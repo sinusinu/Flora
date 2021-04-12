@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Flora.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+	    <PlatformTarget>x86</PlatformTarget>
+        <RootNamespace>FloraExample</RootNamespace>
+    </PropertyGroup>
+    
+    <!-- Use post-build event to copy SDL2 DLLs into build directory -->
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command='xcopy "$(ProjectDir)extlibs\\*.*" "$(TargetDir)" /Y' />
+    </Target>
+
+</Project>

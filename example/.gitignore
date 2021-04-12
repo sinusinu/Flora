@@ -1,0 +1,2 @@
+# do not add any SDL binaries to git repo!
+extlibs/*.dll
