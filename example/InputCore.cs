@@ -4,12 +4,9 @@ using Flora.Gfx;
 using Flora.Input;
 
 namespace FloraExample {
-    class InputCore : ApplicationCore {
-        MyInputHandler handler;
-
+    class InputCore : ApplicationCore, InputHandler {
         public override void Prepare() {
-            handler = new MyInputHandler();
-            Input.SetInputHandler(handler);
+            Input.SetInputHandler(this);
         }
 
         public override void Pause() {
@@ -33,26 +30,24 @@ namespace FloraExample {
             
         }
 
-        class MyInputHandler : InputHandler {
-            public void OnKeyDown(KeyCode keycode) {
-                Console.WriteLine("KeyDown: {0}", Enum.GetName<KeyCode>(keycode));
-            }
+        public void OnKeyDown(KeyCode keycode) {
+            Console.WriteLine("KeyDown: {0}", Enum.GetName<KeyCode>(keycode));
+        }
 
-            public void OnKeyUp(KeyCode keycode) {
-                Console.WriteLine("KeyUp: {0}", Enum.GetName<KeyCode>(keycode));
-            }
+        public void OnKeyUp(KeyCode keycode) {
+            Console.WriteLine("KeyUp: {0}", Enum.GetName<KeyCode>(keycode));
+        }
 
-            public void OnMouseDown(MouseButton button, int x, int y) {
-                Console.WriteLine("MouseDown: {0} ({1}, {2})", Enum.GetName<MouseButton>(button), x, y);
-            }
+        public void OnMouseDown(MouseButton button, int x, int y) {
+            Console.WriteLine("MouseDown: {0} ({1}, {2})", Enum.GetName<MouseButton>(button), x, y);
+        }
 
-            public void OnMouseMove(int x, int y) {
-                Console.WriteLine("MouseMove: ({0}, {1})", x, y);
-            }
+        public void OnMouseMove(int x, int y) {
+            Console.WriteLine("MouseMove: ({0}, {1})", x, y);
+        }
 
-            public void OnMouseUp(MouseButton button, int x, int y) {
-                Console.WriteLine("MouseUp: {0} ({1}, {2})", Enum.GetName<MouseButton>(button), x, y);
-            }
+        public void OnMouseUp(MouseButton button, int x, int y) {
+            Console.WriteLine("MouseUp: {0} ({1}, {2})", Enum.GetName<MouseButton>(button), x, y);
         }
     }
 }
