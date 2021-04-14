@@ -4,7 +4,7 @@ Flora is a WIP .NET game development framework built atop of SDL2-CS.
 ---
 
 ## **Still under development!**
-Flora is still in **very, very early** stage of development - not even all of the planned features are still finished! Due to that, Flora is currently only provided as a project to reference. Something like package will not be available until enough developments are made into Flora.
+Flora is still in **very, very early** stage of development - not even all of the planned features are still finished! It is definitely not ready for production use.
 
 ---
 
@@ -18,13 +18,19 @@ It is built on .NET 5 and SDL2, so while it could be cross-platform, currently o
 
 Currently no separate docs are provided. Some are documented using [documentation comments](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments).
 
+## How to use
+
+Due to it being still under development, Flora is currently only provided as a source project. Providing package won't be considered until enough developments are made into Flora.
+
+If you want to try it anyway, Please take a read on temporary Quick Start Guide below.
+
 ## Quick Start Guide (temporary)
 
 1. ```git clone``` this repository
 2. Create new .NET project somewhere else using ```dotnet new console```
-3. Add reference to Flora using ```dotnet add reference path\to\this\repo```
+3. Add Flora as reference to your project using ```dotnet add reference path\to\flora```
 4. Build project once using ```dotnet build```
-5. Copy SDL2.dll, SDL_image.dll, SDL_mixer.dll, SDL_ttf.dll and all of its dependency DLLs into build directory (where the exe file is located)
+5. Acquire and Place SDL2.dll, SDL_image.dll, SDL_mixer.dll, SDL_ttf.dll and all of its dependency DLLs into build directory (where the exe file is located)
 6. Setup basic codes (See the example project for more info)
 
 Program.cs:
@@ -66,7 +72,7 @@ namespace FloraExample {
 ```
 
 7. Run project using ```dotnet run```
-8. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something (See FloraExample.csproj file inside example project for more info)
+8. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something (See ```FloraExample.csproj``` file and ```extlibs``` directory inside example project for more info)
 
 ## License
 
