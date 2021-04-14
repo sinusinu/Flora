@@ -7,7 +7,8 @@ namespace FloraExample {
             ApplicationConfiguration config = new ApplicationConfiguration();
             
             //BasicCore core = new BasicCore();
-            TextureCore core = new TextureCore();
+            //TextureCore core = new TextureCore();
+            InputCore core = new InputCore();
             
             new FloraApplication(core, config);
         }
