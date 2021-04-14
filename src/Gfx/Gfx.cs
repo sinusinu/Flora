@@ -21,7 +21,7 @@ namespace Flora.Gfx {
             Vertical = SDL.SDL_RendererFlip.SDL_FLIP_VERTICAL
         }
         
-        public static void Init(IntPtr w, IntPtr r) {
+        internal static void Init(IntPtr w, IntPtr r) {
             sdlWindow = w;
             sdlRenderer = r;
             
