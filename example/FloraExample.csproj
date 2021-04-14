@@ -14,6 +14,7 @@
     <!-- Use post-build event to copy SDL2 DLLs into build directory -->
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command='xcopy "$(ProjectDir)extlibs\\*.*" "$(TargetDir)" /Y' />
+        <Exec Command='xcopy "$(ProjectDir)res\\*.*" "$(TargetDir)res\\" /E /Y' />
     </Target>
 
 </Project>

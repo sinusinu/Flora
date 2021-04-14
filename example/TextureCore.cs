@@ -11,7 +11,7 @@ namespace FloraExample {
         double rot = 0d;
 
         public override void Prepare() {
-            texture = new Texture(new RelativePath("test.png"));
+            texture = new Texture(new RelativePath("res\\test.png"));
             region = new TextureRegion(texture, 50, 50, 100, 100);
         }
 
