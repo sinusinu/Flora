@@ -73,18 +73,12 @@ namespace Flora {
         /// </summary>
         public FloraRenderFlags renderFlags;
 
-        /// <summary>
-        /// Target FPS.
-        /// </summary>
-        public int targetFps;
-
         public ApplicationConfiguration() {
             width = 640;
             height = 480;
             windowTitle = "Flora";
             windowFlags = FloraWindowFlags.Shown;
             renderFlags = FloraRenderFlags.Accelerated | FloraRenderFlags.Vsync;
-            targetFps = 60;
         }
     }
 }
