@@ -10,7 +10,7 @@ namespace Flora.Gfx {
 
         // drawing stuff
         public static bool isDrawing = false;
-        public static Color currentColor = new Color(0x00, 0x00, 0x00, 0xFF);
+        public static Color currentColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 
         public enum FlipMode {
             None = SDL.SDL_RendererFlip.SDL_FLIP_NONE,
