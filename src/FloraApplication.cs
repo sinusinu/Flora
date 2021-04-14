@@ -13,6 +13,8 @@ namespace Flora {
             var window = SDL.SDL_CreateWindow(config.windowTitle, SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, (SDL.SDL_WindowFlags)config.windowFlags);
             if (window == IntPtr.Zero) {
                 string error = SDL.SDL_GetError();
+                SDL_mixer.Mix_Quit();
+                SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
                 throw new Exception("Failed to initialize Flora: SDL_CreateWindow returned NULL (" + error + ")");
             }
@@ -22,6 +24,8 @@ namespace Flora {
             if (renderer == IntPtr.Zero) {
                 string error = SDL.SDL_GetError();
                 SDL.SDL_DestroyWindow(window);
+                SDL_mixer.Mix_Quit();
+                SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
                 throw new Exception("Failed to initialize Flora: SDL_CreateRenderer returned NULL (" + error + ")");
             }
