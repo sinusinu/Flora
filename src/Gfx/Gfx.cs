@@ -12,6 +12,9 @@ namespace Flora.Gfx {
         public static bool isDrawing = false;
         public static Color currentColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 
+        /// <summary>
+        /// Flip options for drawing textures.
+        /// </summary>
         public enum FlipMode {
             None = SDL.SDL_RendererFlip.SDL_FLIP_NONE,
             Horizontal = SDL.SDL_RendererFlip.SDL_FLIP_HORIZONTAL,
@@ -27,6 +30,13 @@ namespace Flora.Gfx {
             isGfxInitialized = true;
         }
 
+        /// <summary>
+        /// Set the current color. All textures drawn after this function call will be tinted with this color.
+        /// </summary>
+        /// <param name="r">Red (0-255)</param>
+        /// <param name="g">Green (0-255)</param>
+        /// <param name="b">Blue (0-255)</param>
+        /// <param name="a">Alpha (0-255)</param>
         public static void SetColor(byte r, byte g, byte b, byte a) {
             currentColor.r = r;
             currentColor.g = g;
@@ -34,10 +44,17 @@ namespace Flora.Gfx {
             currentColor.a = a;
         }
 
+        /// <summary>
+        /// Clear screen with current color and get ready for drawing.
+        /// </summary>
         public static void Begin() {
             Begin(currentColor);
         }
-
+        
+        /// <summary>
+        /// Clear screen with given color and get ready for drawing.
+        /// </summary>
+        /// <param name="clearColor"></param>
         public static void Begin(Color clearColor) {
             isDrawing = true;
 
@@ -50,24 +67,64 @@ namespace Flora.Gfx {
             SetCurrentRenderColor(prevColor);
         }
         
+        /// <summary>
+        /// Present drawn picture into display and finishes drawing.
+        /// </summary>
         public static void End() {
             SDL.SDL_RenderPresent(sdlRenderer);
 
             isDrawing = false;
         }
 
+        /// <summary>
+        /// Draw texture on position (x, y).
+        /// </summary>
+        /// <param name="texture">Texture to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
         public static void Draw(Texture texture, int x, int y) {
             Draw(texture, x, y, texture.width, texture.height);
         }
 
+        /// <summary>
+        /// Draw texture on position (x, y) with size of (width, height).
+        /// </summary>
+        /// <param name="texture">Texture to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
         public static void Draw(Texture texture, int x, int y, int width, int height) {
             Draw(texture, x, y, width, height, 0d, texture.width / 2, texture.height / 2);
         }
 
+        /// <summary>
+        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY).
+        /// </summary>
+        /// <param name="texture">Texture to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
+        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="pivotX">X Pivot</param>
+        /// <param name="pivotY">Y Pivot</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY) {
             Draw(texture, x, y, width, height, rotation, pivotX, pivotY, FlipMode.None);
         }
         
+        /// <summary>
+        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY) with flip option of (flip).
+        /// </summary>
+        /// <param name="texture">Texture to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
+        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="pivotX">X Pivot</param>
+        /// <param name="pivotY">Y Pivot</param>
+        /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect drect;
             drect.x = x; drect.y = y; drect.w = width; drect.h = height;
@@ -78,18 +135,55 @@ namespace Flora.Gfx {
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture.sdlTexture, IntPtr.Zero, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
 
+        /// <summary>
+        /// Draw texture region on position (x, y).
+        /// </summary>
+        /// <param name="region">TextureRegion to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
         public static void Draw(TextureRegion region, int x, int y) {
             Draw(region, x, y, region.rect.w, region.rect.h);
         }
 
+        /// <summary>
+        /// Draw texture region on position (x, y) with size of (width, height).
+        /// </summary>
+        /// <param name="region">TextureRegion to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
         public static void Draw(TextureRegion region, int x, int y, int width, int height) {
             Draw(region, x, y, width, height, 0d, region.rect.w / 2, region.rect.h / 2);
         }
 
+        /// <summary>
+        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY).
+        /// </summary>
+        /// <param name="region">TextureRegion to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
+        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="pivotX">X Pivot</param>
+        /// <param name="pivotY">Y Pivot</param>
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY) {
             Draw(region, x, y, width, height, rotation, pivotX, pivotY, FlipMode.None);
         }
 
+        /// <summary>
+        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY) with flip option of (flip).
+        /// </summary>
+        /// <param name="region">TextureRegion to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
+        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="pivotX">X Pivot</param>
+        /// <param name="pivotY">Y Pivot</param>
+        /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
             SDL.SDL_Rect drect;
