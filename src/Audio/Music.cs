@@ -1,7 +1,7 @@
 using System;
 using SDL2;
 
-namespace Flora {
+namespace Flora.Audio {
     public class Music {
         internal IntPtr sdlMusic;
 

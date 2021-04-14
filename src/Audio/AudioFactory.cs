@@ -1,5 +1,5 @@
-namespace Flora {
-    public static class Audio {
+namespace Flora.Audio {
+    public static class AudioFactory {
         
         public static Sound CreateSound(string path) {
             return new Sound(path);
