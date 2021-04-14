@@ -49,10 +49,19 @@ namespace Flora {
                             run = false;
                             break;
                         case SDL.SDL_EventType.SDL_KEYDOWN:
-                            if (Flora.Input.Input.handler != null) Flora.Input.Input.handler.OnKeyDown((int)e.key.keysym.scancode);
+                            if (Input.Input.handler != null) Input.Input.handler.OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
                             break;
                         case SDL.SDL_EventType.SDL_KEYUP:
-                            if (Flora.Input.Input.handler != null) Flora.Input.Input.handler.OnKeyUp((int)e.key.keysym.scancode);
+                            if (Input.Input.handler != null) Input.Input.handler.OnKeyUp((Input.KeyCode)e.key.keysym.scancode);
+                            break;
+                        case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                            if (Input.Input.handler != null) Input.Input.handler.OnMouseDown((Input.MouseButton)e.button.button, e.button.x, e.button.y);
+                            break;
+                        case SDL.SDL_EventType.SDL_MOUSEBUTTONUP:
+                            if (Input.Input.handler != null) Input.Input.handler.OnMouseUp((Input.MouseButton)e.button.button, e.button.x, e.button.y);
+                            break;
+                        case SDL.SDL_EventType.SDL_MOUSEMOTION:
+                            if (Input.Input.handler != null) Input.Input.handler.OnMouseMove(e.motion.x, e.motion.y);
                             break;
                         case SDL.SDL_EventType.SDL_WINDOWEVENT:
                             switch (e.window.windowEvent) {
