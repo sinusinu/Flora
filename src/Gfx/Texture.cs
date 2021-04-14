@@ -8,10 +8,10 @@ namespace Flora.Gfx {
         public int width;
         public int height;
 
-        public Texture(Path path) {
+        public Texture(string path) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Flora.Gfx is not initialized.");
 
-            var imgSurface = SDL_image.IMG_Load(path.Get());
+            var imgSurface = SDL_image.IMG_Load(path);
             if (imgSurface == IntPtr.Zero) {
                 string error = SDL_image.IMG_GetError();
                 throw new ArgumentException("Failed to load image " + path + ": " + error);
