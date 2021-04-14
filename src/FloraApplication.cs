@@ -5,9 +5,18 @@ namespace Flora {
     public class FloraApplication {
         public FloraApplication(ApplicationCore app, ApplicationConfiguration config) {
             // init SDL and friends
-            SDL.SDL_Init(SDL.SDL_INIT_VIDEO);
+            SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
             SDL_mixer.Mix_Init(SDL_mixer.MIX_InitFlags.MIX_INIT_MP3 | SDL_mixer.MIX_InitFlags.MIX_INIT_OGG);
+
+            // open mixer audio
+            if (SDL_mixer.Mix_OpenAudio(SDL_mixer.MIX_DEFAULT_FREQUENCY, SDL_mixer.MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+                string error = SDL.SDL_GetError();
+                SDL_mixer.Mix_Quit();
+                SDL_image.IMG_Quit();
+                SDL.SDL_Quit();
+                throw new Exception("Failed to initialize Flora: Mix_OpenAudio Failed (" + error + ")");
+            }
             
             // create window
             var window = SDL.SDL_CreateWindow(config.windowTitle, SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, (SDL.SDL_WindowFlags)config.windowFlags);
