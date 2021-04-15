@@ -1,4 +1,7 @@
 namespace Flora.Input {
+    /// <summary>
+    /// Interface for handling user input.
+    /// </summary>
     public interface InputHandler {
         void OnKeyDown(KeyCode keycode);
         void OnKeyUp(KeyCode keycode);

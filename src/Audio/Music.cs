@@ -4,10 +4,17 @@ using System.Runtime.InteropServices;
 using SDL2;
 
 namespace Flora.Audio {
+    /// <summary>
+    /// Audio instance that suit better for playing long background music.
+    /// </summary>
     public class Music {
         internal IntPtr sdlMusic;
 
         public enum MusicState { Idle, Playing, Paused }
+        
+        /// <summary>
+        /// State of the playback of this music.
+        /// </summary>
         public MusicState state { get; internal set; }
         
         internal static bool isMixer205;
@@ -35,6 +42,11 @@ namespace Flora.Audio {
             }
         }
 
+        /// <summary>
+        /// Play the music.<br/>
+        /// If music is paused, playback will resume.<br/>
+        /// If music is playing, nothing will happen.
+        /// </summary>
         public void Play() {
             if (state == MusicState.Paused) {
                 SDL_mixer.Mix_ResumeMusic();
@@ -49,20 +61,32 @@ namespace Flora.Audio {
             }
         }
 
+        /// <summary>
+        /// Pause the music.<br/>
+        /// If music is not playing, nothing will happen.
+        /// </summary>
         public void Pause() {
-            if (state == MusicState.Paused) return;
+            if (state != MusicState.Playing) return;
             SDL_mixer.Mix_PauseMusic();
             state = MusicState.Paused;
             
             if (!isMixer205) timeLastPause = SDL.SDL_GetPerformanceCounter();
         }
 
+        /// <summary>
+        /// Stop the music.<br/>
+        /// If music is neither playing or paused, nothing will happen.
+        /// </summary>
         public void Stop() {
             if (state == MusicState.Idle) return;
             SDL_mixer.Mix_HaltMusic();
             state = MusicState.Idle;
         }
 
+        /// <summary>
+        /// Set the position of this music.
+        /// </summary>
+        /// <param name="position">New position in seconds</param>
         public void SetPosition(float position) {
             SDL_mixer.Mix_SetMusicPosition(position);
 
@@ -73,6 +97,10 @@ namespace Flora.Audio {
             }
         }
 
+        /// <summary>
+        /// Get the position of this music.
+        /// </summary>
+        /// <returns>Current position in seconds</returns>
         public float GetPosition() {
             if (state == MusicState.Idle) return 0f;
             if (isMixer205) {

@@ -73,6 +73,9 @@ namespace Flora {
         /// </summary>
         public FloraRenderFlags renderFlags;
 
+        /// <summary>
+        /// Create ApplicationConfiguration with default settings.
+        /// </summary>
         public ApplicationConfiguration() {
             width = 640;
             height = 480;

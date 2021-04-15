@@ -1,6 +1,9 @@
 using SDL2;
 
 namespace Flora.Util {
+    /// <summary>
+    /// It's a box!
+    /// </summary>
     public class Rect {
         public int x;
         public int y;

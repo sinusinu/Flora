@@ -9,6 +9,11 @@ namespace Flora.Input {
             isInputInitialized = true;
         }
 
+        /// <summary>
+        /// Set InputHandler to receive user input events.<br/>
+        /// Any previously set InputHandler will no longer receive user input events.
+        /// </summary>
+        /// <param name="handler"></param>
         public static void SetInputHandler(InputHandler handler) {
             if (!isInputInitialized) throw new InvalidOperationException("Input is not initialized");
             Input.handler = handler;

@@ -3,6 +3,11 @@ using SDL2;
 
 namespace Flora {
     public class FloraApplication {
+        /// <summary>
+        /// Start a new Flora application with given core and settings.
+        /// </summary>
+        /// <param name="app">Instance of the class that extends ApplicationCore</param>
+        /// <param name="config">ApplicationConfiguration to apply</param>
         public FloraApplication(ApplicationCore app, ApplicationConfiguration config) {
             // init SDL and friends
             SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO);

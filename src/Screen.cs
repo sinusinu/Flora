@@ -21,7 +21,7 @@ namespace Flora {
         void Resize(int width, int height);
 
         /// <summary>
-        /// Your render logic should be placed here.
+        /// Main logic of the screen should be placed here.
         /// </summary>
         void Render(float delta);
 

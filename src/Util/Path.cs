@@ -1,6 +1,9 @@
 using System;
 
 namespace Flora.Util {
+    /// <summary>
+    /// Helper class for generating file paths.
+    /// </summary>
     public static class Path {
         private static string executablePath = null;
         

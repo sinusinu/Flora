@@ -3,6 +3,9 @@ using SDL2;
 using Flora.Util;
 
 namespace Flora.Gfx {
+    /// <summary>
+    /// 2D image that can be drawn on screen.
+    /// </summary>
     public class Texture {
         internal IntPtr sdlTexture { get; private set; }
         public int width;
