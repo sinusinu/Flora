@@ -1,4 +1,7 @@
 namespace Flora {
+    /// <summary>
+    /// Stub for utilizing multiple screens.
+    /// </summary>
     public interface Screen {
         /// <summary>
         /// Called when application lost focus.
