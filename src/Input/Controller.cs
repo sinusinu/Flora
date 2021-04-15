@@ -35,6 +35,11 @@ namespace Flora.Input {
             }
         }
 
+        /// <summary>
+        /// Set ControllerHandler to receive controller input events.<br/>
+        /// Any previously set ControllerHandler will no longer receive controller input events.
+        /// </summary>
+        /// <param name="handler"></param>
         public static void SetControllerHandler(ControllerHandler handler) {
             if (!isControllerInitialized) throw new InvalidOperationException("Controller is not initialized");
             Controller.handler = handler;
