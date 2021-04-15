@@ -10,7 +10,7 @@ namespace Flora {
         /// <param name="config">ApplicationConfiguration to apply</param>
         public FloraApplication(ApplicationCore app, ApplicationConfiguration config) {
             // init SDL and friends
-            SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO);
+            SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
             SDL_mixer.Mix_Init(SDL_mixer.MIX_InitFlags.MIX_INIT_MP3 | SDL_mixer.MIX_InitFlags.MIX_INIT_OGG);
 
@@ -47,6 +47,7 @@ namespace Flora {
             // init flora things
             Flora.Gfx.Gfx.Init(window, renderer);
             Flora.Input.Input.Init();
+            Flora.Input.Controller.Init();
             Flora.Audio.Audio.Init();
 
             // call core prepare
@@ -84,6 +85,19 @@ namespace Flora {
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEMOTION:
                             if (Input.Input.handler != null) Input.Input.handler.OnMouseMove(e.motion.x, e.motion.y);
+                            break;
+                        case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
+                            if (Input.Controller.handler != null) Input.Controller.handler.OnAxisMotion(Input.Controller.GetControllerIndex(e.caxis.which), (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
+                            break;
+                        case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
+                            if (Input.Controller.handler != null) Input.Controller.handler.OnButtonDown(Input.Controller.GetControllerIndex(e.cbutton.which), (Input.ControllerButton)e.cbutton.button);
+                            break;
+                        case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
+                            if (Input.Controller.handler != null) Input.Controller.handler.OnButtonUp(Input.Controller.GetControllerIndex(e.cbutton.which), (Input.ControllerButton)e.cbutton.button);
+                            break;
+                        case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
+                        case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
+                            Input.Controller.RefreshControllers();
                             break;
                         case SDL.SDL_EventType.SDL_WINDOWEVENT:
                             switch (e.window.windowEvent) {
