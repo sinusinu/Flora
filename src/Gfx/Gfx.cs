@@ -4,13 +4,13 @@ using SDL2;
 namespace Flora.Gfx {
     public static class Gfx {
         // sdl stuff
-        public static bool isGfxInitialized { get; private set; }
-        public static IntPtr sdlWindow { get; private set; }
-        public static IntPtr sdlRenderer { get; private set; }
+        internal static bool isGfxInitialized { get; private set; }
+        internal static IntPtr sdlWindow { get; private set; }
+        internal static IntPtr sdlRenderer { get; private set; }
 
         // drawing stuff
-        public static bool isDrawing = false;
-        public static Color currentColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
+        internal static bool isDrawing = false;
+        internal static Color currentColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 
         /// <summary>
         /// Flip options for drawing textures.
