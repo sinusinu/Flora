@@ -87,13 +87,13 @@ namespace Flora {
                             if (Input.Input.handler != null) Input.Input.handler.OnMouseMove(e.motion.x, e.motion.y);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
-                            if (Input.Controller.handler != null) Input.Controller.handler.OnAxisMotion(Input.Controller.GetControllerIndex(e.caxis.which), (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
+                            if (Input.Controller.handler != null) Input.Controller.handler.OnAxisMotion(e.caxis.which, (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
-                            if (Input.Controller.handler != null) Input.Controller.handler.OnButtonDown(Input.Controller.GetControllerIndex(e.cbutton.which), (Input.ControllerButton)e.cbutton.button);
+                            if (Input.Controller.handler != null) Input.Controller.handler.OnButtonDown(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
-                            if (Input.Controller.handler != null) Input.Controller.handler.OnButtonUp(Input.Controller.GetControllerIndex(e.cbutton.which), (Input.ControllerButton)e.cbutton.button);
+                            if (Input.Controller.handler != null) Input.Controller.handler.OnButtonUp(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:

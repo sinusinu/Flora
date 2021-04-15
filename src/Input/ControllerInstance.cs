@@ -10,6 +10,8 @@ namespace Flora.Input {
         internal ControllerInstance(IntPtr instance) {
             this.instance = instance;
             id = SDL.SDL_JoystickInstanceID(instance);
+
+            Console.WriteLine("New Controller: id {0}", id);
         }
 
         ~ControllerInstance() {

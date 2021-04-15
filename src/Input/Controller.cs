@@ -16,13 +16,6 @@ namespace Flora.Input {
             isControllerInitialized = true;
         }
 
-        internal static int GetControllerIndex(int instanceId) {
-            for (int i = 0; i < instances.Count; i++) {
-                if (instances[i].id == instanceId) return i;
-            }
-            return -1;
-        }
-
         internal static void RefreshControllers() {
             foreach (var inst in instances) inst.Close();
             instances.Clear();
