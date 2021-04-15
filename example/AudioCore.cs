@@ -30,6 +30,8 @@ namespace FloraExample {
         }
 
         public override void Render(float delta) {
+            Console.WriteLine("Music position: {0}", music.GetPosition());
+
             Gfx.Begin();
             Gfx.End();
         }
@@ -39,8 +41,10 @@ namespace FloraExample {
         }
 
         public void OnKeyDown(KeyCode keycode) {
-            if (keycode == KeyCode.A) sound.Play();
-            else if (keycode == KeyCode.S) music.Play();
+            if (keycode == KeyCode.Q) sound.Play();
+            else if (keycode == KeyCode.A) music.Play();
+            else if (keycode == KeyCode.S) music.Pause();
+            else if (keycode == KeyCode.D) music.Stop();
         }
 
         public void OnKeyUp(KeyCode keycode) {
