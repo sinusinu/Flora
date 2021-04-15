@@ -3,12 +3,12 @@ using SDL2;
 
 namespace Flora.Input {
     internal class ControllerInstance {
-        internal IntPtr instance;
+        internal IntPtr ctrlInstance;
         internal int id;
         internal bool isClosed = false;
 
         internal ControllerInstance(IntPtr instance) {
-            this.instance = instance;
+            this.ctrlInstance = instance;
             id = SDL.SDL_JoystickInstanceID(instance);
 
             Console.WriteLine("New Controller: id {0}", id);
@@ -19,7 +19,7 @@ namespace Flora.Input {
         }
 
         internal void Close() {
-            SDL.SDL_GameControllerClose(instance);
+            SDL.SDL_GameControllerClose(ctrlInstance);
             isClosed = true;
         }
     }
