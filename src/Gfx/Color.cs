@@ -35,14 +35,7 @@ namespace Flora.Gfx {
             if (obj == null || obj.GetType() != typeof(Color)) return false;
             
             Color other = (Color)obj;
-            bool eq = true;
-
-            if (this.r != other.r) eq = false;
-            if (this.g != other.g) eq = false;
-            if (this.b != other.b) eq = false;
-            if (this.a != other.a) eq = false;
-
-            return eq;
+            return this.r == other.r && this.g == other.g && this.b == other.b && this.a == other.a;
         }
 
         internal SDL.SDL_Color ToSDLColor() {
