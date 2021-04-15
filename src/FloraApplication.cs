@@ -39,8 +39,10 @@ namespace Flora {
                 throw new Exception("Failed to initialize Flora: SDL_CreateRenderer returned NULL (" + error + ")");
             }
 
-            // init flora gfx
+            // init flora things
             Flora.Gfx.Gfx.Init(window, renderer);
+            Flora.Input.Input.Init();
+            Flora.Audio.Audio.Init();
 
             // call core prepare
             app.Prepare();

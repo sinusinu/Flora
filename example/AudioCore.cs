@@ -11,8 +11,8 @@ namespace FloraExample {
         Music music;
 
         public override void Prepare() {
-            sound = AudioFactory.CreateSound(Path.Relative("res/se.mp3"));
-            music = AudioFactory.CreateMusic(Path.Relative("res/bgm.mp3"));
+            sound = Audio.CreateSound(Path.Relative("res/se.mp3"));
+            music = Audio.CreateMusic(Path.Relative("res/bgm.mp3"));
 
             Input.SetInputHandler(this);
         }
