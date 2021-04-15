@@ -26,6 +26,7 @@ namespace Flora.Gfx {
             sdlRenderer = r;
             
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+            SetCurrentRenderColor(currentColor.ToSDLColor());
 
             isGfxInitialized = true;
         }
@@ -60,13 +61,14 @@ namespace Flora.Gfx {
         public static void Begin(Color clearColor) {
             isDrawing = true;
 
-            SDL.SDL_Color prevColor = GetCurrentRenderColor();
-
-            SetCurrentRenderColor(clearColor.ToSDLColor());
-
-            SDL.SDL_RenderClear(sdlRenderer);
-
-            SetCurrentRenderColor(prevColor);
+            if (clearColor == currentColor) {
+                SDL.SDL_RenderClear(sdlRenderer);
+            } else {
+                SDL.SDL_Color prevColor = GetCurrentRenderColor();
+                SetCurrentRenderColor(clearColor.ToSDLColor());
+                SDL.SDL_RenderClear(sdlRenderer);
+                SetCurrentRenderColor(prevColor);
+            }
         }
         
         /// <summary>
