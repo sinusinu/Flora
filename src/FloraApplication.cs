@@ -70,6 +70,7 @@ namespace Flora {
                             run = false;
                             break;
                         case SDL.SDL_EventType.SDL_KEYDOWN:
+                            if (e.key.repeat > 0) break;
                             if (Input.Input.handler != null) Input.Input.handler.OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
                             break;
                         case SDL.SDL_EventType.SDL_KEYUP:
