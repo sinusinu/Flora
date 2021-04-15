@@ -42,6 +42,8 @@ namespace Flora.Gfx {
             currentColor.g = g;
             currentColor.b = b;
             currentColor.a = a;
+
+            SetCurrentRenderColor(currentColor.ToSDLColor());
         }
 
         /// <summary>
