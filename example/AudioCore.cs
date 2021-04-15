@@ -45,6 +45,8 @@ namespace FloraExample {
             else if (keycode == KeyCode.A) music.Play();
             else if (keycode == KeyCode.S) music.Pause();
             else if (keycode == KeyCode.D) music.Stop();
+            else if (keycode == KeyCode.F) music.SetPosition(0f);
+            else if (keycode == KeyCode.G) music.SetPosition(8f);
         }
 
         public void OnKeyUp(KeyCode keycode) {
