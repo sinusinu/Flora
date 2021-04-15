@@ -194,6 +194,28 @@ namespace Flora.Gfx {
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
 
+        /// <summary>
+        /// Draw primitive line.
+        /// </summary>
+        /// <param name="x1">X position of starting point</param>
+        /// <param name="y1">Y position of starting point</param>
+        /// <param name="x2">X position of ending point</param>
+        /// <param name="y2">Y position of ending point</param>
+        public static void DrawLine(int x1, int y1, int x2, int y2) {
+            SDL.SDL_RenderDrawLine(Gfx.sdlRenderer, x1, y1, x2, y2);
+        }
+
+        /// <summary>
+        /// Draw primitive rectangle.
+        /// </summary>
+        /// <param name="rect">Rectangle to draw</param>
+        /// <param name="fill">Should rectangle be filled or not</param>
+        public static void DrawRect(Util.Rect rect, bool fill) {
+            SDL.SDL_Rect sr = rect.ToSDLRect();
+            if (fill) SDL.SDL_RenderFillRect(Gfx.sdlRenderer, ref sr);
+            else SDL.SDL_RenderDrawRect(Gfx.sdlRenderer, ref sr);
+        }
+
 #region Private functions
         private static SDL.SDL_Color GetCurrentRenderColor() {
             SDL.SDL_Color currentRenderColor = new SDL.SDL_Color();
