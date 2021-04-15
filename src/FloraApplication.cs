@@ -13,10 +13,12 @@ namespace Flora {
             SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
             SDL_mixer.Mix_Init(SDL_mixer.MIX_InitFlags.MIX_INIT_MP3 | SDL_mixer.MIX_InitFlags.MIX_INIT_OGG);
+            SDL_ttf.TTF_Init();
 
             // open mixer audio
             if (SDL_mixer.Mix_OpenAudio(SDL_mixer.MIX_DEFAULT_FREQUENCY, SDL_mixer.MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
                 string error = SDL.SDL_GetError();
+                SDL_ttf.TTF_Quit();
                 SDL_mixer.Mix_Quit();
                 SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
@@ -27,6 +29,7 @@ namespace Flora {
             var window = SDL.SDL_CreateWindow(config.windowTitle, SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, (SDL.SDL_WindowFlags)config.windowFlags);
             if (window == IntPtr.Zero) {
                 string error = SDL.SDL_GetError();
+                SDL_ttf.TTF_Quit();
                 SDL_mixer.Mix_Quit();
                 SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
@@ -34,10 +37,11 @@ namespace Flora {
             }
 
             // create renderer
-            var renderer = SDL.SDL_CreateRenderer(window, -1, (SDL.SDL_RendererFlags)config.renderFlags);
+            var renderer = SDL.SDL_CreateRenderer(window, -1, (SDL.SDL_RendererFlags)config.renderFlags | SDL.SDL_RendererFlags.SDL_RENDERER_TARGETTEXTURE);
             if (renderer == IntPtr.Zero) {
                 string error = SDL.SDL_GetError();
                 SDL.SDL_DestroyWindow(window);
+                SDL_ttf.TTF_Quit();
                 SDL_mixer.Mix_Quit();
                 SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
@@ -133,6 +137,7 @@ namespace Flora {
             SDL.SDL_DestroyWindow(window);
 
             // cleanup SDL and friends
+            SDL_ttf.TTF_Quit();
             SDL_mixer.Mix_Quit();
             SDL_image.IMG_Quit();
             SDL.SDL_Quit();
