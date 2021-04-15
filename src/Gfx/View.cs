@@ -2,6 +2,9 @@ using System;
 using SDL2;
 
 namespace Flora.Gfx {
+    /// <summary>
+    /// Utility for setting device-independant resolution.
+    /// </summary>
     public class View {
         internal int ratioCorrectedWidth;
         internal int ratioCorrectedHeight;
@@ -11,6 +14,12 @@ namespace Flora.Gfx {
         internal int offsetY;
         internal bool letterBox;
 
+        /// <summary>
+        /// Create new view with given size.
+        /// </summary>
+        /// <param name="width">Width of the view</param>
+        /// <param name="height">Height of the view</param>
+        /// <param name="letterBox">Determine if outside of given view should be obscured with letterbox</param>
         public View(int width, int height, bool letterBox) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initailized");
 
