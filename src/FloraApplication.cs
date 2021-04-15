@@ -88,6 +88,7 @@ namespace Flora {
                                     app.Pause();
                                     break;
                                 case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED:
+                                    Gfx.Gfx.UpdateView();
                                     app.Resize(e.window.data1, e.window.data2);
                                     break;
                             }

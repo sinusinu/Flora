@@ -12,6 +12,11 @@ namespace Flora.Gfx {
         internal static bool isDrawing = false;
         internal static Color currentColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 
+        // view
+        internal static View activeView = null;
+        internal static int activeViewOffsetX { get { return activeView == null ? 0 : activeView.offsetX; } }
+        internal static int activeViewOffsetY { get { return activeView == null ? 0 : activeView.offsetY; } }
+
         /// <summary>
         /// Flip options for drawing textures.
         /// </summary>
@@ -45,6 +50,35 @@ namespace Flora.Gfx {
             currentColor.a = a;
 
             SetCurrentRenderColor(currentColor.ToSDLColor());
+        }
+
+        /// <summary>
+        /// Return the size of client region.
+        /// </summary>
+        public static (int, int) GetClientSize() {
+            int w, h;
+            SDL.SDL_GetWindowSize(sdlWindow, out w, out h);
+            return (w, h);
+        }
+
+        /// <summary>
+        /// Apply a view.
+        /// </summary>
+        /// <param name="view">View to apply</param>
+        public static void SetView(View view) {
+            activeView = view;
+
+            UpdateView();
+        }
+
+        internal static void UpdateView() {
+            var (clientWidth, clientHeight) = GetClientSize();
+            if (activeView == null) {
+                SDL.SDL_RenderSetLogicalSize(sdlRenderer, clientWidth, clientHeight);
+            } else {
+                activeView.CalculateAppliedSize();
+                SDL.SDL_RenderSetLogicalSize(Gfx.sdlRenderer, activeView.ratioCorrectedWidth, activeView.ratioCorrectedHeight);
+            }
         }
 
         /// <summary>
@@ -131,7 +165,8 @@ namespace Flora.Gfx {
         /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect drect;
-            drect.x = x; drect.y = y; drect.w = width; drect.h = height;
+            drect.x = x + activeViewOffsetX; drect.y = y + activeViewOffsetY;
+            drect.w = width; drect.h = height;
             SDL.SDL_Point center;
             center.x = pivotX; center.y = pivotY;
             
@@ -191,7 +226,8 @@ namespace Flora.Gfx {
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
             SDL.SDL_Rect drect;
-            drect.x = x; drect.y = y; drect.w = width; drect.h = height;
+            drect.x = x + activeViewOffsetX; drect.y = y + activeViewOffsetY;
+            drect.w = width; drect.h = height;
             SDL.SDL_Point center;
             center.x = pivotX; center.y = pivotY;
             
@@ -206,7 +242,7 @@ namespace Flora.Gfx {
         /// <param name="x2">X position of ending point</param>
         /// <param name="y2">Y position of ending point</param>
         public static void DrawLine(int x1, int y1, int x2, int y2) {
-            SDL.SDL_RenderDrawLine(Gfx.sdlRenderer, x1, y1, x2, y2);
+            SDL.SDL_RenderDrawLine(Gfx.sdlRenderer, x1 + activeViewOffsetX, y1 + activeViewOffsetY, x2 + activeViewOffsetX, y2 + activeViewOffsetY);
         }
 
         /// <summary>
@@ -216,6 +252,8 @@ namespace Flora.Gfx {
         /// <param name="fill">Should rectangle be filled or not</param>
         public static void DrawRect(Util.Rect rect, bool fill) {
             SDL.SDL_Rect sr = rect.ToSDLRect();
+            sr.x += activeViewOffsetX;
+            sr.y += activeViewOffsetY;
             if (fill) SDL.SDL_RenderFillRect(Gfx.sdlRenderer, ref sr);
             else SDL.SDL_RenderDrawRect(Gfx.sdlRenderer, ref sr);
         }
