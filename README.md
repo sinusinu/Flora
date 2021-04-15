@@ -27,11 +27,12 @@ If you want to try it anyway, Please take a read on temporary Quick Start Guide 
 ## Quick Start Guide (temporary)
 
 1. ```git clone``` this repository
-2. Create new .NET project somewhere else using ```dotnet new console```
-3. Add Flora as reference to your project using ```dotnet add reference path\to\flora```
-4. Build project once using ```dotnet build```
-5. Acquire and Place SDL2.dll, SDL_image.dll, SDL_mixer.dll, SDL_ttf.dll and all of its dependency DLLs into build directory (where the exe file is located)
-6. Setup basic codes (See the example project for more info)
+2. fetch submodules using ```git submodule update --init```
+3. Create new .NET project somewhere else using ```dotnet new console```
+4. Add Flora as reference to your project using ```dotnet add reference path\to\flora```
+5. Build project once using ```dotnet build```
+6. Acquire and Place SDL2.dll, SDL_image.dll, SDL_mixer.dll, SDL_ttf.dll and all of its dependency DLLs into build directory (where the exe file is located)
+7. Setup basic codes (See the example project for more info)
 
 Program.cs:
 ```csharp
@@ -71,8 +72,8 @@ namespace FloraExample {
 }
 ```
 
-7. Run project using ```dotnet run```
-8. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something (See ```FloraExample.csproj``` file and ```extlibs``` directory inside example project for more info)
+8. Run project using ```dotnet run```
+9. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something (See ```FloraExample.csproj``` file and ```extlibs``` directory inside example project for more info)
 
 ## License
 
