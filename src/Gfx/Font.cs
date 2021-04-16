@@ -6,6 +6,7 @@ using Flora.Util;
 namespace Flora.Gfx {
     public class Font {
         internal const int TextureSize = 1024;
+        internal static SDL.SDL_Color white = new SDL.SDL_Color();
 
         internal IntPtr font;
         internal List<IntPtr> textures;
@@ -17,6 +18,11 @@ namespace Flora.Gfx {
 
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
             if (size > 256) throw new ArgumentException("Font size must be smaller than 256");
+
+            white.r = 0xFF;
+            white.g = 0xFF;
+            white.b = 0xFF;
+            white.a = 0xFF;
 
             font = SDL_ttf.TTF_OpenFont(path, size);
         }
@@ -39,15 +45,18 @@ namespace Flora.Gfx {
 
             var gi = new GlyphInfo();
 
-            int minx, maxx, miny, maxy, advance;
-            SDL_ttf.TTF_GlyphMetrics(font, glyph, out minx, out maxx, out miny, out maxy, out advance);
-            
-            Rect rect = new Rect(0, 0, maxx - minx, maxy - miny);   // x, y will be filled after packing
+            var glyphSurface = SDL_ttf.TTF_RenderGlyph_Blended(font, glyph, white);
+            var glyphTexture = SDL.SDL_CreateTextureFromSurface(Gfx.sdlRenderer, glyphSurface);
+            SDL.SDL_FreeSurface(glyphSurface);
+
+            Rect rect = new Rect(); uint udummy; int dummy;
+            SDL.SDL_QueryTexture(glyphTexture, out udummy, out dummy, out rect.w, out rect.h);
 
             // TODO: pack glyph into pages
 
             // TODO: set available texture as render target and draw glyph on rect
 
+            SDL.SDL_DestroyTexture(glyphTexture);
             return gi;
         }
 
