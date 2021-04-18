@@ -16,6 +16,9 @@ namespace Flora.Gfx {
         internal static View activeView = null;
         internal static int activeViewOffsetX { get { return activeView == null ? 0 : (int)(activeView.centerX - activeView.offsetX); } }
         internal static int activeViewOffsetY { get { return activeView == null ? 0 : (int)(activeView.centerY - activeView.offsetY); } }
+        internal static int activeViewWidth { get { return activeView == null ? 0 : activeView.ratioCorrectedWidth; } }
+        internal static int activeViewHeight { get { return activeView == null ? 0 : activeView.ratioCorrectedHeight; } }
+        internal static float activeViewZoom { get { return activeView == null ? 1f : activeView.zoom; } }
 
         /// <summary>
         /// Flip options for drawing textures.
@@ -165,10 +168,13 @@ namespace Flora.Gfx {
         /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect drect;
-            drect.x = x + activeViewOffsetX; drect.y = y + activeViewOffsetY;
-            drect.w = width; drect.h = height;
+            drect.x = (int)((x + activeViewOffsetX) * activeViewZoom);
+            drect.y = (int)((y + activeViewOffsetY) * activeViewZoom);
+            drect.w = (int)(width * activeViewZoom);
+            drect.h = (int)(height * activeViewZoom);
             SDL.SDL_Point center;
-            center.x = pivotX; center.y = pivotY;
+            center.x = (int)(pivotX * activeViewZoom);
+            center.y = (int)(pivotY * activeViewZoom);
             
             SetCurrentTextureColor(texture.sdlTexture, currentColor.ToSDLColor());
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture.sdlTexture, IntPtr.Zero, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
@@ -226,10 +232,13 @@ namespace Flora.Gfx {
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
             SDL.SDL_Rect drect;
-            drect.x = x + activeViewOffsetX; drect.y = y + activeViewOffsetY;
-            drect.w = width; drect.h = height;
+            drect.x = (int)((x + activeViewOffsetX) * activeViewZoom);
+            drect.y = (int)((y + activeViewOffsetY) * activeViewZoom);
+            drect.w = (int)(width * activeViewZoom);
+            drect.h = (int)(height * activeViewZoom);
             SDL.SDL_Point center;
-            center.x = pivotX; center.y = pivotY;
+            center.x = (int)(pivotX * activeViewZoom);
+            center.y = (int)(pivotY * activeViewZoom);
             
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
