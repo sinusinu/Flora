@@ -14,8 +14,10 @@ namespace Flora.Gfx {
 
         // view
         internal static View activeView = null;
-        internal static int activeViewOffsetX { get { return activeView == null ? 0 : (int)(activeView.centerX - activeView.offsetX); } }
-        internal static int activeViewOffsetY { get { return activeView == null ? 0 : (int)(activeView.centerY - activeView.offsetY); } }
+        internal static int activeViewCenterX { get { return activeView == null ? 0 : (int)(activeView.centerX); } }
+        internal static int activeViewCenterY { get { return activeView == null ? 0 : (int)(activeView.centerY); } }
+        internal static int activeViewOffsetX { get { return activeView == null ? 0 : (int)(activeView.offsetX); } }
+        internal static int activeViewOffsetY { get { return activeView == null ? 0 : (int)(activeView.offsetY); } }
         internal static int activeViewWidth { get { return activeView == null ? 0 : activeView.ratioCorrectedWidth; } }
         internal static int activeViewHeight { get { return activeView == null ? 0 : activeView.ratioCorrectedHeight; } }
         internal static float activeViewZoom { get { return activeView == null ? 1f : activeView.zoom; } }
@@ -168,8 +170,8 @@ namespace Flora.Gfx {
         /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect drect;
-            drect.x = (int)((x + activeViewOffsetX) * activeViewZoom);
-            drect.y = (int)((y + activeViewOffsetY) * activeViewZoom);
+            drect.x = (int)((x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
+            drect.y = (int)((y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
             drect.w = (int)(width * activeViewZoom);
             drect.h = (int)(height * activeViewZoom);
             SDL.SDL_Point center;
@@ -232,8 +234,8 @@ namespace Flora.Gfx {
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
             SDL.SDL_Rect drect;
-            drect.x = (int)((x + activeViewOffsetX) * activeViewZoom);
-            drect.y = (int)((y + activeViewOffsetY) * activeViewZoom);
+            drect.x = (int)((x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
+            drect.y = (int)((y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
             drect.w = (int)(width * activeViewZoom);
             drect.h = (int)(height * activeViewZoom);
             SDL.SDL_Point center;
@@ -251,7 +253,13 @@ namespace Flora.Gfx {
         /// <param name="x2">X position of ending point</param>
         /// <param name="y2">Y position of ending point</param>
         public static void DrawLine(int x1, int y1, int x2, int y2) {
-            SDL.SDL_RenderDrawLine(Gfx.sdlRenderer, x1 + activeViewOffsetX, y1 + activeViewOffsetY, x2 + activeViewOffsetX, y2 + activeViewOffsetY);
+            SDL.SDL_RenderDrawLine(
+                Gfx.sdlRenderer,
+                (int)((x1 + activeViewCenterX - activeViewOffsetX) * activeViewZoom),
+                (int)((y1 + activeViewCenterY - activeViewOffsetY) * activeViewZoom),
+                (int)((x2 + activeViewCenterX - activeViewOffsetX) * activeViewZoom),
+                (int)((y2 + activeViewCenterY - activeViewOffsetY) * activeViewZoom)
+            );
         }
 
         /// <summary>
@@ -261,8 +269,10 @@ namespace Flora.Gfx {
         /// <param name="fill">Should rectangle be filled or not</param>
         public static void DrawRect(Util.Rect rect, bool fill) {
             SDL.SDL_Rect sr = rect.ToSDLRect();
-            sr.x += activeViewOffsetX;
-            sr.y += activeViewOffsetY;
+            sr.x = (int)((sr.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
+            sr.y = (int)((sr.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
+            sr.w = (int)(sr.w * activeViewZoom);
+            sr.h = (int)(sr.h * activeViewZoom);
             if (fill) SDL.SDL_RenderFillRect(Gfx.sdlRenderer, ref sr);
             else SDL.SDL_RenderDrawRect(Gfx.sdlRenderer, ref sr);
         }
