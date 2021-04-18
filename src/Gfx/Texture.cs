@@ -12,7 +12,7 @@ namespace Flora.Gfx {
         public int height;
 
         public Texture(string path) {
-            if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Flora.Gfx is not initialized.");
+            if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
             var imgSurface = SDL_image.IMG_Load(path);
             if (imgSurface == IntPtr.Zero) {

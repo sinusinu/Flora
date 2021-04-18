@@ -14,7 +14,7 @@ namespace Flora.Gfx {
         internal float scale = 1f;
 
         public Font(string path, int size) {
-            if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Flora.Gfx is not initialized.");
+            if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
             if (size > 256) throw new ArgumentException("Font size must be smaller than 256");
@@ -49,8 +49,8 @@ namespace Flora.Gfx {
             var glyphTexture = SDL.SDL_CreateTextureFromSurface(Gfx.sdlRenderer, glyphSurface);
             SDL.SDL_FreeSurface(glyphSurface);
 
-            Rect rect = new Rect(); uint udummy; int dummy;
-            SDL.SDL_QueryTexture(glyphTexture, out udummy, out dummy, out rect.w, out rect.h);
+            int w; int h; uint udummy; int dummy;
+            SDL.SDL_QueryTexture(glyphTexture, out udummy, out dummy, out w, out h);
 
             // TODO: pack glyph into pages
 
