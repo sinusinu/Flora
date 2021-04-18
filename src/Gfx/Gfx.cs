@@ -14,8 +14,8 @@ namespace Flora.Gfx {
 
         // view
         internal static View activeView = null;
-        internal static int activeViewOffsetX { get { return activeView == null ? 0 : activeView.offsetX; } }
-        internal static int activeViewOffsetY { get { return activeView == null ? 0 : activeView.offsetY; } }
+        internal static int activeViewOffsetX { get { return activeView == null ? 0 : activeView.centerX - activeView.offsetX; } }
+        internal static int activeViewOffsetY { get { return activeView == null ? 0 : activeView.centerY - activeView.offsetY; } }
 
         /// <summary>
         /// Flip options for drawing textures.

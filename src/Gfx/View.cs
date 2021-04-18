@@ -10,6 +10,8 @@ namespace Flora.Gfx {
         internal int ratioCorrectedHeight;
         internal int givenWidth;
         internal int givenHeight;
+        internal int centerX;
+        internal int centerY;
         internal int offsetX;
         internal int offsetY;
         internal bool letterBox;
@@ -34,8 +36,8 @@ namespace Flora.Gfx {
             if (letterBox) {
                 ratioCorrectedWidth = givenWidth;
                 ratioCorrectedHeight = givenHeight;
-                offsetX = 0;
-                offsetY = 0;
+                centerX = 0;
+                centerY = 0;
                 return;
             } else {
                 var (clientWidth, clientHeight) = Gfx.GetClientSize();
@@ -48,23 +50,40 @@ namespace Flora.Gfx {
                     float ratio = givenSizeAspectRatio / clientSizeAspectRatio;
                     ratioCorrectedWidth = (int)(givenWidth / ratio);
                     ratioCorrectedHeight = givenHeight;
-                    offsetX = (ratioCorrectedWidth - givenWidth) / 2;
-                    offsetY = 0;
+                    centerX = (ratioCorrectedWidth - givenWidth) / 2;
+                    centerY = 0;
                 } else if (clientSizeAspectRatio + 0.005f < givenSizeAspectRatio) {
                     // client is vertically stretched
                     float ratio = clientSizeAspectRatio / givenSizeAspectRatio;
                     ratioCorrectedWidth = givenWidth;
                     ratioCorrectedHeight = (int)(givenHeight / ratio);
-                    offsetX = 0;
-                    offsetY = (ratioCorrectedHeight - givenHeight) / 2;
+                    centerX = 0;
+                    centerY = (ratioCorrectedHeight - givenHeight) / 2;
                 } else {
                     // almost same aspect ratio
                     ratioCorrectedWidth = givenWidth;
                     ratioCorrectedHeight = givenHeight;
-                    offsetX = 0;
-                    offsetY = 0;
+                    centerX = 0;
+                    centerY = 0;
                 }
             }
+        }
+
+        public void SetPosition(int x, int y) {
+            offsetX = x;
+            offsetY = y;
+        }
+
+        public (int, int) GetPosition() {
+            return (offsetX, offsetY);
+        }
+
+        public int GetPositionX() {
+            return offsetX;
+        }
+
+        public int GetPositionY() {
+            return offsetY;
         }
     }
 }
