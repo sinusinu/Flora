@@ -10,10 +10,10 @@ namespace Flora.Gfx {
         internal int ratioCorrectedHeight;
         internal int givenWidth;
         internal int givenHeight;
-        internal int centerX;
-        internal int centerY;
-        internal int offsetX;
-        internal int offsetY;
+        internal float centerX;
+        internal float centerY;
+        internal float offsetX;
+        internal float offsetY;
         internal bool letterBox;
 
         /// <summary>
@@ -69,21 +69,12 @@ namespace Flora.Gfx {
             }
         }
 
-        public void SetPosition(int x, int y) {
-            offsetX = x;
-            offsetY = y;
-        }
+        public void SetPosition(float x, float y) { offsetX = x; offsetY = y; }
+        public void SetPositionX(float x) { offsetX = x; }
+        public void SetPositionY(float y) { offsetY = y; }
 
-        public (int, int) GetPosition() {
-            return (offsetX, offsetY);
-        }
-
-        public int GetPositionX() {
-            return offsetX;
-        }
-
-        public int GetPositionY() {
-            return offsetY;
-        }
+        public (float, float) GetPosition() { return (offsetX, offsetY); }
+        public float GetPositionX() { return offsetX; }
+        public float GetPositionY() { return offsetY; }
     }
 }
