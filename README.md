@@ -1,10 +1,10 @@
 # Flora
-Flora is a WIP .NET game development framework built atop of SDL2-CS.
+Flora is a WIP .NET 2D game development framework built atop of SDL2-CS.
 
 ---
 
 ## **Still under development!**
-Flora is still in **very, very early** stage of development - not even all of the planned features are still finished! It is definitely not ready for production use.
+Flora is still in **very, very early** stage of development! It is definitely **NOT** ready for production use.
 
 ---
 
@@ -31,7 +31,7 @@ If you want to try it anyway, Please take a read on temporary Quick Start Guide 
 3. Create new .NET project somewhere else using ```dotnet new console```
 4. Add Flora as reference to your project using ```dotnet add reference path\to\flora```
 5. Build project once using ```dotnet build```
-6. Acquire and Place SDL2.dll, SDL_image.dll, SDL_mixer.dll, SDL_ttf.dll and all of its dependency DLLs into build directory (where the exe file is located)
+6. Acquire and Place [SDL2.dll](https://www.libsdl.org/download-2.0.php), [SDL_image.dll](https://www.libsdl.org/projects/SDL_image/), [SDL_mixer.dll](https://www.libsdl.org/projects/SDL_mixer/), [SDL_ttf.dll](https://www.libsdl.org/projects/SDL_ttf/) and all of its dependency DLLs into build directory (where the exe file is located)
 7. Setup basic codes (See the example project for more info)
 
 Program.cs:
