@@ -307,27 +307,25 @@ namespace Flora.Gfx {
 
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref dstRect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
-#endregion
-
-#region Private functions
-        private static SDL.SDL_Color GetCurrentRenderColor() {
+        
+        internal static SDL.SDL_Color GetCurrentRenderColor() {
             SDL.SDL_Color currentRenderColor = new SDL.SDL_Color();
             SDL.SDL_GetRenderDrawColor(sdlRenderer, out currentRenderColor.r, out currentRenderColor.g, out currentRenderColor.b, out currentRenderColor.a);
             return currentRenderColor;
         }
 
-        private static void SetCurrentRenderColor(SDL.SDL_Color color) {
+        internal static void SetCurrentRenderColor(SDL.SDL_Color color) {
             SDL.SDL_SetRenderDrawColor(sdlRenderer, color.r, color.g, color.b, color.a);
         }
         
-        private static SDL.SDL_Color GetCurrentTextureColor(IntPtr texture) {
+        internal static SDL.SDL_Color GetCurrentTextureColor(IntPtr texture) {
             SDL.SDL_Color currentTextureColor = new SDL.SDL_Color();
             SDL.SDL_GetTextureColorMod(texture, out currentTextureColor.r, out currentTextureColor.g, out currentTextureColor.b);
             SDL.SDL_GetTextureAlphaMod(texture, out currentTextureColor.a);
             return currentTextureColor;
         }
 
-        private static void SetCurrentTextureColor(IntPtr texture, SDL.SDL_Color color) {
+        internal static void SetCurrentTextureColor(IntPtr texture, SDL.SDL_Color color) {
             SDL.SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
             SDL.SDL_SetTextureAlphaMod(texture, color.a);
         }
