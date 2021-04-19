@@ -12,6 +12,7 @@ namespace Flora.Gfx {
         internal List<IntPtr> textures;
         internal Dictionary<ushort, GlyphInfo> glyphInfos;
         internal float scale = 1f;
+        internal Color color = new Color(0xFF, 0xFF, 0xFF, 0xFF);
 
         public Font(string path, int size) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
@@ -19,6 +20,7 @@ namespace Flora.Gfx {
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
             if (size > 256) throw new ArgumentException("Font size must be smaller than 256");
 
+            // is there any better way to do this?
             white.r = 0xFF;
             white.g = 0xFF;
             white.b = 0xFF;
@@ -184,6 +186,28 @@ namespace Flora.Gfx {
             ClearCache();
             SDL_ttf.TTF_SetFontHinting(font, (int)hinting);
         }
+
+        /// <summary>
+        /// Set the color of this font.
+        /// </summary>
+        /// <param name="newColor">New color</param>
+        public void SetColor(Color newColor) {
+            SetColor(newColor.r, newColor.g, newColor.b, newColor.a);
+        }
+
+        /// <summary>
+        /// Set the color of this font.
+        /// </summary>
+        /// <param name="r">Red (0-255)</param>
+        /// <param name="g">Green (0-255)</param>
+        /// <param name="b">Blue (0-255)</param>
+        /// <param name="a">Alpha (0-255)</param>
+        public void SetColor(byte r, byte g, byte b, byte a) {
+            color.r = r;
+            color.g = g;
+            color.b = b;
+            color.a = a;
+        }
         
         /// <summary>
         /// Sets scaling of this font.
@@ -215,7 +239,8 @@ namespace Flora.Gfx {
                 dstRect.y = y;
                 dstRect.w = (int)(glyphInfo.rect.w * scale);
                 dstRect.h = (int)(glyphInfo.rect.h * scale);
-                Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), ref dstRect, 0, dstRect.w / 2, dstRect.h / 2, Gfx.FlipMode.None);
+
+                Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), ref dstRect, 0, dstRect.w / 2, dstRect.h / 2, Gfx.FlipMode.None, color);
 
                 currentX += dstRect.w;
             }
