@@ -14,7 +14,8 @@ namespace FloraExample {
             //InputCore core = new InputCore();
             //AudioCore core = new AudioCore();
             //ViewCore core = new ViewCore();
-            ControllerCore core = new ControllerCore();
+            //ControllerCore core = new ControllerCore();
+            FontCore core = new FontCore();
             
             new FloraApplication(core, config);
         }
