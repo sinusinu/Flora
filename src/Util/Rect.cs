@@ -28,7 +28,6 @@ namespace Flora.Util {
             return rect;
         }
 
-        // https://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
         /// <summary>
         /// Check if given two rectangles intersect.
         /// </summary>
@@ -36,7 +35,7 @@ namespace Flora.Util {
         /// <param name="r2"></param>
         /// <returns>true if intersects, false otherwise</returns>
         public static bool Intersect(Rect r1, Rect r2) {
-            return (r1.x < r2.x + r2.w && r1.x + r1.w > r2.x && r1.y > r2.y + r2.h && r1.y + r1.h < r2.y);
+            return r1.x < r2.x + r2.w && r1.x + r1.w > r2.x && r1.y < r2.y + r2.h && r1.y + r1.h > r2.y;
         }
     }
 }
