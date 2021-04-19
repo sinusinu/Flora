@@ -176,6 +176,15 @@ namespace Flora.Gfx {
             glyphInfos.Clear();
         }
 
+        /// <summary>
+        /// Sets hinting of this font. Font cache gets cleared on call.
+        /// </summary>
+        /// <param name="newHinting">New hinting for this font (Default is Normal)</param>
+        public void SetHinting(FontHinting hinting) {
+            ClearCache();
+            SDL_ttf.TTF_SetFontHinting(font, (int)hinting);
+        }
+        
         public void SetScale(float scale) {
             this.scale = scale;
         }
