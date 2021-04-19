@@ -185,10 +185,20 @@ namespace Flora.Gfx {
             SDL_ttf.TTF_SetFontHinting(font, (int)hinting);
         }
         
+        /// <summary>
+        /// Sets scaling of this font.
+        /// </summary>
+        /// <param name="scale">New scale for this font</param>
         public void SetScale(float scale) {
             this.scale = scale;
         }
 
+        /// <summary>
+        /// Draw given text with this font.
+        /// </summary>
+        /// <param name="text">Text to draw</param>
+        /// <param name="x">X position of the text (top-left)</param>
+        /// <param name="y">Y position of the text (top-left)</param>
         public void Draw(string text, int x, int y) {
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
@@ -203,8 +213,8 @@ namespace Flora.Gfx {
                 var dstRect = new SDL.SDL_Rect();
                 dstRect.x = x + currentX;
                 dstRect.y = y;
-                dstRect.w = glyphInfo.rect.w;
-                dstRect.h = glyphInfo.rect.h;
+                dstRect.w = (int)(glyphInfo.rect.w * scale);
+                dstRect.h = (int)(glyphInfo.rect.h * scale);
                 Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), ref dstRect, 0, dstRect.w / 2, dstRect.h / 2, Gfx.FlipMode.None);
 
                 currentX += dstRect.w;
