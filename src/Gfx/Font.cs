@@ -32,6 +32,7 @@ namespace Flora.Gfx {
         }
 
         ~Font() {
+            ClearCache();
             SDL_ttf.TTF_CloseFont(font);
         }
 
@@ -167,6 +168,12 @@ namespace Flora.Gfx {
             SDL.SDL_DestroyTexture(glyphTexture);
 
             return gi;
+        }
+
+        internal void ClearCache() {
+            foreach (var tx in textures) SDL.SDL_DestroyTexture(tx);
+            textures.Clear();
+            glyphInfos.Clear();
         }
 
         public void SetScale(float scale) {
