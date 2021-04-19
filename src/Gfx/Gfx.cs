@@ -250,6 +250,7 @@ namespace Flora.Gfx {
             center.x = (int)(pivotX * activeViewZoom);
             center.y = (int)(pivotY * activeViewZoom);
             
+            SetCurrentTextureColor(region.texture.sdlTexture, currentColor.ToSDLColor());
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
 
