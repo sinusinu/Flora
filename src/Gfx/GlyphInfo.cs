@@ -9,5 +9,10 @@ namespace Flora.Gfx {
             page = -1;
             rect = null;
         }
+
+        internal GlyphInfo(int page, Rect rect) {
+            this.page = page;
+            this.rect = rect;
+        }
     }
 }
