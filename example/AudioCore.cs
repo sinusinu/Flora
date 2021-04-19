@@ -11,6 +11,8 @@ namespace FloraExample {
         Music music;
 
         public override void Prepare() {
+            // WARNING: These files are missing from git repository for legal reasons.
+            //          put any of yours accordingly to test this core.
             sound = Audio.CreateSound(Path.Relative("res/se.mp3"));
             music = Audio.CreateMusic(Path.Relative("res/bgm.mp3"));
 

@@ -8,6 +8,8 @@ namespace FloraExample {
         Font font;
 
         public override void Prepare() {
+            // WARNING: This file is missing from git repository for legal reasons.
+            //          put any of yours accordingly to test this core.
             font = new Font(Path.Relative("res\\font.ttf"), 48);
 
             font.SetHinting(FontHinting.Mono);
