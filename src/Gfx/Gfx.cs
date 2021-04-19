@@ -46,6 +46,14 @@ namespace Flora.Gfx {
         /// <summary>
         /// Set the current color. All textures drawn after this function call will be tinted with this color.
         /// </summary>
+        /// <param name="color">New color</param>
+        public static void SetColor(Color color) {
+            SetColor(color.r, color.g, color.b, color.a);
+        }
+
+        /// <summary>
+        /// Set the current color. All textures drawn after this function call will be tinted with this color.
+        /// </summary>
         /// <param name="r">Red (0-255)</param>
         /// <param name="g">Green (0-255)</param>
         /// <param name="b">Blue (0-255)</param>
