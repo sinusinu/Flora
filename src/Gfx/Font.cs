@@ -60,6 +60,7 @@ namespace Flora.Gfx {
             // create first texture if none exists
             if (textures.Count == 0) {
                 var newTexture = SDL.SDL_CreateTexture(Gfx.sdlRenderer, SDL.SDL_PIXELFORMAT_ARGB8888, (int)SDL.SDL_TextureAccess.SDL_TEXTUREACCESS_TARGET, TextureSize, TextureSize);
+                SDL.SDL_SetTextureBlendMode(newTexture, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
                 textures.Add(newTexture);
             }
 
@@ -150,6 +151,7 @@ namespace Flora.Gfx {
             if (!isGlyphPlaced) {
                 // we need a new page
                 var newTexture = SDL.SDL_CreateTexture(Gfx.sdlRenderer, SDL.SDL_PIXELFORMAT_ARGB8888, (int)SDL.SDL_TextureAccess.SDL_TEXTUREACCESS_TARGET, TextureSize, TextureSize);
+                SDL.SDL_SetTextureBlendMode(newTexture, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
                 textures.Add(newTexture);
 
                 // and draw on new texture at (0, 0)

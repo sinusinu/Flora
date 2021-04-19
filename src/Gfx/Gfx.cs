@@ -37,7 +37,9 @@ namespace Flora.Gfx {
 
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, "linear");
             SetCurrentRenderColor(currentColor.ToSDLColor());
-
+            
+            SDL.SDL_SetRenderDrawBlendMode(sdlRenderer, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
+            
             isGfxInitialized = true;
         }
 
