@@ -94,16 +94,6 @@ namespace Flora.Gfx {
             UpdateView();
         }
 
-        internal static void UpdateView() {
-            var (clientWidth, clientHeight) = GetClientSize();
-            if (activeView == null) {
-                SDL.SDL_RenderSetLogicalSize(sdlRenderer, clientWidth, clientHeight);
-            } else {
-                activeView.CalculateAppliedSize();
-                SDL.SDL_RenderSetLogicalSize(Gfx.sdlRenderer, activeView.ratioCorrectedWidth, activeView.ratioCorrectedHeight);
-            }
-        }
-
         /// <summary>
         /// Clear screen with current color and get ready for drawing.
         /// </summary>
@@ -263,18 +253,6 @@ namespace Flora.Gfx {
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
 
-        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, ref SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip) {
-            dstRect.x = (int)((dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
-            dstRect.y = (int)((dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
-            dstRect.w = (int)(dstRect.w * activeViewZoom);
-            dstRect.h = (int)(dstRect.h * activeViewZoom);
-            SDL.SDL_Point center;
-            center.x = (int)(pivotX * activeViewZoom);
-            center.y = (int)(pivotY * activeViewZoom);
-
-            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref dstRect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
-        }
-
         /// <summary>
         /// Draw primitive line.
         /// </summary>
@@ -306,6 +284,30 @@ namespace Flora.Gfx {
             if (fill) SDL.SDL_RenderFillRect(Gfx.sdlRenderer, ref sr);
             else SDL.SDL_RenderDrawRect(Gfx.sdlRenderer, ref sr);
         }
+
+#region Internal functions
+        internal static void UpdateView() {
+            var (clientWidth, clientHeight) = GetClientSize();
+            if (activeView == null) {
+                SDL.SDL_RenderSetLogicalSize(sdlRenderer, clientWidth, clientHeight);
+            } else {
+                activeView.CalculateAppliedSize();
+                SDL.SDL_RenderSetLogicalSize(Gfx.sdlRenderer, activeView.ratioCorrectedWidth, activeView.ratioCorrectedHeight);
+            }
+        }
+
+        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, ref SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip) {
+            dstRect.x = (int)((dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
+            dstRect.y = (int)((dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
+            dstRect.w = (int)(dstRect.w * activeViewZoom);
+            dstRect.h = (int)(dstRect.h * activeViewZoom);
+            SDL.SDL_Point center;
+            center.x = (int)(pivotX * activeViewZoom);
+            center.y = (int)(pivotY * activeViewZoom);
+
+            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref dstRect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
+        }
+#endregion
 
 #region Private functions
         private static SDL.SDL_Color GetCurrentRenderColor() {
