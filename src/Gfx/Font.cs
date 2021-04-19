@@ -162,8 +162,21 @@ namespace Flora.Gfx {
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
 
-            // TODO: foreach glyph GetGlyphInfo and draw
-            // check doc of TTF_GlyphMetrics
+            int currentX = x;
+
+            foreach (var glyph in stringGlyphs) {
+                var glyphInfo = GetGlyphInfo(glyph);
+                if (glyphInfo.page == -1) continue;
+
+                var dstRect = new SDL.SDL_Rect();
+                dstRect.x = x + currentX;
+                dstRect.y = y;
+                dstRect.w = glyphInfo.rect.w;
+                dstRect.h = glyphInfo.rect.h;
+                Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), ref dstRect, 0, dstRect.w / 2, dstRect.h / 2, Gfx.FlipMode.None);
+
+                currentX += dstRect.w;
+            }
         }
     }
 }

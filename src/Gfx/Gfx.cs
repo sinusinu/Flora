@@ -34,7 +34,7 @@ namespace Flora.Gfx {
         internal static void Init(IntPtr w, IntPtr r) {
             sdlWindow = w;
             sdlRenderer = r;
-            
+
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, "linear");
             SetCurrentRenderColor(currentColor.ToSDLColor());
 
@@ -243,6 +243,18 @@ namespace Flora.Gfx {
             center.y = (int)(pivotY * activeViewZoom);
             
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
+        }
+
+        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, ref SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip) {
+            dstRect.x = (int)((dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
+            dstRect.y = (int)((dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
+            dstRect.w = (int)(dstRect.w * activeViewZoom);
+            dstRect.h = (int)(dstRect.h * activeViewZoom);
+            SDL.SDL_Point center;
+            center.x = (int)(pivotX * activeViewZoom);
+            center.y = (int)(pivotY * activeViewZoom);
+
+            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref dstRect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
 
         /// <summary>
