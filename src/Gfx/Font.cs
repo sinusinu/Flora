@@ -75,7 +75,7 @@ namespace Flora.Gfx {
                     Rect targetRect = new Rect(0, 0, w, h);
                     var targetRectS = targetRect.ToSDLRect();
                     SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRectS);
-                    glyphInfos.Add(glyph, new GlyphInfo(glyph, targetRect));
+                    glyphInfos.Add(glyph, new GlyphInfo(i, targetRect));
                     SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
                     isGlyphPlaced = true;
                     break;
@@ -99,7 +99,7 @@ namespace Flora.Gfx {
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, textures[i]);
                             var targetRect = testRect.ToSDLRect();
                             SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRect);
-                            glyphInfos.Add(glyph, new GlyphInfo(glyph, testRect));
+                            glyphInfos.Add(glyph, new GlyphInfo(i, testRect));
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
                             isGlyphPlacedOnThisPage = true;
                             break;
@@ -119,7 +119,7 @@ namespace Flora.Gfx {
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, textures[i]);
                             var targetRect = testRect.ToSDLRect();
                             SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRect);
-                            glyphInfos.Add(glyph, new GlyphInfo(glyph, testRect));
+                            glyphInfos.Add(glyph, new GlyphInfo(i, testRect));
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
                             isGlyphPlacedOnThisPage = true;
                             break;
@@ -145,7 +145,7 @@ namespace Flora.Gfx {
                 Rect targetRect = new Rect(0, 0, w, h);
                 var targetRectS = targetRect.ToSDLRect();
                 SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRectS);
-                glyphInfos.Add(glyph, new GlyphInfo(glyph, targetRect));
+                glyphInfos.Add(glyph, new GlyphInfo(textures.Count - 1, targetRect));
                 SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
             }
 
