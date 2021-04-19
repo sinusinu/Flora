@@ -60,6 +60,14 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
+        /// Get the current color.
+        /// </summary>
+        /// <returns></returns>
+        public static Color GetColor() {
+            return currentColor;
+        }
+
+        /// <summary>
         /// Return the size of client region.
         /// </summary>
         public static (int, int) GetClientSize() {
