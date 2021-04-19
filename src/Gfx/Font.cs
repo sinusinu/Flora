@@ -26,8 +26,9 @@ namespace Flora.Gfx {
 
             textures = new List<IntPtr>();
             glyphInfos = new Dictionary<ushort, GlyphInfo>();
-            
+
             font = SDL_ttf.TTF_OpenFont(path, size);
+            if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
         }
 
         ~Font() {
@@ -48,8 +49,6 @@ namespace Flora.Gfx {
                 return emptyGi;
             }
 
-            var gi = new GlyphInfo();
-
             // get glyph texture
             var glyphSurface = SDL_ttf.TTF_RenderGlyph_Blended(font, glyph, white);
             var glyphTexture = SDL.SDL_CreateTextureFromSurface(Gfx.sdlRenderer, glyphSurface);
@@ -64,21 +63,27 @@ namespace Flora.Gfx {
                 textures.Add(newTexture);
             }
 
+            // will return this
+            GlyphInfo gi = null;
+
             // I know this part is burning pile of garbage, will consider optimizing sometime later
             bool isGlyphPlaced = false;
             // for each page...
             for (int i = 0; i < textures.Count; i++) {
                 // get all glyph rects in this page
                 List<Rect> rectsOfThisPage = new List<Rect>();
-                foreach (var j in glyphInfos) if (j.Value.page == i) rectsOfThisPage.Add(j.Value.rect);
+                foreach (var j in glyphInfos) if (j.Value.page == i) {
+                    rectsOfThisPage.Add(j.Value.rect);
+                } 
                 
                 // if this page is empty, draw here on (0, 0)
                 if (rectsOfThisPage.Count == 0) {
                     SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, textures[i]);
                     Rect targetRect = new Rect(0, 0, w, h);
                     var targetRectS = targetRect.ToSDLRect();
+                    gi = new GlyphInfo(i, targetRect);
                     SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRectS);
-                    glyphInfos.Add(glyph, new GlyphInfo(i, targetRect));
+                    glyphInfos.Add(glyph, gi);
                     SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
                     isGlyphPlaced = true;
                     break;
@@ -96,13 +101,16 @@ namespace Flora.Gfx {
                     if (testRect.x + testRect.w <= TextureSize && testRect.y + testRect.h <= TextureSize) {
                         // and if it does not intersect with rects of this page...
                         bool isVacant = true;
-                        foreach (var rr in rectsOfThisPage) if (Rect.Intersect(testRect, rr)) isVacant = false;
+                        foreach (var rr in rectsOfThisPage) {
+                            if (Rect.Intersect(testRect, rr)) isVacant = false;
+                        }
                         if (isVacant) {
                             // then place it here
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, textures[i]);
                             var targetRect = testRect.ToSDLRect();
+                            gi = new GlyphInfo(i, testRect);
                             SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRect);
-                            glyphInfos.Add(glyph, new GlyphInfo(i, testRect));
+                            glyphInfos.Add(glyph, gi);
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
                             isGlyphPlacedOnThisPage = true;
                             break;
@@ -121,8 +129,9 @@ namespace Flora.Gfx {
                             // then place it here
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, textures[i]);
                             var targetRect = testRect.ToSDLRect();
+                            gi = new GlyphInfo(i, testRect);
                             SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRect);
-                            glyphInfos.Add(glyph, new GlyphInfo(i, testRect));
+                            glyphInfos.Add(glyph, gi);
                             SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
                             isGlyphPlacedOnThisPage = true;
                             break;
@@ -147,12 +156,14 @@ namespace Flora.Gfx {
                 SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, textures[textures.Count - 1]);
                 Rect targetRect = new Rect(0, 0, w, h);
                 var targetRectS = targetRect.ToSDLRect();
+                gi = new GlyphInfo(textures.Count - 1, targetRect);
                 SDL.SDL_RenderCopy(Gfx.sdlRenderer, glyphTexture, IntPtr.Zero, ref targetRectS);
-                glyphInfos.Add(glyph, new GlyphInfo(textures.Count - 1, targetRect));
+                glyphInfos.Add(glyph, gi);
                 SDL.SDL_SetRenderTarget(Gfx.sdlRenderer, IntPtr.Zero);
             }
 
             SDL.SDL_DestroyTexture(glyphTexture);
+
             return gi;
         }
 
