@@ -9,13 +9,13 @@ namespace FloraExample {
             config.width = 1280;
             config.height = 720;
             
-            //BasicCore core = new BasicCore();
+            BasicCore core = new BasicCore();
             //TextureCore core = new TextureCore();
             //InputCore core = new InputCore();
             //AudioCore core = new AudioCore();
             //ViewCore core = new ViewCore();
             //ControllerCore core = new ControllerCore();
-            FontCore core = new FontCore();
+            //FontCore core = new FontCore();
             
             new FloraApplication(core, config);
         }
