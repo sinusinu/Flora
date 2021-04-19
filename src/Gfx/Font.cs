@@ -24,6 +24,9 @@ namespace Flora.Gfx {
             white.b = 0xFF;
             white.a = 0xFF;
 
+            textures = new List<IntPtr>();
+            glyphInfos = new Dictionary<ushort, GlyphInfo>();
+            
             font = SDL_ttf.TTF_OpenFont(path, size);
         }
 
