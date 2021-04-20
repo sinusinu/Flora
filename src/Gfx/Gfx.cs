@@ -100,6 +100,13 @@ namespace Flora.Gfx {
         public static void Begin() {
             Begin(currentColor);
         }
+
+        /// <summary>
+        /// Clear screen with current color and get ready for drawing.
+        /// </summary>
+        public static void Begin(byte r, byte g, byte b, byte a) {
+            Begin(new Color(r, g, b, a));
+        }
         
         /// <summary>
         /// Clear screen with given color and get ready for drawing.
