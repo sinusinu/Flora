@@ -31,11 +31,17 @@ namespace Flora.Util {
         /// <summary>
         /// Check if given two rectangles intersect.
         /// </summary>
-        /// <param name="r1"></param>
-        /// <param name="r2"></param>
         /// <returns>true if intersects, false otherwise</returns>
         public static bool Intersect(Rect r1, Rect r2) {
             return r1.x < r2.x + r2.w && r1.x + r1.w > r2.x && r1.y < r2.y + r2.h && r1.y + r1.h > r2.y;
+        }
+
+        /// <summary>
+        /// Check if given rectangle and point intersect.
+        /// </summary>
+        /// <returns></returns>
+        public static bool Intersect(Rect r, int x, int y) {
+            return r.x < x && x < r.x + r.w && r.y < y && y < r.y + r.h;
         }
     }
 }
