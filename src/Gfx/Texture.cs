@@ -8,8 +8,8 @@ namespace Flora.Gfx {
     /// </summary>
     public class Texture {
         internal IntPtr sdlTexture { get; private set; }
-        public int width;
-        public int height;
+        public int width { get; private set; }
+        public int height  { get; private set; }
 
         public Texture(string path) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
@@ -28,8 +28,9 @@ namespace Flora.Gfx {
 
             SDL.SDL_SetTextureBlendMode(sdlTexture, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
 
-            uint d1; int d2;    // dummies
-            SDL.SDL_QueryTexture(sdlTexture, out d1, out d2, out width, out height);
+            uint d1; int d2; int w; int h;
+            SDL.SDL_QueryTexture(sdlTexture, out d1, out d2, out w, out h);
+            width = w; height = h;
         }
 
         ~Texture() {
