@@ -218,6 +218,29 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
+        /// Measure the size of given text with this font.
+        /// </summary>
+        /// <param name="text">Text to measure</param>
+        /// <returns></returns>
+        public (int, int) Measure(string text) {
+            int width = 0; int height = 0;
+            
+            var charArray = text.ToCharArray();
+            var stringGlyphs = new ushort[charArray.Length];
+            for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
+
+            foreach (var glyph in stringGlyphs) {
+                var glyphInfo = GetGlyphInfo(glyph);
+                if (glyphInfo.page == -1) continue;
+
+                width += glyphInfo.rect.w;
+                height = Math.Max(height, glyphInfo.rect.h);
+            }
+
+            return (width, height);
+        }
+
+        /// <summary>
         /// Draw given text with this font.
         /// </summary>
         /// <param name="text">Text to draw</param>
