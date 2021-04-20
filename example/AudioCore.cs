@@ -38,10 +38,6 @@ namespace FloraExample {
             Gfx.End();
         }
 
-        public override void Dispose() {
-            
-        }
-
         public void OnKeyDown(KeyCode keycode) {
             if (keycode == KeyCode.Q) sound.Play();
             else if (keycode == KeyCode.A) music.Play();

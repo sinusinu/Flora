@@ -49,7 +49,5 @@ namespace FloraExample {
             
             Gfx.End();
         }
-        
-        public override void Dispose() {}
     }
 }

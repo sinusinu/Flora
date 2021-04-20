@@ -26,10 +26,6 @@ namespace FloraExample {
             Gfx.End();
         }
 
-        public override void Dispose() {
-            
-        }
-
         public void OnKeyDown(KeyCode keycode) {
             Console.WriteLine("KeyDown: {0}", Enum.GetName<KeyCode>(keycode));
         }

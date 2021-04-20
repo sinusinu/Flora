@@ -30,10 +30,5 @@ namespace Flora {
         /// Main logic of the application should be placed here.
         /// </summary>
         public virtual void Render(float delta) {}
-
-        /// <summary>
-        /// Called when your resources should dispose.
-        /// </summary>
-        public virtual void Dispose() {}
     }
 }

@@ -24,10 +24,5 @@ namespace Flora {
         /// Main logic of the screen should be placed here.
         /// </summary>
         void Render(float delta);
-
-        /// <summary>
-        /// Called when your resources should dispose.
-        /// </summary>
-        void Dispose();
     }
 }

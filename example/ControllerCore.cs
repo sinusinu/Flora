@@ -17,8 +17,6 @@ namespace FloraExample {
             Gfx.Begin();
             Gfx.End();
         }
-        
-        public override void Dispose() {}
 
         public void OnAxisMotion(int which, ControllerAxis axis, float value) {
             Console.WriteLine("AxisMotion\tID {0}\tAxis {1}\t{2}", which, Enum.GetName<ControllerAxis>(axis), value);

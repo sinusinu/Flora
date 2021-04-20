@@ -129,9 +129,6 @@ namespace Flora {
                 app.Render(delta);
             }
 
-            // call core dispose
-            app.Dispose();
-
             // cleanup things
             SDL.SDL_DestroyRenderer(renderer);
             SDL.SDL_DestroyWindow(window);
