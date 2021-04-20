@@ -104,6 +104,10 @@ namespace Flora.Gfx {
         /// <summary>
         /// Clear screen with current color and get ready for drawing.
         /// </summary>
+        /// <param name="r">Color to clear screen: Red (0-255)</param>
+        /// <param name="g">Color to clear screen: Green (0-255)</param>
+        /// <param name="b">Color to clear screen: Blue (0-255)</param>
+        /// <param name="a">Color to clear screen: Alpha (0-255)</param>
         public static void Begin(byte r, byte g, byte b, byte a) {
             Begin(new Color(r, g, b, a));
         }
@@ -111,7 +115,7 @@ namespace Flora.Gfx {
         /// <summary>
         /// Clear screen with given color and get ready for drawing.
         /// </summary>
-        /// <param name="clearColor"></param>
+        /// <param name="clearColor">Color to clear screen</param>
         public static void Begin(Color clearColor) {
             isDrawing = true;
 
