@@ -1,7 +1,7 @@
 using System;
 
 namespace Flora.Util { 
-    class Math {
+    class MathUtils {
         /// <summary>
         /// Convert Radian angle to Degree angle.
         /// </summary>
