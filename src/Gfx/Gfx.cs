@@ -308,18 +308,18 @@ namespace Flora.Gfx {
             }
         }
 
-        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, ref SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
+        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
             SetCurrentTextureColor(texture, color.ToSDLColor());
-
-            dstRect.x = (int)((dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
-            dstRect.y = (int)((dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
-            dstRect.w = (int)(dstRect.w * activeViewZoom);
-            dstRect.h = (int)(dstRect.h * activeViewZoom);
+            SDL.SDL_Rect drect;
+            drect.x = (int)((dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
+            drect.y = (int)((dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
+            drect.w = (int)(dstRect.w * activeViewZoom);
+            drect.h = (int)(dstRect.h * activeViewZoom);
             SDL.SDL_Point center;
             center.x = (int)(pivotX * activeViewZoom);
             center.y = (int)(pivotY * activeViewZoom);
 
-            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref dstRect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
         
         internal static SDL.SDL_Color GetCurrentRenderColor() {
