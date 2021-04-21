@@ -233,8 +233,8 @@ namespace Flora.Gfx {
                 var glyphInfo = GetGlyphInfo(glyph);
                 if (glyphInfo.page == -1) continue;
 
-                width += glyphInfo.rect.w;
-                height = Math.Max(height, glyphInfo.rect.h);
+                width += (int)(glyphInfo.rect.w * scale);
+                height = Math.Max(height, (int)(glyphInfo.rect.h * scale));
             }
 
             return (width, height);
