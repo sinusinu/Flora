@@ -30,6 +30,18 @@ namespace Flora.Gfx {
             Horizontal = SDL.SDL_RendererFlip.SDL_FLIP_HORIZONTAL,
             Vertical = SDL.SDL_RendererFlip.SDL_FLIP_VERTICAL
         }
+
+        /// <summary>
+        /// Window mode.
+        /// </summary>
+        public enum WindowMode : uint {
+            /// <summary>Windowed mode.</summary>
+            Windowed = 0,
+            /// <summary>Borderless Fullscreen mode (aka 'fake').</summary>
+            Borderless = SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP,
+            /// <summary>Exclusive Fullscreen mode.</summary>
+            Exclusive = SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN
+        }
         
         internal static void Init(IntPtr w, IntPtr r) {
             sdlWindow = w;
@@ -92,6 +104,23 @@ namespace Flora.Gfx {
             activeView = view;
 
             UpdateView();
+        }
+
+        /// <summary>
+        /// Set window size. Does nothing when on fullscreen.
+        /// </summary>
+        /// <param name="width">New width of the window</param>
+        /// <param name="height">New height of the window</param>
+        public static void SetWindowSize(int width, int height) {
+            SDL.SDL_SetWindowSize(sdlWindow, width, height);
+        }
+
+        /// <summary>
+        /// Set new window mode.
+        /// </summary>
+        /// <param name="mode">New window mode</param>
+        public static void SetWindowMode(WindowMode mode) {
+            SDL.SDL_SetWindowFullscreen(sdlWindow, (uint)mode);
         }
 
         /// <summary>
