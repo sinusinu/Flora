@@ -39,12 +39,11 @@ namespace Flora.Gfx {
         }
 
         internal GlyphInfo GetGlyphInfo(ushort glyph) {
+            // return GlyphInfo for given glyph if it is already drawn
             if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
-            return PlaceGlyph(glyph);
-        }
+            
+            // if not: draw glyph, generate new GlyphInfo and return
 
-        // glyph must not be in glyphInfos - call GetGlyphInfo to implicitly check it
-        internal GlyphInfo PlaceGlyph(ushort glyph) {
             // this glyph is not supported by font - don't draw it
             if (SDL_ttf.TTF_GlyphIsProvided(font, glyph) == 0) {
                 var emptyGi = new GlyphInfo();
