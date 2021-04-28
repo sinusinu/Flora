@@ -123,7 +123,7 @@ namespace Flora {
                 // calculate delta
                 last = now;
                 now = SDL.SDL_GetPerformanceCounter();
-                delta = (float)(((now - last) * 1000) / (float)freq);
+                delta = (float)(((now - last)) / (float)freq);
 
                 // call core render
                 app.Render(delta);
