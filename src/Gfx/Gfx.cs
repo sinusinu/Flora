@@ -217,6 +217,7 @@ namespace Flora.Gfx {
         /// <param name="pivotY">Y Pivot</param>
         /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
+            if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
             SDL.SDL_Rect drect;
             drect.x = (int)((x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
             drect.y = (int)((y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
@@ -280,6 +281,7 @@ namespace Flora.Gfx {
         /// <param name="pivotY">Y Pivot</param>
         /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
+            if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
             SDL.SDL_Rect drect;
             drect.x = (int)((x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
@@ -302,6 +304,7 @@ namespace Flora.Gfx {
         /// <param name="x2">X position of ending point</param>
         /// <param name="y2">Y position of ending point</param>
         public static void DrawLine(int x1, int y1, int x2, int y2) {
+            if (!isDrawing) throw new InvalidOperationException("DrawLine must be called between Gfx.Begin and Gfx.End");
             SDL.SDL_RenderDrawLine(
                 Gfx.sdlRenderer,
                 (int)((x1 + activeViewCenterX - activeViewOffsetX) * activeViewZoom),
@@ -317,6 +320,7 @@ namespace Flora.Gfx {
         /// <param name="rect">Rectangle to draw</param>
         /// <param name="fill">Should rectangle be filled or not</param>
         public static void DrawRect(Util.Rect rect, bool fill) {
+            if (!isDrawing) throw new InvalidOperationException("DrawRect must be called between Gfx.Begin and Gfx.End");
             SDL.SDL_Rect sr = rect.ToSDLRect();
             sr.x = (int)((sr.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
             sr.y = (int)((sr.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);

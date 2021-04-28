@@ -252,6 +252,8 @@ namespace Flora.Gfx {
         /// <param name="x">X position of the text (top-left)</param>
         /// <param name="y">Y position of the text (top-left)</param>
         public void Draw(string text, int x, int y) {
+            if (!Gfx.isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
+
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
