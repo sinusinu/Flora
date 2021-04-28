@@ -93,6 +93,7 @@ namespace Flora.Gfx {
                 }
                 
                 bool isGlyphPlacedOnThisPage = false;
+
                 // for each rects of this page...
                 foreach (var r in rectsOfThisPage) {
                     Rect testRect = new Rect(0, 0, w, h);
@@ -119,6 +120,11 @@ namespace Flora.Gfx {
                             break;
                         }
                     }
+                }
+                
+                // is this the best way to achieve right-first placement?
+                foreach (var r in rectsOfThisPage) {
+                    Rect testRect = new Rect(0, 0, w, h);
 
                     // check bottom of this rect
                     testRect.x = r.x;
