@@ -251,7 +251,7 @@ namespace Flora.Gfx {
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
 
-            int currentX = x;
+            int currentX = 0;
 
             foreach (var glyph in stringGlyphs) {
                 var glyphInfo = GetGlyphInfo(glyph);
