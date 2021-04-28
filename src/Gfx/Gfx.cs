@@ -190,14 +190,14 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
-        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY).
+        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) degrees with pivot of (pivotX, pivotY).
         /// </summary>
         /// <param name="texture">Texture to draw</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
-        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="rotation">Rotation angle in degrees</param>
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY) {
@@ -205,14 +205,14 @@ namespace Flora.Gfx {
         }
         
         /// <summary>
-        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY) with flip option of (flip).
+        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) degrees with pivot of (pivotX, pivotY) with flip option of (flip).
         /// </summary>
         /// <param name="texture">Texture to draw</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
-        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="rotation">Rotation angle in degrees</param>
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
         /// <param name="flip">Flip option (use | to combine options)</param>
@@ -254,14 +254,14 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
-        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY).
+        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) degrees with pivot of (pivotX, pivotY).
         /// </summary>
         /// <param name="region">TextureRegion to draw</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
-        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="rotation">Rotation angle in degrees</param>
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
         public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY) {
@@ -269,14 +269,14 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
-        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) radians with pivot of (pivotX, pivotY) with flip option of (flip).
+        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) degrees with pivot of (pivotX, pivotY) with flip option of (flip).
         /// </summary>
         /// <param name="region">TextureRegion to draw</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
-        /// <param name="rotation">Rotation angle in radians</param>
+        /// <param name="rotation">Rotation angle in degrees</param>
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
         /// <param name="flip">Flip option (use | to combine options)</param>
