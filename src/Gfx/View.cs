@@ -38,9 +38,8 @@ namespace Flora.Gfx {
             if (letterBox) {
                 ratioCorrectedWidth = givenWidth;
                 ratioCorrectedHeight = givenHeight;
-                centerX = 0;
-                centerY = 0;
-                return;
+                centerX = givenWidth / 2;
+                centerY = givenHeight / 2;
             } else {
                 var (clientWidth, clientHeight) = Gfx.GetClientSize();
 
@@ -52,21 +51,21 @@ namespace Flora.Gfx {
                     float ratio = givenSizeAspectRatio / clientSizeAspectRatio;
                     ratioCorrectedWidth = (int)(givenWidth / ratio);
                     ratioCorrectedHeight = givenHeight;
-                    centerX = (ratioCorrectedWidth - givenWidth) / 2;
-                    centerY = 0;
+                    centerX = ((ratioCorrectedWidth - givenWidth) / 2) + (givenWidth / 2);
+                    centerY = givenHeight / 2;
                 } else if (clientSizeAspectRatio + 0.005f < givenSizeAspectRatio) {
                     // client is vertically stretched
                     float ratio = clientSizeAspectRatio / givenSizeAspectRatio;
                     ratioCorrectedWidth = givenWidth;
                     ratioCorrectedHeight = (int)(givenHeight / ratio);
-                    centerX = 0;
-                    centerY = (ratioCorrectedHeight - givenHeight) / 2;
+                    centerX = givenWidth / 2;
+                    centerY = ((ratioCorrectedHeight - givenHeight) / 2) + (givenHeight / 2);
                 } else {
                     // almost same aspect ratio
                     ratioCorrectedWidth = givenWidth;
                     ratioCorrectedHeight = givenHeight;
-                    centerX = 0;
-                    centerY = 0;
+                    centerX = givenWidth / 2;
+                    centerY = givenHeight / 2;
                 }
             }
         }
