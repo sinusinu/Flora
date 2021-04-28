@@ -34,7 +34,7 @@ If you want to try it anyway, Please take a read on temporary Quick Start Guide 
 4. Add Flora as reference to your project using ```dotnet add reference path\to\flora\Flora.csproj```
 5. Build project once using ```dotnet build```
 6. Acquire and Place [SDL2.dll](https://www.libsdl.org/download-2.0.php), [SDL_image.dll](https://www.libsdl.org/projects/SDL_image/), [SDL_mixer.dll](https://www.libsdl.org/projects/SDL_mixer/), [SDL_ttf.dll](https://www.libsdl.org/projects/SDL_ttf/) and all of its dependency DLLs into build directory (where the exe file is located)
-7. Setup basic codes (See the example project for more info)
+7. Setup basic codes:
 
 Program.cs:
 ```csharp
@@ -74,7 +74,7 @@ namespace FloraExample {
 ```
 
 8. Run project using ```dotnet run```
-9. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something (See ```FloraExample.csproj``` file and ```extlibs``` directory inside example project for more info)
+9. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something
 
 ## License
 

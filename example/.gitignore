@@ -1,8 +1,0 @@
-# do not add any SDL binaries to git repo!
-extlibs/*.dll
-
-# files used in AudioCore are public domain, but in case...
-res/*.mp3
-
-# also font...
-res/*.ttf
