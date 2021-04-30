@@ -6,9 +6,9 @@ namespace Flora {
         /// <summary>
         /// Start a new Flora application with given core and settings.
         /// </summary>
-        /// <param name="app">Instance of the class that extends ApplicationCore</param>
+        /// <param name="core">Instance of the class that extends ApplicationCore</param>
         /// <param name="config">ApplicationConfiguration to apply</param>
-        public FloraApplication(ApplicationCore app, ApplicationConfiguration config) {
+        public FloraApplication(ApplicationCore core, ApplicationConfiguration config) {
             // init SDL and friends
             SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
@@ -55,7 +55,7 @@ namespace Flora {
             Flora.Audio.Audio.Init();
 
             // call core prepare
-            app.Prepare();
+            core.Prepare();
 
             // main loop stuff
             SDL.SDL_Event e;
@@ -106,14 +106,14 @@ namespace Flora {
                         case SDL.SDL_EventType.SDL_WINDOWEVENT:
                             switch (e.window.windowEvent) {
                                 case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED:
-                                    app.Resume();
+                                    core.Resume();
                                     break;
                                 case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_LOST:
-                                    app.Pause();
+                                    core.Pause();
                                     break;
                                 case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED:
                                     Gfx.Gfx.UpdateView();
-                                    app.Resize(e.window.data1, e.window.data2);
+                                    core.Resize(e.window.data1, e.window.data2);
                                     break;
                             }
                             break;
@@ -126,7 +126,7 @@ namespace Flora {
                 delta = (float)(((now - last)) / (float)freq);
 
                 // call core render
-                app.Render(delta);
+                core.Render(delta);
             }
 
             // cleanup things
