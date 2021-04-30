@@ -121,7 +121,13 @@ namespace Flora.Gfx {
                         }
                     }
                 }
-                
+
+                // if it's drawn in this page, skip checking pages after this
+                if (isGlyphPlacedOnThisPage) {
+                    isGlyphPlaced = true;
+                    break;
+                }
+
                 // is this the best way to achieve right-first placement?
                 foreach (var r in rectsOfThisPage) {
                     Rect testRect = new Rect(0, 0, w, h);
