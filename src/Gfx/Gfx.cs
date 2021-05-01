@@ -220,6 +220,10 @@ namespace Flora.Gfx {
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
+            // replace (x - activeViewOffsetX) with px
+            //int px = (int)((x - activeViewOffsetX) * MathF.Cos(MathUtils.DegToRad((float)rotation)) + (y - activeViewOffsetY) * MathF.Sin(MathUtils.DegToRad((float)rotation)));
+            //int py = (int)(-(x - activeViewOffsetX) * MathF.Sin(MathUtils.DegToRad((float)rotation)) + (y - activeViewOffsetY) * MathF.Cos(MathUtils.DegToRad((float)rotation)));
+
             SDL.SDL_Rect drect;
             drect.x = (int)(((x - activeViewOffsetX) * activeViewZoom) + activeViewCenterX);
             drect.y = (int)(((y - activeViewOffsetY) * activeViewZoom) + activeViewCenterY);
@@ -229,6 +233,8 @@ namespace Flora.Gfx {
             SDL.SDL_Point center;
             center.x = (int)(pivotX * activeViewZoom);
             center.y = (int)(pivotY * activeViewZoom);
+            //center.x = -(int)((x - activeViewOffsetX) * activeViewZoom);
+            //center.y = -(int)((y - activeViewOffsetY) * activeViewZoom);
             
             SetCurrentTextureColor(texture.sdlTexture, currentColor.ToSDLColor());
             SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture.sdlTexture, IntPtr.Zero, ref drect, rotation + activeViewRotation, ref center, (SDL.SDL_RendererFlip)flip);
