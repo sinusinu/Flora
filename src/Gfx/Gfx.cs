@@ -14,14 +14,14 @@ namespace Flora.Gfx {
 
         // view
         internal static View activeView = null;
-        internal static int activeViewCenterX;
-        internal static int activeViewCenterY;
-        internal static int activeViewOffsetX;
-        internal static int activeViewOffsetY;
-        internal static int activeViewWidth;
-        internal static int activeViewHeight;
-        internal static float activeViewZoom;
-        internal static int activeViewRotation;
+        internal static int activeViewCenterX = 0;
+        internal static int activeViewCenterY = 0;
+        internal static int activeViewOffsetX = 0;
+        internal static int activeViewOffsetY = 0;
+        internal static int activeViewWidth = 0;
+        internal static int activeViewHeight = 0;
+        internal static float activeViewZoom = 1f;
+        internal static int activeViewRotation = 0;
 
         /// <summary>
         /// Flip options for drawing textures.
