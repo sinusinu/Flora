@@ -21,6 +21,7 @@ namespace Flora.Gfx {
         internal static int activeViewWidth;
         internal static int activeViewHeight;
         internal static float activeViewZoom;
+        internal static int activeViewRotation;
 
         /// <summary>
         /// Flip options for drawing textures.
@@ -350,6 +351,7 @@ namespace Flora.Gfx {
                 activeViewWidth = 0;
                 activeViewHeight = 0;
                 activeViewZoom = 1f;
+                activeViewRotation = 0;
             } else {
                 activeViewCenterX = (int)(activeView.centerX);
                 activeViewCenterY = (int)(activeView.centerY);
@@ -358,6 +360,7 @@ namespace Flora.Gfx {
                 activeViewWidth = activeView.ratioCorrectedWidth;
                 activeViewHeight = activeView.ratioCorrectedHeight;
                 activeViewZoom = activeView._zoom;
+                activeViewRotation = activeView._rotation;
             }
         }
 
