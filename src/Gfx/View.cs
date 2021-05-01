@@ -16,7 +16,11 @@ namespace Flora.Gfx {
         internal float offsetY;
         internal bool letterBox;
 
-        internal float zoom = 1f;
+        internal float _zoom = 1f;
+
+        public float positionX { get { return offsetX; } set { offsetX = value; if (Gfx.activeView == this) Gfx.activeViewOffsetX = (int)offsetX; } }
+        public float positionY { get { return offsetY; } set { offsetY = value; if (Gfx.activeView == this) Gfx.activeViewOffsetY = (int)offsetY; } }
+        public float zoom { get { return _zoom; } set { _zoom = value; if (Gfx.activeView == this) Gfx.activeViewZoom = _zoom; } }
 
         /// <summary>
         /// Create new view with given size.
@@ -69,15 +73,5 @@ namespace Flora.Gfx {
                 }
             }
         }
-
-        public void SetPosition(float x, float y) { offsetX = x; offsetY = y; }
-        public void SetPositionX(float x) { offsetX = x; }
-        public void SetPositionY(float y) { offsetY = y; }
-        public void SetZoom(float zoom) { this.zoom = zoom; }
-
-        public (float, float) GetPosition() { return (offsetX, offsetY); }
-        public float GetPositionX() { return offsetX; }
-        public float GetPositionY() { return offsetY; }
-        public float GetZoom() { return zoom; }
     }
 }
