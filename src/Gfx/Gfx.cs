@@ -1,4 +1,5 @@
 using System;
+using Flora.Util;
 using SDL2;
 
 namespace Flora.Gfx {
@@ -21,7 +22,7 @@ namespace Flora.Gfx {
         internal static int activeViewWidth = 0;
         internal static int activeViewHeight = 0;
         internal static float activeViewZoom = 1f;
-        internal static int activeViewRotation = 0;
+        internal static float activeViewRotation = 0f;
 
         /// <summary>
         /// Flip options for drawing textures.
@@ -52,7 +53,7 @@ namespace Flora.Gfx {
             SetCurrentRenderColor(currentColor.ToSDLColor());
             
             SDL.SDL_SetRenderDrawBlendMode(sdlRenderer, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
-            
+
             isGfxInitialized = true;
         }
 
@@ -218,9 +219,14 @@ namespace Flora.Gfx {
         /// <param name="flip">Flip option (use | to combine options)</param>
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
+
+            //int dtX = x - activeViewOffsetX;
+            //int dtY = y - activeViewOffsetY;
+            //Console.WriteLine("dtX, dtY = {0}, {1}", dtX, dtY);
+
             SDL.SDL_Rect drect;
-            drect.x = (int)((x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
-            drect.y = (int)((y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
+            drect.x = (int)((x * activeViewZoom) + activeViewCenterX - activeViewOffsetX);
+            drect.y = (int)((y * activeViewZoom) + activeViewCenterY - activeViewOffsetY);
             drect.w = (int)(width * activeViewZoom);
             drect.h = (int)(height * activeViewZoom);
             SDL.SDL_Point center;
@@ -228,7 +234,7 @@ namespace Flora.Gfx {
             center.y = (int)(pivotY * activeViewZoom);
             
             SetCurrentTextureColor(texture.sdlTexture, currentColor.ToSDLColor());
-            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture.sdlTexture, IntPtr.Zero, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture.sdlTexture, IntPtr.Zero, ref drect, rotation + activeViewRotation, ref center, (SDL.SDL_RendererFlip)flip);
         }
 
         /// <summary>

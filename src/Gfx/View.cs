@@ -17,12 +17,39 @@ namespace Flora.Gfx {
         internal bool letterBox;
 
         internal float _zoom = 1f;
-        internal int _rotation = 0;
+        internal float _rotation = 0;
 
-        public float positionX { get { return offsetX; } set { offsetX = value; if (Gfx.activeView == this) Gfx.activeViewOffsetX = (int)offsetX; } }
-        public float positionY { get { return offsetY; } set { offsetY = value; if (Gfx.activeView == this) Gfx.activeViewOffsetY = (int)offsetY; } }
-        public float zoom { get { return _zoom; } set { _zoom = value; if (Gfx.activeView == this) Gfx.activeViewZoom = _zoom; } }
-        public int rotation { get { return _rotation; } set { _rotation = value; if (Gfx.activeView == this) Gfx.activeViewRotation = _rotation; } }
+        public float positionX {
+            get { return offsetX; }
+            set { offsetX = value; if (Gfx.activeView == this) Gfx.activeViewOffsetX = (int)offsetX; }
+        }
+        
+        public float positionY {
+            get { return offsetY; }
+            set { offsetY = value; if (Gfx.activeView == this) Gfx.activeViewOffsetY = (int)offsetY; }
+        }
+        
+        public float zoom {
+            get { return _zoom; }
+            set {
+                if (value < 0.01f) value = 0.01f;
+                float zoomDiff = value - _zoom;
+                //offsetX += offsetX * zoomDiff;
+                //offsetY += offsetY * zoomDiff;
+
+                _zoom = value;
+                if (Gfx.activeView == this) {
+                    Gfx.activeViewOffsetX = (int)offsetX;
+                    Gfx.activeViewOffsetY = (int)offsetY;
+                    Gfx.activeViewZoom = _zoom;
+                }
+            }
+        }
+
+        public float rotation {
+            get { return _rotation; }
+            set { _rotation = value % 360f; if (Gfx.activeView == this) Gfx.activeViewRotation = _rotation; }
+        }
 
         /// <summary>
         /// Create new view with given size.
