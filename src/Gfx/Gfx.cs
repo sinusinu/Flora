@@ -14,13 +14,13 @@ namespace Flora.Gfx {
 
         // view
         internal static View activeView = null;
-        internal static int activeViewCenterX { get { return activeView == null ? 0 : (int)(activeView.centerX); } }
-        internal static int activeViewCenterY { get { return activeView == null ? 0 : (int)(activeView.centerY); } }
-        internal static int activeViewOffsetX { get { return activeView == null ? 0 : (int)(activeView.offsetX); } }
-        internal static int activeViewOffsetY { get { return activeView == null ? 0 : (int)(activeView.offsetY); } }
-        internal static int activeViewWidth { get { return activeView == null ? 0 : activeView.ratioCorrectedWidth; } }
-        internal static int activeViewHeight { get { return activeView == null ? 0 : activeView.ratioCorrectedHeight; } }
-        internal static float activeViewZoom { get { return activeView == null ? 1f : activeView.zoom; } }
+        internal static int activeViewCenterX;
+        internal static int activeViewCenterY;
+        internal static int activeViewOffsetX;
+        internal static int activeViewOffsetY;
+        internal static int activeViewWidth;
+        internal static int activeViewHeight;
+        internal static float activeViewZoom;
 
         /// <summary>
         /// Flip options for drawing textures.
@@ -102,7 +102,6 @@ namespace Flora.Gfx {
         /// <param name="view">View to apply</param>
         public static void SetView(View view) {
             activeView = view;
-
             UpdateView();
         }
 
@@ -338,6 +337,27 @@ namespace Flora.Gfx {
             } else {
                 activeView.CalculateAppliedSize();
                 SDL.SDL_RenderSetLogicalSize(Gfx.sdlRenderer, activeView.ratioCorrectedWidth, activeView.ratioCorrectedHeight);
+            }
+            UpdateViewMetrics();
+        }
+
+        internal static void UpdateViewMetrics() {
+            if (activeView == null) {
+                activeViewCenterX = 0;
+                activeViewCenterY = 0;
+                activeViewOffsetX = 0;
+                activeViewOffsetY = 0;
+                activeViewWidth = 0;
+                activeViewHeight = 0;
+                activeViewZoom = 1f;
+            } else {
+                activeViewCenterX = (int)(activeView.centerX);
+                activeViewCenterY = (int)(activeView.centerY);
+                activeViewOffsetX = (int)(activeView.offsetX);
+                activeViewOffsetY = (int)(activeView.offsetY);
+                activeViewWidth = activeView.ratioCorrectedWidth;
+                activeViewHeight = activeView.ratioCorrectedHeight;
+                activeViewZoom = activeView._zoom;
             }
         }
 
