@@ -187,7 +187,7 @@ namespace Flora.Gfx {
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
         public static void Draw(Texture texture, int x, int y, int width, int height) {
-            Draw(texture, x, y, width, height, 0d, texture.width / 2, texture.height / 2);
+            Draw(texture, x, y, width, height, 0d, width / 2, height / 2);
         }
 
         /// <summary>
@@ -220,15 +220,12 @@ namespace Flora.Gfx {
         public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
             if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
-            //int dtX = x - activeViewOffsetX;
-            //int dtY = y - activeViewOffsetY;
-            //Console.WriteLine("dtX, dtY = {0}, {1}", dtX, dtY);
-
             SDL.SDL_Rect drect;
-            drect.x = (int)((x * activeViewZoom) + activeViewCenterX - activeViewOffsetX);
-            drect.y = (int)((y * activeViewZoom) + activeViewCenterY - activeViewOffsetY);
+            drect.x = (int)(((x - activeViewOffsetX) * activeViewZoom) + activeViewCenterX);
+            drect.y = (int)(((y - activeViewOffsetY) * activeViewZoom) + activeViewCenterY);
             drect.w = (int)(width * activeViewZoom);
             drect.h = (int)(height * activeViewZoom);
+            
             SDL.SDL_Point center;
             center.x = (int)(pivotX * activeViewZoom);
             center.y = (int)(pivotY * activeViewZoom);

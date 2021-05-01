@@ -33,10 +33,6 @@ namespace Flora.Gfx {
             get { return _zoom; }
             set {
                 if (value < 0.01f) value = 0.01f;
-                float zoomDiff = value - _zoom;
-                //offsetX += offsetX * zoomDiff;
-                //offsetY += offsetY * zoomDiff;
-
                 _zoom = value;
                 if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = (int)offsetX;
