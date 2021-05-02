@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Flora.Util;
 using SDL2;
 
@@ -174,7 +175,7 @@ namespace Flora.Gfx {
         /// <param name="texture">Texture to draw</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
-        public static void Draw(Texture texture, int x, int y) {
+        public static void Draw(Texture texture, float x, float y) {
             Draw(texture, x, y, texture.width, texture.height);
         }
 
@@ -186,8 +187,8 @@ namespace Flora.Gfx {
         /// <param name="y">Y position</param>
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
-        public static void Draw(Texture texture, int x, int y, int width, int height) {
-            Draw(texture, x, y, width, height, 0d, width / 2, height / 2);
+        public static void Draw(Texture texture, float x, float y, float width, float height) {
+            Draw(texture, x, y, width, height, 0d, width / 2f, height / 2f);
         }
 
         /// <summary>
@@ -201,7 +202,7 @@ namespace Flora.Gfx {
         /// <param name="rotation">Rotation angle in degrees</param>
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
-        public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY) {
+        public static void Draw(Texture texture, float x, float y, float width, float height, double rotation, float pivotX, float pivotY) {
             Draw(texture, x, y, width, height, rotation, pivotX, pivotY, FlipMode.None);
         }
         
@@ -217,27 +218,33 @@ namespace Flora.Gfx {
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
         /// <param name="flip">Flip option (use | to combine options)</param>
-        public static void Draw(Texture texture, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
+        public static void Draw(Texture texture, float x, float y, float width, float height, double rotation, float pivotX, float pivotY, FlipMode flip) {
             if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
-            // replace (x - activeViewOffsetX) with px
-            //int px = (int)((x - activeViewOffsetX) * MathF.Cos(MathUtils.DegToRad((float)rotation)) + (y - activeViewOffsetY) * MathF.Sin(MathUtils.DegToRad((float)rotation)));
-            //int py = (int)(-(x - activeViewOffsetX) * MathF.Sin(MathUtils.DegToRad((float)rotation)) + (y - activeViewOffsetY) * MathF.Cos(MathUtils.DegToRad((float)rotation)));
+            SDL.SDL_Rect srect;
+            srect.x = 0;
+            srect.y = 0;
+            srect.w = texture.width;
+            srect.h = texture.height;
 
-            SDL.SDL_Rect drect;
-            drect.x = (int)(((x - activeViewOffsetX) * activeViewZoom) + activeViewCenterX);
-            drect.y = (int)(((y - activeViewOffsetY) * activeViewZoom) + activeViewCenterY);
-            drect.w = (int)(width * activeViewZoom);
-            drect.h = (int)(height * activeViewZoom);
+            SDL.SDL_FRect drect;
+            drect.x = ((x - activeViewOffsetX) * activeViewZoom) + activeViewCenterX;
+            drect.y = ((y - activeViewOffsetY) * activeViewZoom) + activeViewCenterY;
+            drect.w = width * activeViewZoom;
+            drect.h = height * activeViewZoom;
             
-            SDL.SDL_Point center;
-            center.x = (int)(pivotX * activeViewZoom);
-            center.y = (int)(pivotY * activeViewZoom);
-            //center.x = -(int)((x - activeViewOffsetX) * activeViewZoom);
-            //center.y = -(int)((y - activeViewOffsetY) * activeViewZoom);
+            SDL.SDL_FPoint center;
+            center.x = pivotX * activeViewZoom;
+            center.y = pivotY * activeViewZoom;
+            
+            // workaround for SDL.SDL_RenderCopyExF missing overload of (IntPtr, IntPtr, ref SDL_Rect, ref SDL_FRect, double, ref SDL_FPoint, SDL_RendererFlip)
+            // hope this doesn't make too much performance hit...
+            GCHandle centerHandle = GCHandle.Alloc(center);
             
             SetCurrentTextureColor(texture.sdlTexture, currentColor.ToSDLColor());
-            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture.sdlTexture, IntPtr.Zero, ref drect, rotation + activeViewRotation, ref center, (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture.sdlTexture, ref srect, ref drect, rotation + activeViewRotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
+
+            centerHandle.Free();
         }
 
         /// <summary>
@@ -246,7 +253,7 @@ namespace Flora.Gfx {
         /// <param name="region">TextureRegion to draw</param>
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
-        public static void Draw(TextureRegion region, int x, int y) {
+        public static void Draw(TextureRegion region, float x, float y) {
             Draw(region, x, y, region.rect.w, region.rect.h);
         }
 
@@ -258,7 +265,7 @@ namespace Flora.Gfx {
         /// <param name="y">Y position</param>
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
-        public static void Draw(TextureRegion region, int x, int y, int width, int height) {
+        public static void Draw(TextureRegion region, float x, float y, float width, float height) {
             Draw(region, x, y, width, height, 0d, region.rect.w / 2, region.rect.h / 2);
         }
 
@@ -273,7 +280,7 @@ namespace Flora.Gfx {
         /// <param name="rotation">Rotation angle in degrees</param>
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
-        public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY) {
+        public static void Draw(TextureRegion region, float x, float y, float width, float height, double rotation, float pivotX, float pivotY) {
             Draw(region, x, y, width, height, rotation, pivotX, pivotY, FlipMode.None);
         }
 
@@ -289,20 +296,27 @@ namespace Flora.Gfx {
         /// <param name="pivotX">X Pivot</param>
         /// <param name="pivotY">Y Pivot</param>
         /// <param name="flip">Flip option (use | to combine options)</param>
-        public static void Draw(TextureRegion region, int x, int y, int width, int height, double rotation, int pivotX, int pivotY, FlipMode flip) {
+        public static void Draw(TextureRegion region, float x, float y, float width, float height, double rotation, float pivotX, float pivotY, FlipMode flip) {
             if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
+
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
-            SDL.SDL_Rect drect;
-            drect.x = (int)((x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
-            drect.y = (int)((y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
-            drect.w = (int)(width * activeViewZoom);
-            drect.h = (int)(height * activeViewZoom);
-            SDL.SDL_Point center;
-            center.x = (int)(pivotX * activeViewZoom);
-            center.y = (int)(pivotY * activeViewZoom);
+            SDL.SDL_FRect drect;
+            drect.x = (x + activeViewCenterX - activeViewOffsetX) * activeViewZoom;
+            drect.y = (y + activeViewCenterY - activeViewOffsetY) * activeViewZoom;
+            drect.w = width * activeViewZoom;
+            drect.h = height * activeViewZoom;
+            SDL.SDL_FPoint center;
+            center.x = pivotX * activeViewZoom;
+            center.y = pivotY * activeViewZoom;
+            
+            // workaround for SDL.SDL_RenderCopyExF missing overload of (IntPtr, IntPtr, ref SDL_Rect, ref SDL_FRect, double, ref SDL_FPoint, SDL_RendererFlip)
+            // hope this doesn't make too much performance hit...
+            GCHandle centerHandle = GCHandle.Alloc(center);
             
             SetCurrentTextureColor(region.texture.sdlTexture, currentColor.ToSDLColor());
-            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
+
+            centerHandle.Free();
         }
 
         /// <summary>
@@ -375,16 +389,22 @@ namespace Flora.Gfx {
 
         internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
             SetCurrentTextureColor(texture, color.ToSDLColor());
-            SDL.SDL_Rect drect;
-            drect.x = (int)((dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
-            drect.y = (int)((dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
-            drect.w = (int)(dstRect.w * activeViewZoom);
-            drect.h = (int)(dstRect.h * activeViewZoom);
-            SDL.SDL_Point center;
-            center.x = (int)(pivotX * activeViewZoom);
-            center.y = (int)(pivotY * activeViewZoom);
+            SDL.SDL_FRect drect;
+            drect.x = (dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom;
+            drect.y = (dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom;
+            drect.w = dstRect.w * activeViewZoom;
+            drect.h = dstRect.h * activeViewZoom;
+            SDL.SDL_FPoint center;
+            center.x = pivotX * activeViewZoom;
+            center.y = pivotY * activeViewZoom;
+            
+            // workaround for SDL.SDL_RenderCopyExF missing overload of (IntPtr, IntPtr, ref SDL_Rect, ref SDL_FRect, double, ref SDL_FPoint, SDL_RendererFlip)
+            // hope this doesn't make too much performance hit...
+            GCHandle centerHandle = GCHandle.Alloc(center);
 
-            SDL.SDL_RenderCopyEx(Gfx.sdlRenderer, texture, ref srcRect, ref drect, rotation, ref center, (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture, ref srcRect, ref drect, rotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
+
+            centerHandle.Free();
         }
         
         internal static SDL.SDL_Color GetCurrentRenderColor() {
