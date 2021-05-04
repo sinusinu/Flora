@@ -21,7 +21,7 @@ namespace Flora.Gfx {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
-            if (size > 256) throw new ArgumentException("Font size must be smaller than 256");
+            if (size > 255) throw new ArgumentException("Font size must be smaller than 256");
 
             // is there any better way to do this?
             white.r = 0xFF;
