@@ -21,12 +21,20 @@ namespace Flora.Gfx {
 
         public float positionX {
             get { return offsetX; }
-            set { offsetX = value; if (Gfx.activeView == this) Gfx.activeViewOffsetX = (int)offsetX; }
+            set {
+                offsetX = value;
+                if (Gfx.activeView == this)
+                    Gfx.activeViewOffsetX = offsetX;
+            }
         }
         
         public float positionY {
             get { return offsetY; }
-            set { offsetY = value; if (Gfx.activeView == this) Gfx.activeViewOffsetY = (int)offsetY; }
+            set {
+                offsetY = value; 
+                if (Gfx.activeView == this)
+                    Gfx.activeViewOffsetY = offsetY;
+            }
         }
         
         public float zoom {
@@ -35,8 +43,8 @@ namespace Flora.Gfx {
                 if (value < 0.01f) value = 0.01f;
                 _zoom = value;
                 if (Gfx.activeView == this) {
-                    Gfx.activeViewOffsetX = (int)offsetX;
-                    Gfx.activeViewOffsetY = (int)offsetY;
+                    Gfx.activeViewOffsetX = offsetX;
+                    Gfx.activeViewOffsetY = offsetY;
                     Gfx.activeViewZoom = _zoom;
                 }
             }

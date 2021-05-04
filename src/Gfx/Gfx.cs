@@ -16,10 +16,10 @@ namespace Flora.Gfx {
 
         // view
         internal static View activeView = null;
-        internal static int activeViewCenterX = 0;
-        internal static int activeViewCenterY = 0;
-        internal static int activeViewOffsetX = 0;
-        internal static int activeViewOffsetY = 0;
+        internal static float activeViewCenterX = 0;
+        internal static float activeViewCenterY = 0;
+        internal static float activeViewOffsetX = 0;
+        internal static float activeViewOffsetY = 0;
         internal static int activeViewWidth = 0;
         internal static int activeViewHeight = 0;
         internal static float activeViewZoom = 1f;
@@ -226,7 +226,7 @@ namespace Flora.Gfx {
             srect.y = 0;
             srect.w = texture.width;
             srect.h = texture.height;
-
+            
             SDL.SDL_FRect drect;
             drect.x = ((x - activeViewOffsetX) * activeViewZoom) + activeViewCenterX;
             drect.y = ((y - activeViewOffsetY) * activeViewZoom) + activeViewCenterY;
@@ -376,10 +376,10 @@ namespace Flora.Gfx {
                 activeViewZoom = 1f;
                 activeViewRotation = 0;
             } else {
-                activeViewCenterX = (int)(activeView.centerX);
-                activeViewCenterY = (int)(activeView.centerY);
-                activeViewOffsetX = (int)(activeView.offsetX);
-                activeViewOffsetY = (int)(activeView.offsetY);
+                activeViewCenterX = activeView.centerX;
+                activeViewCenterY = activeView.centerY;
+                activeViewOffsetX = activeView.offsetX;
+                activeViewOffsetY = activeView.offsetY;
                 activeViewWidth = activeView.ratioCorrectedWidth;
                 activeViewHeight = activeView.ratioCorrectedHeight;
                 activeViewZoom = activeView._zoom;
