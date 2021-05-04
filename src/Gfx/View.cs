@@ -1,6 +1,5 @@
 using System;
 using Flora.Util;
-using SDL2;
 
 namespace Flora.Gfx {
     /// <summary>
