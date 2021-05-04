@@ -43,6 +43,7 @@ namespace Flora.Gfx {
             SDL_ttf.TTF_CloseFont(font);
         }
 
+        // FIXME: Glyphs have dark smear on its outline (probably scaling artifact)
         internal GlyphInfo GetGlyphInfo(ushort glyph) {
             // return GlyphInfo for given glyph if it is already drawn
             if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
