@@ -13,7 +13,9 @@ namespace Flora.Gfx {
         internal Dictionary<ushort, GlyphInfo> glyphInfos;
         internal float scale = 1f;
         internal Color color = new Color(0xFF, 0xFF, 0xFF, 0xFF);
-        internal int lineHeight;
+        internal int _lineHeight;
+
+        public int lineHeight { get { return _lineHeight; }}
 
         public Font(string path, int size) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
@@ -33,7 +35,7 @@ namespace Flora.Gfx {
             font = SDL_ttf.TTF_OpenFont(path, size);
             if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
 
-            lineHeight = SDL_ttf.TTF_FontLineSkip(font);
+            _lineHeight = SDL_ttf.TTF_FontLineSkip(font);
         }
 
         ~Font() {
@@ -245,12 +247,12 @@ namespace Flora.Gfx {
 
             int maxWidth = 0;
             int currentWidth = 0;
-            int stackedHeight = lineHeight;
+            int stackedHeight = _lineHeight;
 
             foreach (var glyph in stringGlyphs) {
                 if (glyph == (ushort)'\n') {
                     currentWidth = 0;
-                    stackedHeight += lineHeight;
+                    stackedHeight += _lineHeight;
                     continue;
                 }
 
@@ -288,7 +290,7 @@ namespace Flora.Gfx {
             foreach (var glyph in stringGlyphs) {
                 if (glyph == (ushort)'\n') {
                     currentX = 0;
-                    currentY += lineHeight;
+                    currentY += _lineHeight;
                     continue;
                 }
 
