@@ -307,11 +307,20 @@ namespace Flora.Gfx {
             if (!isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
+
+            float rx = x - activeViewOffsetX;
+            float ry = y - activeViewOffsetY;
+            float d = MathF.Sqrt((rx * rx) + (ry * ry));
+            float r = MathF.Atan2(ry, rx);  // in radians
+            float xp = d * MathF.Cos(r + MathUtils.DegToRad(activeViewRotation));
+            float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
+            
             SDL.SDL_FRect drect;
-            drect.x = (x + activeViewCenterX - activeViewOffsetX) * activeViewZoom;
-            drect.y = (y + activeViewCenterY - activeViewOffsetY) * activeViewZoom;
+            drect.x = ((xp) * activeViewZoom) + activeViewCenterX;
+            drect.y = ((yp) * activeViewZoom) + activeViewCenterY;
             drect.w = width * activeViewZoom;
             drect.h = height * activeViewZoom;
+
             SDL.SDL_FPoint center;
             center.x = pivotX * activeViewZoom;
             center.y = pivotY * activeViewZoom;
@@ -321,7 +330,7 @@ namespace Flora.Gfx {
             GCHandle centerHandle = GCHandle.Alloc(center);
             
             SetCurrentTextureColor(region.texture.sdlTexture, currentColor.ToSDLColor());
-            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation + activeViewRotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
 
             centerHandle.Free();
         }
@@ -335,12 +344,26 @@ namespace Flora.Gfx {
         /// <param name="y2">Y position of ending point</param>
         public static void DrawLine(int x1, int y1, int x2, int y2) {
             if (!isDrawing) throw new InvalidOperationException("DrawLine must be called between Gfx.Begin and Gfx.End");
-            SDL.SDL_RenderDrawLine(
+
+            float rx1 = x1 - activeViewOffsetX;
+            float ry1 = y1 - activeViewOffsetY;
+            float rx2 = x2 - activeViewOffsetX;
+            float ry2 = y2 - activeViewOffsetY;
+            float d1 = MathF.Sqrt((rx1 * rx1) + (ry1 * ry1));
+            float d2 = MathF.Sqrt((rx2 * rx2) + (ry2 * ry2));
+            float r1 = MathF.Atan2(ry1, rx1);  // in radians
+            float r2 = MathF.Atan2(ry2, rx2);  // in radians
+            float x1p = d1 * MathF.Cos(r1 + MathUtils.DegToRad(activeViewRotation));
+            float y1p = d1 * MathF.Sin(r1 + MathUtils.DegToRad(activeViewRotation));
+            float x2p = d2 * MathF.Cos(r2 + MathUtils.DegToRad(activeViewRotation));
+            float y2p = d2 * MathF.Sin(r2 + MathUtils.DegToRad(activeViewRotation));
+
+            SDL.SDL_RenderDrawLineF(
                 Gfx.sdlRenderer,
-                (int)((x1 + activeViewCenterX - activeViewOffsetX) * activeViewZoom),
-                (int)((y1 + activeViewCenterY - activeViewOffsetY) * activeViewZoom),
-                (int)((x2 + activeViewCenterX - activeViewOffsetX) * activeViewZoom),
-                (int)((y2 + activeViewCenterY - activeViewOffsetY) * activeViewZoom)
+                ((x1p) * activeViewZoom) + activeViewCenterX,
+                ((y1p) * activeViewZoom) + activeViewCenterY,
+                ((x2p) * activeViewZoom) + activeViewCenterX,
+                ((y2p) * activeViewZoom) + activeViewCenterY
             );
         }
 
