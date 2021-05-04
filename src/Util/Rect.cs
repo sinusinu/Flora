@@ -46,10 +46,10 @@ namespace Flora.Util {
         }
 
         /// <summary>
-        /// Check if given rectangle and point intersect.
+        /// Check if given rectangle contains given point.
         /// </summary>
         /// <returns></returns>
-        public static bool Intersect(Rect r, int x, int y) {
+        public static bool Contains(Rect r, int x, int y) {
             return r.x < x && x < r.x + r.w && r.y < y && y < r.y + r.h;
         }
     }
