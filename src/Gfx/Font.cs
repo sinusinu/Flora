@@ -33,8 +33,7 @@ namespace Flora.Gfx {
             font = SDL_ttf.TTF_OpenFont(path, size);
             if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
 
-            // get line height from glyph I
-            int dummy; SDL_ttf.TTF_SizeUNICODE(font, "I", out dummy, out lineHeight);
+            lineHeight = SDL_ttf.TTF_FontLineSkip(font);
         }
 
         ~Font() {
