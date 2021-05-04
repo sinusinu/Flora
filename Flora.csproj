@@ -8,17 +8,11 @@
     <ItemGroup>
         <ProjectReference Include="SDL2-CS\SDL2-CS.Core.csproj" />
         
-        <!-- Exclude SDL2-CS module from this project -->
+        <!-- Prevent SDL2-CS module from being compiled into this project -->
         <Content Remove="SDL2-CS\**" />
         <Compile Remove="SDL2-CS\**" />
         <EmbeddedResource Remove="SDL2-CS\**" />
         <None Remove="SDL2-CS\**" />
-        
-        <!-- Exclude examples directory from this project -->
-        <Content Remove="example\**" />
-        <Compile Remove="example\**" />
-        <EmbeddedResource Remove="example\**" />
-        <None Remove="example\**" />
     </ItemGroup>
     
 </Project>
