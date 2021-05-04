@@ -13,6 +13,7 @@ namespace Flora.Gfx {
         internal Dictionary<ushort, GlyphInfo> glyphInfos;
         internal float scale = 1f;
         internal Color color = new Color(0xFF, 0xFF, 0xFF, 0xFF);
+        internal int lineHeight;
 
         public Font(string path, int size) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
@@ -31,6 +32,9 @@ namespace Flora.Gfx {
 
             font = SDL_ttf.TTF_OpenFont(path, size);
             if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
+
+            // get line height from glyph I
+            int dummy; SDL_ttf.TTF_SizeUNICODE(font, "I", out dummy, out lineHeight);
         }
 
         ~Font() {
@@ -234,21 +238,29 @@ namespace Flora.Gfx {
         /// <param name="text">Text to measure</param>
         /// <returns></returns>
         public (int, int) Measure(string text) {
-            int width = 0; int height = 0;
-            
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
 
+            int maxWidth = 0;
+            int currentWidth = 0;
+            int stackedHeight = lineHeight;
+
             foreach (var glyph in stringGlyphs) {
+                if (glyph == (ushort)'\n') {
+                    currentWidth = 0;
+                    stackedHeight += lineHeight;
+                    continue;
+                }
+
                 var glyphInfo = GetGlyphInfo(glyph);
                 if (glyphInfo.page == -1) continue;
 
-                width += (int)(glyphInfo.rect.w * scale);
-                height = Math.Max(height, (int)(glyphInfo.rect.h * scale));
+                currentWidth += (int)(glyphInfo.rect.w * scale);
+                maxWidth = Math.Max(currentWidth, maxWidth);
             }
 
-            return (width, height);
+            return (maxWidth, stackedHeight);
         }
 
         /// <summary>
@@ -260,19 +272,29 @@ namespace Flora.Gfx {
         public void Draw(string text, int x, int y) {
             if (!Gfx.isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
+            // for easier detection of line break
+            text.Replace("\r\n", "\n");
+
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
 
             int currentX = 0;
+            int currentY = 0;
 
             foreach (var glyph in stringGlyphs) {
+                if (glyph == (ushort)'\n') {
+                    currentX = 0;
+                    currentY += lineHeight;
+                    continue;
+                }
+
                 var glyphInfo = GetGlyphInfo(glyph);
                 if (glyphInfo.page == -1) continue;
 
                 var dstRect = new SDL.SDL_Rect();
                 dstRect.x = x + currentX;
-                dstRect.y = y;
+                dstRect.y = y + currentY;
                 dstRect.w = (int)(glyphInfo.rect.w * scale);
                 dstRect.h = (int)(glyphInfo.rect.h * scale);
 
