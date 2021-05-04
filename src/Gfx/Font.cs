@@ -238,6 +238,8 @@ namespace Flora.Gfx {
         /// <param name="text">Text to measure</param>
         /// <returns></returns>
         public (int, int) Measure(string text) {
+            if (text.Length == 0) return (0, 0);
+
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
@@ -271,6 +273,8 @@ namespace Flora.Gfx {
         /// <param name="y">Y position of the text (top-left)</param>
         public void Draw(string text, int x, int y) {
             if (!Gfx.isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
+
+            if (text.Length == 0) return;
 
             // for easier detection of line break
             text.Replace("\r\n", "\n");
