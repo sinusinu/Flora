@@ -367,22 +367,6 @@ namespace Flora.Gfx {
             );
         }
 
-        /// <summary>
-        /// Draw primitive rectangle.
-        /// </summary>
-        /// <param name="rect">Rectangle to draw</param>
-        /// <param name="fill">Should rectangle be filled or not</param>
-        public static void DrawRect(Util.Rect rect, bool fill) {
-            if (!isDrawing) throw new InvalidOperationException("DrawRect must be called between Gfx.Begin and Gfx.End");
-            SDL.SDL_Rect sr = rect.ToSDLRect();
-            sr.x = (int)((sr.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom);
-            sr.y = (int)((sr.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom);
-            sr.w = (int)(sr.w * activeViewZoom);
-            sr.h = (int)(sr.h * activeViewZoom);
-            if (fill) SDL.SDL_RenderFillRect(Gfx.sdlRenderer, ref sr);
-            else SDL.SDL_RenderDrawRect(Gfx.sdlRenderer, ref sr);
-        }
-
 #region Internal functions
         internal static void UpdateView() {
             var (clientWidth, clientHeight) = GetClientSize();
