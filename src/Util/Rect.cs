@@ -5,14 +5,14 @@ namespace Flora.Util {
     /// It's a box!
     /// </summary>
     public class Rect {
-        public int x;
-        public int y;
-        public int w;
-        public int h;
+        public float x;
+        public float y;
+        public float w;
+        public float h;
 
         public Rect() : this(0, 0, 0, 0) {}
 
-        public Rect(int x, int y, int w, int h) {
+        public Rect(float x, float y, float w, float h) {
             this.x = x;
             this.y = y;
             this.w = w;
@@ -21,6 +21,15 @@ namespace Flora.Util {
 
         internal SDL.SDL_Rect ToSDLRect() {
             SDL.SDL_Rect rect;
+            rect.x = (int)x;
+            rect.y = (int)y;
+            rect.w = (int)w;
+            rect.h = (int)h;
+            return rect;
+        }
+
+        internal SDL.SDL_FRect ToSDLFRect() {
+            SDL.SDL_FRect rect;
             rect.x = x;
             rect.y = y;
             rect.w = w;
