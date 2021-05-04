@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using Flora.Util;
 using SDL2;
@@ -226,10 +227,17 @@ namespace Flora.Gfx {
             srect.y = 0;
             srect.w = texture.width;
             srect.h = texture.height;
+
+            float rx = x - activeViewOffsetX;
+            float ry = y - activeViewOffsetY;
+            float d = MathF.Sqrt((rx * rx) + (ry * ry));
+            float r = MathF.Atan2(ry, rx);  // in radians
+            float xp = d * MathF.Cos(r + MathUtils.DegToRad(activeViewRotation));
+            float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = ((x - activeViewOffsetX) * activeViewZoom) + activeViewCenterX;
-            drect.y = ((y - activeViewOffsetY) * activeViewZoom) + activeViewCenterY;
+            drect.x = ((xp) * activeViewZoom) + activeViewCenterX;
+            drect.y = ((yp) * activeViewZoom) + activeViewCenterY;
             drect.w = width * activeViewZoom;
             drect.h = height * activeViewZoom;
             
