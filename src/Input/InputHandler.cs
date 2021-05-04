@@ -8,5 +8,6 @@ namespace Flora.Input {
         void OnMouseDown(MouseButton button, int x, int y);
         void OnMouseUp(MouseButton button, int x, int y);
         void OnMouseMove(int x, int y);
+        void OnMouseWheel(int x, int y);
     }
 }

@@ -90,6 +90,9 @@ namespace Flora {
                         case SDL.SDL_EventType.SDL_MOUSEMOTION:
                             if (Input.Input.handler != null) Input.Input.handler.OnMouseMove(e.motion.x, e.motion.y);
                             break;
+                        case SDL.SDL_EventType.SDL_MOUSEWHEEL:
+                            if (Input.Input.handler != null) Input.Input.handler.OnMouseWheel(e.wheel.x, e.wheel.y);
+                            break;
                         case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
                             if (Input.Controller.handler != null) Input.Controller.handler.OnAxisMotion(e.caxis.which, (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
                             break;
