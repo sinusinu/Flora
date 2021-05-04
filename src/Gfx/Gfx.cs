@@ -375,6 +375,7 @@ namespace Flora.Gfx {
         /// <returns>(x, y) of view point</returns>
         public static (int, int) TranslateScreenPointToViewPoint(int x, int y) {
             if (activeViewZoom == 0f) return (0, 0);
+            if (activeView == null) return (x, y);
 
             float xp = (x - activeViewCenterX) / activeViewZoom;
             float yp = (y - activeViewCenterY) / activeViewZoom;
