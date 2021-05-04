@@ -403,9 +403,17 @@ namespace Flora.Gfx {
 
         internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
             SetCurrentTextureColor(texture, color.ToSDLColor());
+
+            float rx = dstRect.x - activeViewOffsetX;
+            float ry = dstRect.y - activeViewOffsetY;
+            float d = MathF.Sqrt((rx * rx) + (ry * ry));
+            float r = MathF.Atan2(ry, rx);  // in radians
+            float xp = d * MathF.Cos(r + MathUtils.DegToRad(activeViewRotation));
+            float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
+            
             SDL.SDL_FRect drect;
-            drect.x = (dstRect.x + activeViewCenterX - activeViewOffsetX) * activeViewZoom;
-            drect.y = (dstRect.y + activeViewCenterY - activeViewOffsetY) * activeViewZoom;
+            drect.x = xp * activeViewZoom + activeViewCenterX;
+            drect.y = yp * activeViewZoom + activeViewCenterY;
             drect.w = dstRect.w * activeViewZoom;
             drect.h = dstRect.h * activeViewZoom;
             SDL.SDL_FPoint center;
@@ -416,7 +424,7 @@ namespace Flora.Gfx {
             // hope this doesn't make too much performance hit...
             GCHandle centerHandle = GCHandle.Alloc(center);
 
-            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture, ref srcRect, ref drect, rotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture, ref srcRect, ref drect, rotation + activeViewRotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
 
             centerHandle.Free();
         }
