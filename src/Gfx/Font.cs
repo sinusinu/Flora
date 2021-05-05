@@ -239,16 +239,16 @@ namespace Flora.Gfx {
         /// </summary>
         /// <param name="text">Text to measure</param>
         /// <returns></returns>
-        public (int, int) Measure(string text) {
+        public (float, float) Measure(string text) {
             if (text.Length == 0) return (0, 0);
 
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
 
-            int maxWidth = 0;
-            int currentWidth = 0;
-            int stackedHeight = _lineHeight;
+            float maxWidth = 0;
+            float currentWidth = 0;
+            float stackedHeight = _lineHeight;
 
             foreach (var glyph in stringGlyphs) {
                 if (glyph == (ushort)'\n') {
@@ -260,7 +260,7 @@ namespace Flora.Gfx {
                 var glyphInfo = GetGlyphInfo(glyph);
                 if (glyphInfo.page == -1) continue;
 
-                currentWidth += (int)(glyphInfo.rect.w * scale);
+                currentWidth += glyphInfo.rect.w * scale;
                 maxWidth = Math.Max(currentWidth, maxWidth);
             }
 
@@ -273,7 +273,7 @@ namespace Flora.Gfx {
         /// <param name="text">Text to draw</param>
         /// <param name="x">X position of the text (top-left)</param>
         /// <param name="y">Y position of the text (top-left)</param>
-        public void Draw(string text, int x, int y) {
+        public void Draw(string text, float x, float y) {
             if (!Gfx.isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
             if (text.Length == 0) return;
@@ -285,8 +285,8 @@ namespace Flora.Gfx {
             var stringGlyphs = new ushort[charArray.Length];
             for (int i = 0; i < charArray.Length; i++) stringGlyphs[i] = charArray[i];
 
-            int currentX = 0;
-            int currentY = 0;
+            float currentX = 0;
+            float currentY = 0;
 
             foreach (var glyph in stringGlyphs) {
                 if (glyph == (ushort)'\n') {
@@ -298,15 +298,15 @@ namespace Flora.Gfx {
                 var glyphInfo = GetGlyphInfo(glyph);
                 if (glyphInfo.page == -1) continue;
 
-                var dstRect = new SDL.SDL_Rect();
+                var dstRect = new SDL.SDL_FRect();
                 dstRect.x = x + currentX;
                 dstRect.y = y + currentY;
-                dstRect.w = (int)(glyphInfo.rect.w * scale);
-                dstRect.h = (int)(glyphInfo.rect.h * scale);
+                dstRect.w = glyphInfo.rect.w * scale;
+                dstRect.h = glyphInfo.rect.h * scale;
 
                 Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), dstRect, 0, 0, 0, Gfx.FlipMode.None, color);
 
-                currentX += (int)(glyphInfo.rect.w * scale);
+                currentX += glyphInfo.rect.w * scale;
             }
         }
     }

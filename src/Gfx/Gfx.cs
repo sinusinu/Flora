@@ -454,7 +454,7 @@ namespace Flora.Gfx {
             }
         }
 
-        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
+        internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_FRect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
             SetCurrentTextureColor(texture, color.ToSDLColor());
 
             float rx = dstRect.x - activeViewOffsetX + pivotX;
