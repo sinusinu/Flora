@@ -34,6 +34,9 @@ namespace Flora {
         /// </summary>
         public virtual void Render(float delta) {}
 
+        /// <summary>
+        /// Schedule exit of the application. Note that exit will not happen immediately.
+        /// </summary>
         public void Exit() { _floraApplication.Exit(); }
     }
 }
