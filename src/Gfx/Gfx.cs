@@ -262,9 +262,10 @@ namespace Flora.Gfx {
             // workaround for SDL.SDL_RenderCopyExF missing overload of (IntPtr, IntPtr, ref SDL_Rect, ref SDL_FRect, double, ref SDL_FPoint, SDL_RendererFlip)
             // hope this doesn't make too much performance hit...
             GCHandle centerHandle = GCHandle.Alloc(center);
+            Marshal.StructureToPtr<SDL.SDL_FPoint>(center, (IntPtr)centerHandle, false);
             
             SetCurrentTextureColor(texture.sdlTexture, currentColor.ToSDLColor());
-            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture.sdlTexture, ref srect, ref drect, rotation + activeViewRotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
+            SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture.sdlTexture, ref srect, ref drect, rotation + activeViewRotation, (IntPtr)centerHandle, (SDL.SDL_RendererFlip)flip);
 
             centerHandle.Free();
         }
@@ -358,6 +359,7 @@ namespace Flora.Gfx {
             // workaround for SDL.SDL_RenderCopyExF missing overload of (IntPtr, IntPtr, ref SDL_Rect, ref SDL_FRect, double, ref SDL_FPoint, SDL_RendererFlip)
             // hope this doesn't make too much performance hit...
             GCHandle centerHandle = GCHandle.Alloc(center);
+            Marshal.StructureToPtr<SDL.SDL_FPoint>(center, (IntPtr)centerHandle, false);
             
             SetCurrentTextureColor(region.texture.sdlTexture, currentColor.ToSDLColor());
             SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, region.texture.sdlTexture, ref srect, ref drect, rotation + activeViewRotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
@@ -474,6 +476,7 @@ namespace Flora.Gfx {
             // workaround for SDL.SDL_RenderCopyExF missing overload of (IntPtr, IntPtr, ref SDL_Rect, ref SDL_FRect, double, ref SDL_FPoint, SDL_RendererFlip)
             // hope this doesn't make too much performance hit...
             GCHandle centerHandle = GCHandle.Alloc(center);
+            Marshal.StructureToPtr<SDL.SDL_FPoint>(center, (IntPtr)centerHandle, false);
 
             SDL.SDL_RenderCopyExF(Gfx.sdlRenderer, texture, ref srcRect, ref drect, rotation + activeViewRotation, GCHandle.ToIntPtr(centerHandle), (SDL.SDL_RendererFlip)flip);
 
