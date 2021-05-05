@@ -188,7 +188,22 @@ namespace Flora.Gfx {
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
         public static void Draw(Texture texture, float x, float y, float width, float height) {
-            Draw(texture, x, y, width, height, 0d, width / 2f, height / 2f);
+            Draw(texture, x, y, width, height, 0d);
+        }
+
+        /// <summary>
+        /// Draw texture on position (x, y) with size of (width, height) rotated (rotation) degrees with central pivot.
+        /// </summary>
+        /// <param name="texture">Texture to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
+        /// <param name="rotation">Rotation angle in degrees</param>
+        /// <param name="pivotX">X Pivot</param>
+        /// <param name="pivotY">Y Pivot</param>
+        public static void Draw(Texture texture, float x, float y, float width, float height, double rotation) {
+            Draw(texture, x, y, width, height, rotation, width / 2f, height / 2f);
         }
 
         /// <summary>
@@ -273,7 +288,22 @@ namespace Flora.Gfx {
         /// <param name="width">Image width</param>
         /// <param name="height">Image height</param>
         public static void Draw(TextureRegion region, float x, float y, float width, float height) {
-            Draw(region, x, y, width, height, 0d, region.rect.w / 2, region.rect.h / 2);
+            Draw(region, x, y, width, height, 0d);
+        }
+
+        /// <summary>
+        /// Draw texture region on position (x, y) with size of (width, height) rotated (rotation) degrees with central pivot.
+        /// </summary>
+        /// <param name="texture">Texture to draw</param>
+        /// <param name="x">X position</param>
+        /// <param name="y">Y position</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
+        /// <param name="rotation">Rotation angle in degrees</param>
+        /// <param name="pivotX">X Pivot</param>
+        /// <param name="pivotY">Y Pivot</param>
+        public static void Draw(TextureRegion region, float x, float y, float width, float height, double rotation) {
+            Draw(region, x, y, width, height, rotation, width / 2f, height / 2f);
         }
 
         /// <summary>
