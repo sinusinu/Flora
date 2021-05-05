@@ -13,9 +13,9 @@ namespace Flora.Gfx {
         internal Dictionary<ushort, GlyphInfo> glyphInfos;
         internal float scale = 1f;
         internal Color color = new Color(0xFF, 0xFF, 0xFF, 0xFF);
-        internal int _lineHeight;
+        internal float _lineHeight;
 
-        public int lineHeight { get { return _lineHeight; }}
+        public float lineHeight { get { return _lineHeight * scale; }}
 
         public Font(string path, int size) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
