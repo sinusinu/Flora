@@ -5,6 +5,9 @@ namespace Flora {
     /// Core of the application.
     /// </summary>
     public class ApplicationCore {
+        // will be set in ctor of FloraApplication
+        internal FloraApplication _floraApplication;
+
         /// <summary>
         /// Called when Flora is ready to start your application.<br/>
         /// It is recommended to load resources from this function.
@@ -30,5 +33,7 @@ namespace Flora {
         /// Main logic of the application should be placed here.
         /// </summary>
         public virtual void Render(float delta) {}
+
+        public void Exit() { _floraApplication.Exit(); }
     }
 }

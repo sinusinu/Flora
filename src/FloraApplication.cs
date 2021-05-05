@@ -11,6 +11,8 @@ namespace Flora {
         /// <param name="core">Instance of the class that extends ApplicationCore</param>
         /// <param name="config">ApplicationConfiguration to apply</param>
         public FloraApplication(ApplicationCore core, ApplicationConfiguration config) {
+            core._floraApplication = this;
+
             // init SDL and friends
             SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
