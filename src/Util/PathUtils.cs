@@ -4,7 +4,7 @@ namespace Flora.Util {
     /// <summary>
     /// Helper class for generating file paths.
     /// </summary>
-    public static class Path {
+    public static class PathUtils {
         private static string executablePath = null;
         
         public static string Absolute(string path) {
