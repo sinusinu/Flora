@@ -304,7 +304,7 @@ namespace Flora.Gfx {
                 dstRect.w = (int)(glyphInfo.rect.w * scale);
                 dstRect.h = (int)(glyphInfo.rect.h * scale);
 
-                Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), dstRect, 0, dstRect.w / 2, dstRect.h / 2, Gfx.FlipMode.None, color);
+                Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), dstRect, 0, 0, 0, Gfx.FlipMode.None, color);
 
                 currentX += (int)(glyphInfo.rect.w * scale);
             }

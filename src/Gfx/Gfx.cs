@@ -250,8 +250,8 @@ namespace Flora.Gfx {
             float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = ((xp) * activeViewZoom) + activeViewCenterX;
-            drect.y = ((yp) * activeViewZoom) + activeViewCenterY;
+            drect.x = ((xp) * activeViewZoom) + activeViewCenterX - (pivotX * activeViewZoom);
+            drect.y = ((yp) * activeViewZoom) + activeViewCenterY - (pivotY * activeViewZoom);
             drect.w = width * activeViewZoom;
             drect.h = height * activeViewZoom;
             
@@ -347,8 +347,8 @@ namespace Flora.Gfx {
             float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = ((xp) * activeViewZoom) + activeViewCenterX;
-            drect.y = ((yp) * activeViewZoom) + activeViewCenterY;
+            drect.x = ((xp) * activeViewZoom) + activeViewCenterX - (pivotX * activeViewZoom);
+            drect.y = ((yp) * activeViewZoom) + activeViewCenterY - (pivotY * activeViewZoom);
             drect.w = width * activeViewZoom;
             drect.h = height * activeViewZoom;
 
@@ -465,8 +465,8 @@ namespace Flora.Gfx {
             float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = xp * activeViewZoom + activeViewCenterX;
-            drect.y = yp * activeViewZoom + activeViewCenterY;
+            drect.x = xp * activeViewZoom + activeViewCenterX - (pivotX * activeViewZoom);
+            drect.y = yp * activeViewZoom + activeViewCenterY - (pivotY * activeViewZoom);
             drect.w = dstRect.w * activeViewZoom;
             drect.h = dstRect.h * activeViewZoom;
             SDL.SDL_FPoint center;
