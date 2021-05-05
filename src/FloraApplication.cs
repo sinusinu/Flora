@@ -74,7 +74,8 @@ namespace Flora {
                     switch (e.type) {
                         case SDL.SDL_EventType.SDL_QUIT:
                             run = false;
-                            break;
+                            // use goto to completely break out of main loop, preventing frame update happening on closing frame
+                            goto Cleanup;
                         case SDL.SDL_EventType.SDL_KEYDOWN:
                             if (e.key.repeat > 0) break;
                             if (Input.Input.handler != null) Input.Input.handler.OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
@@ -132,6 +133,8 @@ namespace Flora {
                 // call core render
                 core.Render(delta);
             }
+
+            Cleanup:
 
             // cleanup things
             SDL.SDL_DestroyRenderer(renderer);
