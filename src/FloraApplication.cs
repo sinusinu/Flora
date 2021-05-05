@@ -14,14 +14,12 @@ namespace Flora {
             DisableController = 2
         }
 
-        public FloraApplication(ApplicationCore core, ApplicationConfiguration config) : this(core, config, FloraApplicationFlags.Normal) {}
-
         /// <summary>
         /// Start a new Flora application with given core, settings and flags.
         /// </summary>
         /// <param name="core">Instance of the class that extends ApplicationCore</param>
         /// <param name="config">ApplicationConfiguration to apply</param>
-        public FloraApplication(ApplicationCore core, ApplicationConfiguration config, FloraApplicationFlags flags) {
+        public FloraApplication(ApplicationCore core, ApplicationConfiguration config, FloraApplicationFlags flags = FloraApplicationFlags.Normal) {
             core._floraApplication = this;
 
             // init SDL and friends
