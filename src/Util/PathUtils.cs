@@ -7,10 +7,6 @@ namespace Flora.Util {
     public static class PathUtils {
         private static string executablePath = null;
         
-        public static string Absolute(string path) {
-            return path;
-        }
-
         public static string Relative(string path) {
             if (executablePath == null) {
                 executablePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
