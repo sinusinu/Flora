@@ -4,27 +4,17 @@ using SDL2;
 namespace Flora {
     public class FloraApplication {
         bool run = true;
-        
-        public enum FloraApplicationFlags : int {
-            /// <summary>No flags.</summary>
-            Normal = 0,
-            /// <summary>Create OpenGL Context for advanced uses.</summary>
-            CreateOpenGLContext = 1,
-            /// <summary>Do not initialize controller routines.</summary>
-            DisableController = 2
-        }
 
         /// <summary>
         /// Start a new Flora application with given core, settings and flags.
         /// </summary>
         /// <param name="core">Instance of the class that extends ApplicationCore</param>
         /// <param name="config">ApplicationConfiguration to apply</param>
-        public FloraApplication(ApplicationCore core, ApplicationConfiguration config, FloraApplicationFlags flags = FloraApplicationFlags.Normal) {
+        public FloraApplication(ApplicationCore core, ApplicationConfiguration config) {
             core._floraApplication = this;
 
             // init SDL and friends
             uint sdlInitFlag = SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO;
-            if ((flags & FloraApplicationFlags.DisableController) == 0) sdlInitFlag |= SDL.SDL_INIT_GAMECONTROLLER;
             SDL.SDL_Init(sdlInitFlag);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
             SDL_mixer.Mix_Init(SDL_mixer.MIX_InitFlags.MIX_INIT_MP3 | SDL_mixer.MIX_InitFlags.MIX_INIT_OGG);
@@ -42,7 +32,6 @@ namespace Flora {
             
             // create window
             SDL.SDL_WindowFlags windowFlags = (SDL.SDL_WindowFlags)config.windowFlags;
-            if ((flags & FloraApplicationFlags.CreateOpenGLContext) > 0) windowFlags |= SDL.SDL_WindowFlags.SDL_WINDOW_OPENGL;
             var window = SDL.SDL_CreateWindow(config.windowTitle, SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, windowFlags);
             if (window == IntPtr.Zero) {
                 string error = SDL.SDL_GetError();
@@ -69,7 +58,7 @@ namespace Flora {
             // init flora things
             Flora.Gfx.Gfx.Init(window, renderer);
             Flora.Input.Input.Init();
-            if ((flags & FloraApplicationFlags.DisableController) > 0) Flora.Input.Controller.Init();
+            Flora.Input.Controller.Init();
             Flora.Audio.Audio.Init();
 
             // call core prepare
