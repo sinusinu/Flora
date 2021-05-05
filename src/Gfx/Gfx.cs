@@ -242,16 +242,16 @@ namespace Flora.Gfx {
             srect.w = texture.width;
             srect.h = texture.height;
 
-            float rx = x - activeViewOffsetX;
-            float ry = y - activeViewOffsetY;
+            float rx = x - activeViewOffsetX + pivotX;
+            float ry = y - activeViewOffsetY + pivotY;
             float d = MathF.Sqrt((rx * rx) + (ry * ry));
             float r = MathF.Atan2(ry, rx);  // in radians
             float xp = d * MathF.Cos(r + MathUtils.DegToRad(activeViewRotation));
             float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = ((xp) * activeViewZoom) + activeViewCenterX - (pivotX * activeViewZoom);
-            drect.y = ((yp) * activeViewZoom) + activeViewCenterY - (pivotY * activeViewZoom);
+            drect.x = (xp - pivotX) * activeViewZoom + activeViewCenterX;
+            drect.y = (yp - pivotY) * activeViewZoom + activeViewCenterY;
             drect.w = width * activeViewZoom;
             drect.h = height * activeViewZoom;
             
@@ -339,16 +339,16 @@ namespace Flora.Gfx {
 
             SDL.SDL_Rect srect = region.rect.ToSDLRect();
 
-            float rx = x - activeViewOffsetX;
-            float ry = y - activeViewOffsetY;
+            float rx = x - activeViewOffsetX + pivotX;
+            float ry = y - activeViewOffsetY + pivotY;
             float d = MathF.Sqrt((rx * rx) + (ry * ry));
             float r = MathF.Atan2(ry, rx);  // in radians
             float xp = d * MathF.Cos(r + MathUtils.DegToRad(activeViewRotation));
             float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = ((xp) * activeViewZoom) + activeViewCenterX - (pivotX * activeViewZoom);
-            drect.y = ((yp) * activeViewZoom) + activeViewCenterY - (pivotY * activeViewZoom);
+            drect.x = (xp - pivotX) * activeViewZoom + activeViewCenterX;
+            drect.y = (yp - pivotY) * activeViewZoom + activeViewCenterY;
             drect.w = width * activeViewZoom;
             drect.h = height * activeViewZoom;
 
@@ -457,16 +457,16 @@ namespace Flora.Gfx {
         internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_Rect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
             SetCurrentTextureColor(texture, color.ToSDLColor());
 
-            float rx = dstRect.x - activeViewOffsetX;
-            float ry = dstRect.y - activeViewOffsetY;
+            float rx = dstRect.x - activeViewOffsetX + pivotX;
+            float ry = dstRect.y - activeViewOffsetY + pivotY;
             float d = MathF.Sqrt((rx * rx) + (ry * ry));
             float r = MathF.Atan2(ry, rx);  // in radians
             float xp = d * MathF.Cos(r + MathUtils.DegToRad(activeViewRotation));
             float yp = d * MathF.Sin(r + MathUtils.DegToRad(activeViewRotation));
             
             SDL.SDL_FRect drect;
-            drect.x = xp * activeViewZoom + activeViewCenterX - (pivotX * activeViewZoom);
-            drect.y = yp * activeViewZoom + activeViewCenterY - (pivotY * activeViewZoom);
+            drect.x = (xp - pivotX) * activeViewZoom + activeViewCenterX;
+            drect.y = (yp - pivotY) * activeViewZoom + activeViewCenterY;
             drect.w = dstRect.w * activeViewZoom;
             drect.h = dstRect.h * activeViewZoom;
             SDL.SDL_FPoint center;
