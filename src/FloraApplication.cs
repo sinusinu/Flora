@@ -3,6 +3,8 @@ using SDL2;
 
 namespace Flora {
     public class FloraApplication {
+        bool run = true;
+
         /// <summary>
         /// Start a new Flora application with given core and settings.
         /// </summary>
@@ -59,7 +61,6 @@ namespace Flora {
 
             // main loop stuff
             SDL.SDL_Event e;
-            bool run = true;
             
             // delta calculating stuff
             ulong freq = SDL.SDL_GetPerformanceFrequency();
@@ -141,6 +142,13 @@ namespace Flora {
             SDL_mixer.Mix_Quit();
             SDL_image.IMG_Quit();
             SDL.SDL_Quit();
+        }
+
+        /// <summary>
+        /// Schedule exit of this application. Exiting will not happen immediately.
+        /// </summary>
+        public void Exit() {
+            run = false;
         }
     }
 }
