@@ -149,10 +149,7 @@ namespace Flora {
             SDL.SDL_Quit();
         }
 
-        /// <summary>
-        /// Schedule exit of this application. Exiting will not happen immediately.
-        /// </summary>
-        public void Exit() {
+        internal void Exit() {
             run = false;
         }
     }
