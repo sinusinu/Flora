@@ -24,5 +24,10 @@ namespace Flora {
         /// Main logic of the screen should be placed here.
         /// </summary>
         void Render(float delta);
+
+        /// <summary>
+        /// Any disposable resources must be disposed at here. NOTE: calling manners of this function might differ slightly from typical IDisposable.Dispose() manners!
+        /// </summary>
+        void Dispose();
     }
 }

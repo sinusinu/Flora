@@ -141,6 +141,9 @@ namespace Flora {
 
             Cleanup:
 
+            // cleanup core
+            core.Dispose();
+
             // cleanup things
             SDL.SDL_DestroyRenderer(renderer);
             SDL.SDL_DestroyWindow(window);
