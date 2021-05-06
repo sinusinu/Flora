@@ -43,10 +43,6 @@ namespace Flora.Gfx {
             SDL_ttf.TTF_CloseFont(font);
         }
 
-        public void DebugDrawFirstTexture() {
-            SDL.SDL_RenderCopy(Gfx.sdlRenderer, textures[0], IntPtr.Zero, IntPtr.Zero);
-        }
-
         internal GlyphInfo GetGlyphInfo(ushort glyph) {
             // return GlyphInfo for given glyph if it is already drawn
             if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
