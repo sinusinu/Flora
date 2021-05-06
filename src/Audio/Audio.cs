@@ -1,11 +1,19 @@
 using System;
+using System.Threading;
 using SDL2;
 
 namespace Flora.Audio {
     public static class Audio {
         internal static bool isAudioInitialized = false;
 
+        internal static readonly int numChannels = 32;
+        internal static Mutex mtxSound;
+        internal static Sound[] sounds;
+
         internal static void Init() {
+            SDL_mixer.Mix_AllocateChannels(numChannels);
+            sounds = new Sound[numChannels];
+
             isAudioInitialized = true;
         }
         
