@@ -251,7 +251,10 @@ namespace Flora.Gfx {
         /// <param name="text">Text to measure</param>
         /// <returns></returns>
         public (float, float) Measure(string text) {
-            if (text.Length == 0) return (0, 0);
+            if (text == null || text.Length == 0) return (0, 0);
+            
+            // for easier detection of line break
+            text = text.Replace("\r", "");
 
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
@@ -287,7 +290,7 @@ namespace Flora.Gfx {
         public void Draw(string text, float x, float y) {
             if (!Gfx.isDrawing) throw new InvalidOperationException("Draw must be called between Gfx.Begin and Gfx.End");
 
-            if (text.Length == 0) return;
+            if (text == null || text.Length == 0) return;
 
             // for easier detection of line break
             text = text.Replace("\r", "");
