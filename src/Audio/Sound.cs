@@ -9,12 +9,12 @@ namespace Flora.Audio {
         internal IntPtr sdlSound;
         internal int channel;
 
-        private byte _volume = 255;
+        private byte _volume = SDL_mixer.MIX_MAX_VOLUME;
         public float Volume {
-            get { return _volume / 255f; }
+            get { return _volume / (float)SDL_mixer.MIX_MAX_VOLUME; }
             set {
                 if (value < 0f || value > 1f) throw new ArgumentException("volume must be between 0 and 1");
-                _volume = (byte)(value * 255f);
+                _volume = (byte)(value * SDL_mixer.MIX_MAX_VOLUME);
                 SDL_mixer.Mix_Volume(channel, _volume);
             }
         }
