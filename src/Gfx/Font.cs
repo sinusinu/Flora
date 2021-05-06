@@ -47,7 +47,6 @@ namespace Flora.Gfx {
             SDL.SDL_RenderCopy(Gfx.sdlRenderer, textures[0], IntPtr.Zero, IntPtr.Zero);
         }
 
-        // FIXME: Glyphs have dark smear on its outline (probably scaling artifact)
         internal GlyphInfo GetGlyphInfo(ushort glyph) {
             // return GlyphInfo for given glyph if it is already drawn
             if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
@@ -64,6 +63,7 @@ namespace Flora.Gfx {
             // get glyph texture
             var glyphSurface = SDL_ttf.TTF_RenderGlyph_Blended(font, glyph, white);
             var glyphTexture = SDL.SDL_CreateTextureFromSurface(Gfx.sdlRenderer, glyphSurface);
+            SDL.SDL_SetTextureBlendMode(glyphTexture, SDL.SDL_BlendMode.SDL_BLENDMODE_NONE);
             SDL.SDL_FreeSurface(glyphSurface);
 
             uint udummy; int dummy; int w; int h;
