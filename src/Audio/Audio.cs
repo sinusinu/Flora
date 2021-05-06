@@ -11,6 +11,7 @@ namespace Flora.Audio {
         internal static Sound[] sounds;
 
         internal static void Init() {
+            mtxSound = new Mutex();
             SDL_mixer.Mix_AllocateChannels(numChannels);
             sounds = new Sound[numChannels];
 
