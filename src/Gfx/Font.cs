@@ -290,7 +290,7 @@ namespace Flora.Gfx {
             if (text.Length == 0) return;
 
             // for easier detection of line break
-            text.Replace("\r\n", "\n");
+            text = text.Replace("\r", "");
 
             var charArray = text.ToCharArray();
             var stringGlyphs = new ushort[charArray.Length];
