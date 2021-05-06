@@ -7,7 +7,7 @@ namespace Flora.Audio {
     /// <summary>
     /// Audio instance that suit better for playing long background music.
     /// </summary>
-    public class Music {
+    public class Music : IDisposable {
         internal IntPtr sdlMusic;
 
         public enum MusicState { Idle, Playing, Paused }
@@ -24,6 +24,8 @@ namespace Flora.Audio {
         internal ulong timeLastPlay;
         internal ulong timeLastPause;
         internal static ulong timerFreq;
+
+        private bool disposed = false;
 
         internal Music(string path) {
             sdlMusic = SDL_mixer.Mix_LoadMUS(path);
@@ -111,8 +113,18 @@ namespace Flora.Audio {
             }
         }
 
-        ~Music() {
+        public void Dispose() {
+            if (disposed) return;
+            
             SDL_mixer.Mix_FreeMusic(sdlMusic);
+            
+            disposed = true;
+            
+            GC.SuppressFinalize(this);
+        }
+
+        ~Music() {
+            Dispose();
         }
     }
 }

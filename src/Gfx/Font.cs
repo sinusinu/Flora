@@ -4,7 +4,7 @@ using SDL2;
 using Flora.Util;
 
 namespace Flora.Gfx {
-    public class Font {
+    public class Font : IDisposable {
         internal const int TextureSize = 1024;
         internal static SDL.SDL_Color white = new SDL.SDL_Color();
 
@@ -16,6 +16,8 @@ namespace Flora.Gfx {
         internal float _lineHeight;
 
         public float lineHeight { get { return _lineHeight * scale; }}
+
+        private bool disposed = false;
 
         public Font(string path, int size) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
@@ -36,11 +38,6 @@ namespace Flora.Gfx {
             if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
 
             _lineHeight = SDL_ttf.TTF_FontLineSkip(font);
-        }
-
-        ~Font() {
-            ClearCache();
-            SDL_ttf.TTF_CloseFont(font);
         }
 
         internal GlyphInfo GetGlyphInfo(ushort glyph) {
@@ -322,6 +319,21 @@ namespace Flora.Gfx {
 
                 currentX += glyphInfo.rect.w * scale;
             }
+        }
+
+        public void Dispose() {
+            if (disposed) return;
+            
+            ClearCache();
+            SDL_ttf.TTF_CloseFont(font);
+            
+            disposed = true;
+            
+            GC.SuppressFinalize(this);
+        }
+
+        ~Font() {
+            Dispose();
         }
     }
 }

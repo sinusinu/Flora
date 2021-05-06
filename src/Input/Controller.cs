@@ -17,7 +17,7 @@ namespace Flora.Input {
         }
 
         internal static void RefreshControllers() {
-            foreach (var inst in instances) inst.Close();
+            foreach (var inst in instances) inst.Dispose();
             instances.Clear();
             
             int num = SDL.SDL_NumJoysticks();

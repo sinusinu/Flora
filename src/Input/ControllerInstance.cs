@@ -2,10 +2,11 @@ using System;
 using SDL2;
 
 namespace Flora.Input {
-    internal class ControllerInstance {
+    internal class ControllerInstance : IDisposable {
         internal IntPtr ctrlInstance;
         internal int id;
-        internal bool isClosed = false;
+        
+        private bool disposed = false;
 
         internal ControllerInstance(IntPtr instance) {
             this.ctrlInstance = instance;
@@ -14,13 +15,18 @@ namespace Flora.Input {
             Console.WriteLine("New Controller: id {0}", id);
         }
 
-        ~ControllerInstance() {
-            if (!isClosed) Close();
-        }
-
-        internal void Close() {
+        public void Dispose() {
+            if (disposed) return;
+            
             SDL.SDL_GameControllerClose(ctrlInstance);
-            isClosed = true;
+            
+            disposed = true;
+            
+            GC.SuppressFinalize(this);
+        }
+        
+        ~ControllerInstance() {
+            Dispose();
         }
     }
 }

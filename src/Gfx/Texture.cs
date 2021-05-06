@@ -6,10 +6,12 @@ namespace Flora.Gfx {
     /// <summary>
     /// 2D image that can be drawn on screen.
     /// </summary>
-    public class Texture {
+    public class Texture : IDisposable {
         internal IntPtr sdlTexture { get; private set; }
         public int width { get; private set; }
         public int height  { get; private set; }
+
+        private bool disposed = false;
 
         public Texture(string path) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
@@ -33,8 +35,18 @@ namespace Flora.Gfx {
             width = w; height = h;
         }
 
-        ~Texture() {
+        public void Dispose() {
+            if (disposed) return;
+            
             SDL.SDL_DestroyTexture(sdlTexture);
+            
+            disposed = true;
+            
+            GC.SuppressFinalize(this);
+        }
+
+        ~Texture() {
+            Dispose();
         }
     }
 }
