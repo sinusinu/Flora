@@ -13,7 +13,7 @@ namespace Flora.Audio {
         public float Volume {
             get { return _volume / (float)SDL_mixer.MIX_MAX_VOLUME; }
             set {
-                if (value < 0f || value > 1f) throw new ArgumentException("volume must be between 0 and 1");
+                value = Math.Clamp(value, 0f, 1f);
                 _volume = (byte)(value * SDL_mixer.MIX_MAX_VOLUME);
                 SDL_mixer.Mix_Volume(channel, _volume);
             }
