@@ -25,9 +25,19 @@ namespace Flora.Audio {
         internal ulong timeLastPause;
         internal static ulong timerFreq;
 
+        internal byte _volume = SDL_mixer.MIX_MAX_VOLUME;
+        public float Volume {
+            get { return _volume / (float)SDL_mixer.MIX_MAX_VOLUME; }
+            set {
+                value = Math.Clamp(value, 0f, 1f);
+                _volume = (byte)(value * SDL_mixer.MIX_MAX_VOLUME);
+                SDL_mixer.Mix_VolumeMusic(_volume);
+            }
+        }
+
         private bool disposed = false;
 
-        internal Music(string path) {
+        internal Music(string path, float volume = 1f) {
             sdlMusic = SDL_mixer.Mix_LoadMUS(path);
             if (sdlMusic == IntPtr.Zero) throw new ArgumentException("Mix_LoadMUS failed: " + SDL.SDL_GetError());
 
@@ -42,6 +52,8 @@ namespace Flora.Audio {
             if (!isMixer205) {
                 timerFreq = SDL.SDL_GetPerformanceFrequency();
             }
+
+            Volume = volume;
         }
 
         /// <summary>
