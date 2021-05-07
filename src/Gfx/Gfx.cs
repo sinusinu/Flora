@@ -74,6 +74,10 @@ namespace Flora.Gfx {
         /// <param name="b">Blue (0-1)</param>
         /// <param name="a">Alpha (0-1)</param>
         public static void SetColor(float r, float g, float b, float a) {
+            r = Math.Clamp(r, 0f, 1f);
+            g = Math.Clamp(g, 0f, 1f);
+            b = Math.Clamp(b, 0f, 1f);
+            a = Math.Clamp(a, 0f, 1f);
             SetColor((byte)(r * 255), (byte)(g * 255), (byte)(b * 255), (byte)(a * 255));
         }
 

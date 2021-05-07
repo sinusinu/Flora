@@ -25,6 +25,10 @@ namespace Flora.Gfx {
         }
 
         public Color(float r, float g, float b, float a) {
+            r = Math.Clamp(r, 0f, 1f);
+            g = Math.Clamp(g, 0f, 1f);
+            b = Math.Clamp(b, 0f, 1f);
+            a = Math.Clamp(a, 0f, 1f);
             this.r = (byte)MathF.Floor(r * 255);
             this.g = (byte)MathF.Floor(g * 255);
             this.b = (byte)MathF.Floor(b * 255);
