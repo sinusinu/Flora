@@ -102,7 +102,7 @@ namespace Flora.Gfx {
         /// </summary>
         /// <returns></returns>
         public static Color GetColor() {
-            return currentColor;
+            return new Color(currentColor);
         }
 
         /// <summary>
