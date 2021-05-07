@@ -17,18 +17,7 @@ namespace Flora {
             uint sdlInitFlag = SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO;
             SDL.SDL_Init(sdlInitFlag);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
-            SDL_mixer.Mix_Init(SDL_mixer.MIX_InitFlags.MIX_INIT_MP3 | SDL_mixer.MIX_InitFlags.MIX_INIT_OGG);
             SDL_ttf.TTF_Init();
-
-            // open mixer audio
-            if (SDL_mixer.Mix_OpenAudio(SDL_mixer.MIX_DEFAULT_FREQUENCY, SDL_mixer.MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-                string error = SDL.SDL_GetError();
-                SDL_ttf.TTF_Quit();
-                SDL_mixer.Mix_Quit();
-                SDL_image.IMG_Quit();
-                SDL.SDL_Quit();
-                throw new Exception("Failed to initialize Flora: Mix_OpenAudio Failed (" + error + ")");
-            }
             
             // create window
             SDL.SDL_WindowFlags windowFlags = (SDL.SDL_WindowFlags)config.windowFlags;
@@ -144,13 +133,15 @@ namespace Flora {
             // cleanup core
             core.Dispose();
 
+            // cleanup soloud
+            Flora.Audio.Audio.Deinit();
+
             // cleanup things
             SDL.SDL_DestroyRenderer(renderer);
             SDL.SDL_DestroyWindow(window);
 
             // cleanup SDL and friends
             SDL_ttf.TTF_Quit();
-            SDL_mixer.Mix_Quit();
             SDL_image.IMG_Quit();
             SDL.SDL_Quit();
         }

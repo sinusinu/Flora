@@ -1,21 +1,22 @@
 using System;
 using System.Threading;
 using SDL2;
+using SoLoud;
 
 namespace Flora.Audio {
     public static class Audio {
+        internal static Soloud soloud;
         internal static bool isAudioInitialized = false;
 
-        internal static readonly int numChannels = 32;
-        internal static Mutex mtxSound;
-        internal static Sound[] sounds;
-
         internal static void Init() {
-            mtxSound = new Mutex();
-            SDL_mixer.Mix_AllocateChannels(numChannels);
-            sounds = new Sound[numChannels];
+            soloud = new Soloud();
+            soloud.init(1, Soloud.SDL2);
 
             isAudioInitialized = true;
+        }
+
+        internal static void Deinit() {
+            soloud.deinit();
         }
         
         /// <summary>
