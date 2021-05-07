@@ -10,6 +10,13 @@ namespace Flora.Gfx {
         public byte b;
         public byte a;
 
+        public Color(Color originalColor) {
+            this.r = originalColor.r;
+            this.g = originalColor.g;
+            this.b = originalColor.b;
+            this.a = originalColor.a;
+        }
+
         public Color(byte r, byte g, byte b, byte a) {
             this.r = r;
             this.g = g;
