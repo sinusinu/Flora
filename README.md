@@ -31,10 +31,11 @@ If you want to try it anyway, Please take a read on temporary Quick Start Guide 
 1. ```git clone``` this repository
 2. fetch submodules using ```git submodule update --init```
 3. Create new .NET project somewhere else using ```dotnet new console```
-4. Add Flora as reference to your project using ```dotnet add reference path\to\flora\Flora.csproj```
-5. Build project once using ```dotnet build```
-6. Acquire and Place [SDL2.dll](https://www.libsdl.org/download-2.0.php), [SDL_image.dll](https://www.libsdl.org/projects/SDL_image/), [SDL_mixer.dll](https://www.libsdl.org/projects/SDL_mixer/), [SDL_ttf.dll](https://www.libsdl.org/projects/SDL_ttf/) and all of its dependency DLLs into build directory (where the exe file is located)
-7. Setup basic codes:
+4. Flora only targets x86 platform, so make sure your project also targets x86
+5. Add Flora as reference to your project using ```dotnet add reference path\to\flora\Flora.csproj```
+6. Build project once using ```dotnet build```
+7. Acquire and Place [SDL2.dll](https://www.libsdl.org/download-2.0.php), [SDL_image.dll](https://www.libsdl.org/projects/SDL_image/), [SDL_ttf.dll](https://www.libsdl.org/projects/SDL_ttf/), [soloud_x86.dll](https://sol.gfxile.net/soloud/downloads.html) and all of its dependency DLLs into build directory (where the exe file is located)
+8. Setup basic codes:
 
 Program.cs:
 ```csharp
@@ -73,8 +74,8 @@ namespace FloraExample {
 }
 ```
 
-8. Run project using ```dotnet run```
-9. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something
+9. Run project using ```dotnet run```
+10. (Optional) Setup Post-build event for auto-copying SDL DLLs into build folder in case of running ```dotnet clean``` or something
 
 ## License
 

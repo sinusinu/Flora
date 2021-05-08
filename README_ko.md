@@ -31,10 +31,11 @@ Flora는 쓸데없이 복잡한 기능과 과도한 제약 없이 귀찮은 일�
 1. ```git clone```으로 Flora 프로젝트를 다운로드합니다.
 2. ```git submodule update --init```으로 submodule을 받아옵니다.
 3. 어딘가 다른 디렉토리에 ```dotnet new console```으로 새 .NET 프로젝트를 생성합니다.
-4. ```dotnet add reference path\to\flora\Flora.csproj```로 Flora를 새 프로젝트에 참조로 추가합니다.
-5. ```dotnet build```로 한 번 빌드합니다.
-6. [SDL2.dll](https://www.libsdl.org/download-2.0.php), [SDL_image.dll](https://www.libsdl.org/projects/SDL_image/), [SDL_mixer.dll](https://www.libsdl.org/projects/SDL_mixer/), [SDL_ttf.dll](https://www.libsdl.org/projects/SDL_ttf/) 및 그 의존 DLL을 모두 다운로드하여 빌드 디렉토리(exe 파일이 생성되는 곳)에 배치합니다.
-7. 간단한 예제 코드를 작성합니다.
+4. 새 프로젝트의 타겟 플랫폼을 x86으로 설정합니다. Flora는 x86 이외의 플랫폼을 지원하지 않습니다.
+5. ```dotnet add reference path\to\flora\Flora.csproj```로 Flora를 새 프로젝트에 참조로 추가합니다.
+6. ```dotnet build```로 한 번 빌드합니다.
+7. [SDL2.dll](https://www.libsdl.org/download-2.0.php), [SDL_image.dll](https://www.libsdl.org/projects/SDL_image/), [SDL_ttf.dll](https://www.libsdl.org/projects/SDL_ttf/), [soloud_x86.dll](https://sol.gfxile.net/soloud/downloads.html) 및 그 의존 DLL을 모두 다운로드하여 빌드 디렉토리(exe 파일이 생성되는 곳)에 배치합니다.
+8. 간단한 예제 코드를 작성합니다.
 
 Program.cs:
 ```csharp
@@ -73,8 +74,8 @@ namespace FloraExample {
 }
 ```
 
-8. ```dotnet run```으로 프로젝트를 실행합니다.
-9. (선택) 프로젝트를 정리하는 등의 상황을 대비하여 빌드 후 이벤트를 통해 SDL DLL 파일들을 빌드할 때마다 자동으로 빌드 디렉토리에 복사되도록 설정합니다.
+9. ```dotnet run```으로 프로젝트를 실행합니다.
+10. (선택) 프로젝트를 정리하는 등의 상황을 대비하여 빌드 후 이벤트를 통해 SDL DLL 파일들을 빌드할 때마다 자동으로 빌드 디렉토리에 복사되도록 설정합니다.
 
 ## 라이선스
 
