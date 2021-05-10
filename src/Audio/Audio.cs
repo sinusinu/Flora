@@ -25,9 +25,9 @@ namespace Flora.Audio {
         /// </summary>
         /// <param name="path">Path to the sound file. WAV/MP3/OGG are supported.</param>
         /// <returns></returns>
-        public static Sound CreateSound(string path) {
+        public static Sound CreateSound(string path, float volume = 1f) {
             if (!isAudioInitialized) throw new InvalidOperationException("Audio is not initialized");
-            return new Sound(path);
+            return new Sound(path, volume);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace Flora.Audio {
         /// </summary>
         /// <param name="path">Path to the sound file. WAV/MP3/OGG are supported.</param>
         /// <returns></returns>
-        public static Music CreateMusic(string path) {
+        public static Music CreateMusic(string path, float volume = 1f) {
             if (!isAudioInitialized) throw new InvalidOperationException("Audio is not initialized");
-            return new Music(path);
+            return new Music(path, volume);
         }
     }
 }
