@@ -61,6 +61,11 @@ namespace Flora.Gfx {
             set { _rotation = value % 360f; if (Gfx.activeView == this) Gfx.activeViewRotation = _rotation; }
         }
 
+        public float visibleTop { get; private set; }
+        public float visibleLeft { get; private set; }
+        public float visibleWidth { get; private set; }
+        public float visibleHeight { get; private set; }
+
         /// <summary>
         /// Create new view with given size.
         /// </summary>
@@ -83,6 +88,11 @@ namespace Flora.Gfx {
                 ratioCorrectedHeight = givenHeight;
                 centerX = givenWidth / 2;
                 centerY = givenHeight / 2;
+                
+                visibleTop = 0;
+                visibleLeft = 0;
+                visibleWidth = givenWidth;
+                visibleHeight = givenHeight;
             } else {
                 var (clientWidth, clientHeight) = Gfx.GetClientSize();
 
@@ -110,6 +120,11 @@ namespace Flora.Gfx {
                     centerX = givenWidth / 2;
                     centerY = givenHeight / 2;
                 }
+
+                visibleTop = (givenHeight / 2) - centerY;
+                visibleLeft = (givenWidth / 2) - centerX;
+                visibleWidth = ratioCorrectedWidth;
+                visibleHeight = ratioCorrectedHeight;
             }
         }
     }
