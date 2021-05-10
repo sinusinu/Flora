@@ -66,6 +66,9 @@ namespace Flora.Gfx {
         public float visibleWidth { get; private set; }
         public float visibleHeight { get; private set; }
 
+        public enum Stretch { Horizontal, Vertical, Identical }
+        public Stretch stretch { get; private set; }
+
         /// <summary>
         /// Create new view with given size.
         /// </summary>
@@ -93,6 +96,8 @@ namespace Flora.Gfx {
                 visibleLeft = 0;
                 visibleWidth = givenWidth;
                 visibleHeight = givenHeight;
+
+                stretch = Stretch.Identical;
             } else {
                 var (clientWidth, clientHeight) = Gfx.GetClientSize();
 
@@ -106,6 +111,8 @@ namespace Flora.Gfx {
                     ratioCorrectedHeight = givenHeight;
                     centerX = ((ratioCorrectedWidth - givenWidth) / 2) + (givenWidth / 2);
                     centerY = givenHeight / 2;
+
+                    stretch = Stretch.Horizontal;
                 } else if (clientSizeAspectRatio + 0.005f < givenSizeAspectRatio) {
                     // client is vertically stretched
                     float ratio = clientSizeAspectRatio / givenSizeAspectRatio;
@@ -113,12 +120,16 @@ namespace Flora.Gfx {
                     ratioCorrectedHeight = (int)(givenHeight / ratio);
                     centerX = givenWidth / 2;
                     centerY = ((ratioCorrectedHeight - givenHeight) / 2) + (givenHeight / 2);
+                    
+                    stretch = Stretch.Vertical;
                 } else {
                     // almost same aspect ratio
                     ratioCorrectedWidth = givenWidth;
                     ratioCorrectedHeight = givenHeight;
                     centerX = givenWidth / 2;
                     centerY = givenHeight / 2;
+
+                    stretch = Stretch.Identical;
                 }
 
                 visibleTop = (givenHeight / 2) - centerY;
