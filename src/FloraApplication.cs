@@ -61,6 +61,8 @@ namespace Flora {
             ulong last, now = SDL.SDL_GetPerformanceCounter();
             float delta = 0f;
 
+            bool shouldCompensatePause = false;
+
             // SDL main loop
             while (run) {
                 // do events
@@ -114,15 +116,29 @@ namespace Flora {
                                     Gfx.Gfx.UpdateView();
                                     core.Resize(e.window.data1, e.window.data2);
                                     break;
+                                case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_MINIMIZED:
+                                    // stall execution while window is minimized.
+                                    shouldCompensatePause = true;
+                                    while (SDL.SDL_WaitEvent(out e) != 0) {
+                                        if (e.window.windowEvent == SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED) {
+                                            break;
+                                        }
+                                    }
+                                    break;
                             }
                             break;
                     }
                 }
 
-                // calculate delta
-                last = now;
-                now = SDL.SDL_GetPerformanceCounter();
-                delta = (float)(((now - last)) / (float)freq);
+                if (shouldCompensatePause) {
+                    // set 'compensated' delta
+                    delta = 1/60f;
+                } else {
+                    // calculate delta
+                    last = now;
+                    now = SDL.SDL_GetPerformanceCounter();
+                    delta = (float)(((now - last)) / (float)freq);
+                }
 
                 // call core render
                 core.Render(delta);
