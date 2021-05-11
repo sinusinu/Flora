@@ -14,7 +14,7 @@ namespace Flora {
             core._floraApplication = this;
 
             // init SDL and friends
-            uint sdlInitFlag = SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO;
+            uint sdlInitFlag = SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER;
             SDL.SDL_Init(sdlInitFlag);
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
             SDL_ttf.TTF_Init();
