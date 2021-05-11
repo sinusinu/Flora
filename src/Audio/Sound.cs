@@ -18,8 +18,6 @@ namespace Flora.Audio {
             }
         }
 
-        private bool disposed = false;
-
         internal Sound(string path, float volume = 1f) {
             wav = new Wav();
             wav.load(path);
@@ -35,18 +33,23 @@ namespace Flora.Audio {
             Audio.soloud.play(wav, _volume);
         }
 
-        public void Dispose() {
-            if (disposed) return;
+        private bool _disposed = false;
 
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
+
+            /* if (disposing) {} */
+            
             wav.Dispose();
-            
-            disposed = true;
-            
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~Sound() {
-            Dispose();
-        }
+        ~Sound() => Dispose(false);
     }
 }

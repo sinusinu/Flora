@@ -6,25 +6,28 @@ namespace Flora.Input {
         internal IntPtr ctrlInstance;
         internal int id;
         
-        private bool disposed = false;
-
         internal ControllerInstance(IntPtr instance) {
             this.ctrlInstance = instance;
             id = SDL.SDL_JoystickInstanceID(instance);
         }
 
-        public void Dispose() {
-            if (disposed) return;
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
+            
+            /* if (disposing) {} */
             
             SDL.SDL_GameControllerClose(ctrlInstance);
-            
-            disposed = true;
-            
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
-        ~ControllerInstance() {
-            Dispose();
-        }
+
+        ~ControllerInstance() => Dispose(false);
     }
 }

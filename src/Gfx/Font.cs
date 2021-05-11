@@ -17,8 +17,6 @@ namespace Flora.Gfx {
 
         public float lineHeight { get { return _lineHeight * scale; }}
 
-        private bool disposed = false;
-
         public Font(string path, int size) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
@@ -321,19 +319,27 @@ namespace Flora.Gfx {
             }
         }
 
-        public void Dispose() {
-            if (disposed) return;
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
             
-            ClearCache();
+            foreach (var tx in textures) SDL.SDL_DestroyTexture(tx);
             SDL_ttf.TTF_CloseFont(font);
             
-            disposed = true;
-            
+            if (disposing) {
+                textures.Clear();
+                glyphInfos.Clear();
+            }
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~Font() {
-            Dispose();
-        }
+        ~Font() => Dispose(false);
     }
 }

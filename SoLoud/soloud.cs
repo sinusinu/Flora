@@ -643,8 +643,6 @@ namespace SoLoud {
     }
 
     public class Wav : SoloudObject, IDisposable {
-        private bool disposed = false;
-
         [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr Wav_create();
         public Wav() {
@@ -653,17 +651,25 @@ namespace SoLoud {
 
         [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr Wav_destroy(IntPtr aObjHandle);
-        
-        public void Dispose() {
-            if (disposed) return;
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
+            
+            /* if (disposing) {} */
+            
             Wav_destroy(objhandle);
-            disposed = true;
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~Wav() {
-            Dispose();
-        }
+        ~Wav() => Dispose(false);
 
         [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int Wav_load(IntPtr aObjHandle, [MarshalAs(UnmanagedType.LPStr)] string aFilename);
@@ -793,8 +799,6 @@ namespace SoLoud {
     }
 
     public class WavStream : SoloudObject, IDisposable {
-        private bool disposed = false;
-
         [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr WavStream_create();
         public WavStream() {
@@ -804,16 +808,24 @@ namespace SoLoud {
         [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr WavStream_destroy(IntPtr aObjHandle);
 
-        public void Dispose() {
-            if (disposed) return;
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
+            
+            /* if (disposing) {} */
+            
             WavStream_destroy(objhandle);
-            disposed = true;
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~WavStream() {
-            Dispose();
-        }
+        ~WavStream() => Dispose(false);
 
         [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int WavStream_load(IntPtr aObjHandle, [MarshalAs(UnmanagedType.LPStr)] string aFilename);

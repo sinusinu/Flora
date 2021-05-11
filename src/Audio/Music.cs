@@ -33,8 +33,6 @@ namespace Flora.Audio {
             }
         }
 
-        private bool disposed = false;
-
         internal Music(string path, float volume = 1f) {
             wavStream = new WavStream();
             wavStream.load(path);
@@ -101,19 +99,23 @@ namespace Flora.Audio {
             return (float)Audio.soloud.getStreamPosition(handle);
         }
 
-        public void Dispose() {
-            if (disposed) return;
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
+
+            /* if (disposing) {} */
             
-            Stop();
             wavStream.Dispose();
-            
-            disposed = true;
-            
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~Music() {
-            Dispose();
-        }
+        ~Music() => Dispose(false);
     }
 }

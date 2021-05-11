@@ -11,8 +11,6 @@ namespace Flora.Gfx {
         public int width { get; private set; }
         public int height  { get; private set; }
 
-        private bool disposed = false;
-
         public Texture(string path) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
@@ -35,18 +33,23 @@ namespace Flora.Gfx {
             width = w; height = h;
         }
 
-        public void Dispose() {
-            if (disposed) return;
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (_disposed) return;
+            
+            /* if (disposing) {} */
             
             SDL.SDL_DestroyTexture(sdlTexture);
-            
-            disposed = true;
-            
+
+            _disposed = true;
+        }
+
+        public void Dispose() {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        ~Texture() {
-            Dispose();
-        }
+        ~Texture() => Dispose(false);
     }
 }
