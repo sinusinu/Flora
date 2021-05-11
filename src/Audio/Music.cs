@@ -81,8 +81,8 @@ namespace Flora.Audio {
         /// </summary>
         /// <param name="position">New position in seconds</param>
         public void SetPosition(float position) {
-            if (position == 0f) { Stop(); Play(); return; }
             bool isPlaying = (state == MusicState.Playing);
+            if (position == 0f) { Stop(); if (isPlaying) Play(); return; }
             Audio.soloud.setPause(handle, 1);
             Audio.soloud.seek(handle, 0d);
             Audio.soloud.seek(handle, position);
