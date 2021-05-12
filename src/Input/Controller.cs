@@ -7,7 +7,7 @@ namespace Flora.Input {
         internal static bool isControllerInitialized = false;
 
         internal static List<ControllerInstance> instances;
-        internal static ControllerHandler handler = null;
+        internal static IControllerHandler handler = null;
 
         internal static void Init() {
             instances = new List<ControllerInstance>();
@@ -33,7 +33,7 @@ namespace Flora.Input {
         /// Any previously set ControllerHandler will no longer receive controller input events.
         /// </summary>
         /// <param name="handler"></param>
-        public static void SetControllerHandler(ControllerHandler handler) {
+        public static void SetControllerHandler(IControllerHandler handler) {
             if (!isControllerInitialized) throw new InvalidOperationException("Controller is not initialized");
             Controller.handler = handler;
         }

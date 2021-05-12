@@ -2,7 +2,7 @@ namespace Flora.Input {
     /// <summary>
     /// Interface for handling user input.
     /// </summary>
-    public interface InputHandler {
+    public interface IInputHandler {
         void OnKeyDown(KeyCode keycode);
         void OnKeyUp(KeyCode keycode);
         void OnMouseDown(MouseButton button, int x, int y);
