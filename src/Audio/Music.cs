@@ -30,6 +30,7 @@ namespace Flora.Audio {
             set {
                 _volume = Math.Clamp(value, 0f, 1f);
                 wavStream.setVolume(_volume);
+                if (state != MusicState.Idle) Audio.soloud.setVolume(handle, _volume);
             }
         }
 
