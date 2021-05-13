@@ -34,6 +34,16 @@ namespace Flora.Audio {
             }
         }
 
+        internal bool _looping = false;
+        public bool Looping {
+            get { return _looping; }
+            set { 
+                _looping = value;
+                wavStream.setLooping(_looping ? 1 : 0);
+                if (state != MusicState.Idle) Audio.soloud.setLooping(handle, _looping ? 1 : 0);
+            }
+        }
+
         internal Music(string path, float volume = 1f) {
             wavStream = new WavStream();
             wavStream.load(path);
