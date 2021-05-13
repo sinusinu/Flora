@@ -31,11 +31,9 @@ namespace Flora.Util {
             }
             var ros = new ReadOnlySpan<byte>(rb);
             try {
-                var opt = new JsonSerializerOptions {
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Always
-                };
-                pref = JsonSerializer.Deserialize<Dictionary<string, string>>(ros, opt);
+                pref = JsonSerializer.Deserialize<Dictionary<string, string>>(ros);
             } catch (Exception) {
+                // TODO: do better error handling
                 pref = new Dictionary<string, string>();
             }
         }
