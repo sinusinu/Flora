@@ -13,7 +13,7 @@ It is built on .NET 5 and SDL2, so while it could be cross-platform, currently o
 
 ## Documentation
 
-Writing some basics into [Wiki](https://github.com/sinusinu/Flora/wiki) is planned in near future.
+[Wiki](https://github.com/sinusinu/Flora/wiki) is currently being written.
 
 Flora's public functions are usually documented with [documentation comments](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments), so check out the sources if you need more info.
 
