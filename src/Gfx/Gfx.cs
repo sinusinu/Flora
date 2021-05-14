@@ -153,9 +153,18 @@ namespace Flora.Gfx {
         /// <param name="r">Color to clear screen: Red (0-255)</param>
         /// <param name="g">Color to clear screen: Green (0-255)</param>
         /// <param name="b">Color to clear screen: Blue (0-255)</param>
-        /// <param name="a">Color to clear screen: Alpha (0-255)</param>
-        public static void Begin(byte r, byte g, byte b, byte a) {
-            Begin(new Color(r, g, b, a));
+        public static void Begin(byte r, byte g, byte b) {
+            Begin(new Color(r, g, b, (byte)255));
+        }
+
+        /// <summary>
+        /// Clear screen with current color and get ready for drawing.
+        /// </summary>
+        /// <param name="r">Color to clear screen: Red (0-1)</param>
+        /// <param name="g">Color to clear screen: Green (0-1)</param>
+        /// <param name="b">Color to clear screen: Blue (0-1)</param>
+        public static void Begin(float r, float g, float b) {
+            Begin(new Color((byte)(r * 255f), (byte)(g * 255f), (byte)(b * 255f), (byte)255));
         }
         
         /// <summary>
