@@ -1,5 +1,3 @@
-[한국어](README_ko.md)
-
 # Flora
 Flora is a .NET 2D game development framework.
 
