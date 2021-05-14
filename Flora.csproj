@@ -3,6 +3,10 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
 	    <PlatformTarget>x64</PlatformTarget>
+        
+        <PackageId>Flora</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>Woohyun Shin</Authors>
     </PropertyGroup>
 
     <ItemGroup>
