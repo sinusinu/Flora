@@ -106,7 +106,7 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
-        /// Return the size of client region.
+        /// Return the size of the window.
         /// </summary>
         public static (int, int) GetClientSize() {
             int w, h;
@@ -115,20 +115,11 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
-        /// Apply a view.
-        /// </summary>
-        /// <param name="view">View to apply</param>
-        public static void SetView(View view) {
-            activeView = view;
-            UpdateView();
-        }
-
-        /// <summary>
-        /// Set window size. Does nothing when on fullscreen.
+        /// Set the size of the window. Does nothing when on fullscreen.
         /// </summary>
         /// <param name="width">New width of the window</param>
         /// <param name="height">New height of the window</param>
-        public static void SetWindowSize(int width, int height) {
+        public static void SetClientSize(int width, int height) {
             SDL.SDL_SetWindowSize(sdlWindow, width, height);
         }
 
@@ -138,6 +129,15 @@ namespace Flora.Gfx {
         /// <param name="mode">New window mode</param>
         public static void SetWindowMode(WindowMode mode) {
             SDL.SDL_SetWindowFullscreen(sdlWindow, (uint)mode);
+        }
+
+        /// <summary>
+        /// Apply a view.
+        /// </summary>
+        /// <param name="view">View to apply</param>
+        public static void SetView(View view) {
+            activeView = view;
+            UpdateView();
         }
 
         /// <summary>
