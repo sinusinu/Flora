@@ -446,8 +446,8 @@ namespace Flora.Gfx {
 
 #region Internal functions
         internal static void UpdateView() {
-            var (clientWidth, clientHeight) = GetClientSize();
             if (activeView == null) {
+                var (clientWidth, clientHeight) = GetClientSize();
                 SDL.SDL_RenderSetLogicalSize(sdlRenderer, clientWidth, clientHeight);
             } else {
                 activeView.CalculateAppliedSize();
