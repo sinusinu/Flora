@@ -6,15 +6,15 @@ namespace Flora.Gfx {
     /// Utility for setting device-independant resolution.
     /// </summary>
     public class View {
-        internal int ratioCorrectedWidth;
-        internal int ratioCorrectedHeight;
-        internal int givenWidth;
-        internal int givenHeight;
-        internal float centerX;
-        internal float centerY;
-        internal float offsetX;
-        internal float offsetY;
-        internal bool letterBox;
+        internal int ratioCorrectedWidth = 0;
+        internal int ratioCorrectedHeight = 0;
+        internal int givenWidth = 0;
+        internal int givenHeight = 0;
+        internal float centerX = 0;
+        internal float centerY = 0;
+        internal float offsetX = 0;
+        internal float offsetY = 0;
+        internal bool letterBox = false;
 
         internal float _zoom = 1f;
         internal float _rotation = 0;
@@ -25,8 +25,8 @@ namespace Flora.Gfx {
                 float diff = value - offsetX;
                 offsetX += diff * MathF.Cos(MathUtils.DegToRad(_rotation));
                 offsetY += diff * -MathF.Sin(MathUtils.DegToRad(_rotation));
-                visibleLeft = -ratioCorrectedWidth / 2 + offsetX;
-                visibleTop = -ratioCorrectedHeight / 2 + offsetY;
+                visibleLeft = (-ratioCorrectedWidth / 2) + offsetX;
+                visibleTop = (-ratioCorrectedHeight / 2) + offsetY;
                 if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = offsetX;
                     Gfx.activeViewOffsetY = offsetY;
@@ -40,8 +40,8 @@ namespace Flora.Gfx {
                 float diff = value - offsetY;
                 offsetX += diff * MathF.Sin(MathUtils.DegToRad(_rotation));
                 offsetY += diff * MathF.Cos(MathUtils.DegToRad(_rotation));
-                visibleLeft = -ratioCorrectedWidth / 2 + offsetX;
-                visibleTop = -ratioCorrectedHeight / 2 + offsetY;
+                visibleLeft = (-ratioCorrectedWidth / 2) + offsetX;
+                visibleTop = (-ratioCorrectedHeight / 2) + offsetY;
                 if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = offsetX;
                     Gfx.activeViewOffsetY = offsetY;
@@ -95,11 +95,11 @@ namespace Flora.Gfx {
             if (letterBox) {
                 ratioCorrectedWidth = givenWidth;
                 ratioCorrectedHeight = givenHeight;
-                centerX = givenWidth / 2;
-                centerY = givenHeight / 2;
+                centerX = givenWidth / 2f;
+                centerY = givenHeight / 2f;
                 
-                visibleTop = 0;
-                visibleLeft = 0;
+                visibleLeft = (-givenWidth / 2) + offsetX;
+                visibleTop = (-givenHeight / 2) + offsetY;
                 visibleWidth = givenWidth;
                 visibleHeight = givenHeight;
 
@@ -138,8 +138,8 @@ namespace Flora.Gfx {
                     stretch = Stretch.Identical;
                 }
 
-                visibleLeft = -ratioCorrectedWidth / 2;
-                visibleTop = -ratioCorrectedHeight / 2;
+                visibleLeft = (-ratioCorrectedWidth / 2) + offsetX;
+                visibleTop = (-ratioCorrectedHeight / 2) + offsetY;
                 visibleWidth = ratioCorrectedWidth;
                 visibleHeight = ratioCorrectedHeight;
             }
