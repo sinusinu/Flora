@@ -66,9 +66,17 @@ namespace Flora.Util {
 
         public float GetValueFloat(string key, float fallback = 0f) {
             string rawStr; float ret;
-            if (!pref.TryGetValue(key, out rawStr)) return 0f;
+            if (!pref.TryGetValue(key, out rawStr)) return fallback;
             if (!float.TryParse(rawStr, out ret)) throw new InvalidDataException("Key " + key + " have non-float value");
             return ret;
+        }
+
+        public bool GetValueBool(string key, bool fallback = false) {
+            string rawStr;
+            if (!pref.TryGetValue(key, out rawStr)) return fallback;
+            if (rawStr.Equals("true")) return true;
+            else if (rawStr.Equals("false")) return false;
+            throw new InvalidDataException("Key " + key + " have non-bool value");
         }
 #endregion
 
@@ -76,6 +84,7 @@ namespace Flora.Util {
         public void SetValue(string key, string value) { pref[key] = value; }
         public void SetValue(string key, int value) { pref[key] = value.ToString(); }
         public void SetValue(string key, float value) { pref[key] = value.ToString(); }
+        public void SetValue(string key, bool value) { pref[key] = value ? "true" : "false"; }
 #endregion
     }
 }
