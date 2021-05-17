@@ -26,8 +26,8 @@ namespace Flora {
         void Render(float delta);
 
         /// <summary>
-        /// Any disposable resources must be disposed at here. NOTE: calling manners of this function might differ slightly from typical IDisposable.Dispose() manners!
+        /// Any disposable resources must be disposed at here.
         /// </summary>
-        void Dispose();
+        void Cleanup();
     }
 }

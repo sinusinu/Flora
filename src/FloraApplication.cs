@@ -147,7 +147,7 @@ namespace Flora {
             Cleanup:
 
             // cleanup core
-            core.Dispose();
+            core.Cleanup();
 
             // cleanup soloud
             Flora.Audio.Audio.Deinit();

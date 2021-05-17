@@ -35,9 +35,9 @@ namespace Flora {
         public virtual void Render(float delta) {}
 
         /// <summary>
-        /// Any disposable resources must be disposed at here. NOTE: calling manners of this function might differ slightly from typical IDisposable.Dispose() manners!
+        /// Any disposable resources must be disposed at here.
         /// </summary>
-        public virtual void Dispose() {}
+        public virtual void Cleanup() {}
 
         /// <summary>
         /// Schedule exit of the application. Note that exit will not happen immediately.
