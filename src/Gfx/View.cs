@@ -25,6 +25,8 @@ namespace Flora.Gfx {
                 float diff = value - offsetX;
                 offsetX += diff * MathF.Cos(MathUtils.DegToRad(_rotation));
                 offsetY += diff * -MathF.Sin(MathUtils.DegToRad(_rotation));
+                visibleLeft = -ratioCorrectedWidth / 2 + offsetX;
+                visibleTop = -ratioCorrectedHeight / 2 + offsetY;
                 if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = offsetX;
                     Gfx.activeViewOffsetY = offsetY;
@@ -38,6 +40,8 @@ namespace Flora.Gfx {
                 float diff = value - offsetY;
                 offsetX += diff * MathF.Sin(MathUtils.DegToRad(_rotation));
                 offsetY += diff * MathF.Cos(MathUtils.DegToRad(_rotation));
+                visibleLeft = -ratioCorrectedWidth / 2 + offsetX;
+                visibleTop = -ratioCorrectedHeight / 2 + offsetY;
                 if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = offsetX;
                     Gfx.activeViewOffsetY = offsetY;
@@ -134,8 +138,8 @@ namespace Flora.Gfx {
                     stretch = Stretch.Identical;
                 }
 
-                visibleTop = (givenHeight / 2) - centerY;
-                visibleLeft = (givenWidth / 2) - centerX;
+                visibleLeft = -ratioCorrectedWidth / 2;
+                visibleTop = -ratioCorrectedHeight / 2;
                 visibleWidth = ratioCorrectedWidth;
                 visibleHeight = ratioCorrectedHeight;
             }
