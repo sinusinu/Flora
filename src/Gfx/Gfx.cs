@@ -129,6 +129,7 @@ namespace Flora.Gfx {
         /// <param name="mode">New window mode</param>
         public static void SetWindowMode(WindowMode mode) {
             SDL.SDL_SetWindowFullscreen(sdlWindow, (uint)mode);
+            UpdateView();
         }
 
         /// <summary>
