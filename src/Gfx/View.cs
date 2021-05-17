@@ -25,9 +25,10 @@ namespace Flora.Gfx {
                 float diff = value - offsetX;
                 offsetX += diff * MathF.Cos(MathUtils.DegToRad(_rotation));
                 offsetY += diff * -MathF.Sin(MathUtils.DegToRad(_rotation));
-                if (Gfx.activeView == this)
+                if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = offsetX;
                     Gfx.activeViewOffsetY = offsetY;
+                }
             }
         }
         
@@ -37,9 +38,10 @@ namespace Flora.Gfx {
                 float diff = value - offsetY;
                 offsetX += diff * MathF.Sin(MathUtils.DegToRad(_rotation));
                 offsetY += diff * MathF.Cos(MathUtils.DegToRad(_rotation));
-                if (Gfx.activeView == this)
+                if (Gfx.activeView == this) {
                     Gfx.activeViewOffsetX = offsetX;
                     Gfx.activeViewOffsetY = offsetY;
+                }
             }
         }
         
