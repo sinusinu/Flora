@@ -28,6 +28,8 @@ namespace Flora.Input {
             }
         }
 
+        // TODO: add functions that can enumerate or at least get count of controllers
+
         /// <summary>
         /// Set ControllerHandler to receive controller input events.<br/>
         /// Any previously set ControllerHandler will no longer receive controller input events.
