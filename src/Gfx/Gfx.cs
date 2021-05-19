@@ -458,6 +458,15 @@ namespace Flora.Gfx {
             }
         }
 
+        internal static (int, int) ConvertScreenPointToViewPoint(int x, int y) {
+            if (activeView == null) return (x, y);
+            
+            int rx = x, ry = y;
+            rx += (int)(activeViewOffsetX - activeViewCenterX);
+            ry += (int)(activeViewOffsetY - activeViewCenterY);
+            return (rx, ry);
+        }
+
         internal static void DrawGlyph(IntPtr texture, SDL.SDL_Rect srcRect, SDL.SDL_FRect dstRect, double rotation, int pivotX, int pivotY, FlipMode flip, Color color) {
             SetCurrentTextureColor(texture, color.ToSDLColor());
 
