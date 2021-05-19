@@ -424,27 +424,6 @@ namespace Flora.Gfx {
             );
         }
 
-        /// <summary>
-        /// Translate screen point (relative to window) to view point (relative to view).
-        /// </summary>
-        /// <param name="x">X of screen point</param>
-        /// <param name="y">Y of screen point</param>
-        /// <returns>(x, y) of view point</returns>
-        public static (int, int) TranslateScreenPointToViewPoint(int x, int y) {
-            if (activeViewZoom == 0f) return (0, 0);
-            if (activeView == null) return (x, y);
-
-            float xp = (x - activeViewCenterX) / activeViewZoom;
-            float yp = (y - activeViewCenterY) / activeViewZoom;
-
-            float d = MathF.Sqrt((xp * xp) + (yp * yp));
-            float r = MathF.Atan2(yp, xp);  // in radians
-            float ox = d * MathF.Cos(r - MathUtils.DegToRad(activeViewRotation)) + activeViewOffsetX;
-            float oy = d * MathF.Sin(r - MathUtils.DegToRad(activeViewRotation)) + activeViewOffsetY;
-
-            return ((int)ox, (int)oy);
-        }
-
 #region Internal functions
         internal static void UpdateView() {
             if (activeView == null) {
