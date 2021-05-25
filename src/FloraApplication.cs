@@ -110,8 +110,20 @@ namespace Flora {
                             if (Input.Controller.isControllerInitialized && Input.Controller.handler != null) Input.Controller.handler.OnButtonUp(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
+                            if (Input.Controller.isControllerInitialized) {
+                                Input.Controller.RefreshControllers();
+                                if (Input.Controller.handler != null) {
+                                    Input.Controller.handler.OnControllerAdded(e.cdevice.which);
+                                }
+                            }
+                            break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
-                            if (Input.Controller.isControllerInitialized) Input.Controller.RefreshControllers();
+                            if (Input.Controller.isControllerInitialized) {
+                                Input.Controller.RefreshControllers();
+                                if (Input.Controller.handler != null) {
+                                    Input.Controller.handler.OnControllerRemoved(e.cdevice.which);
+                                }
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_WINDOWEVENT:
                             switch (e.window.windowEvent) {
