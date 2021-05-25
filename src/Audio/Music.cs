@@ -17,7 +17,7 @@ namespace Flora.Audio {
         /// <summary>
         /// State of the playback of this music.
         /// </summary>
-        public MusicState state { get {
+        public MusicState State { get {
             if (handle == 0) return MusicState.Idle;
             if (Audio.soloud.isValidVoiceHandle(handle) == 0) { handle = 0; return MusicState.Idle; }
             if (Audio.soloud.getPause(handle) > 0) return MusicState.Paused;
@@ -30,7 +30,7 @@ namespace Flora.Audio {
             set {
                 _volume = Math.Clamp(value, 0f, 1f);
                 wavStream.setVolume(_volume);
-                if (state != MusicState.Idle) Audio.soloud.setVolume(handle, _volume);
+                if (State != MusicState.Idle) Audio.soloud.setVolume(handle, _volume);
             }
         }
 
@@ -40,7 +40,7 @@ namespace Flora.Audio {
             set { 
                 _looping = value;
                 wavStream.setLooping(_looping ? 1 : 0);
-                if (state != MusicState.Idle) Audio.soloud.setLooping(handle, _looping ? 1 : 0);
+                if (State != MusicState.Idle) Audio.soloud.setLooping(handle, _looping ? 1 : 0);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Flora.Audio {
         /// If music is playing, nothing will happen.
         /// </summary>
         public void Play() {
-            switch (state) {
+            switch (State) {
                 case MusicState.Idle:
                     handle = Audio.soloud.play(wavStream, _volume);
                     break;
@@ -89,7 +89,7 @@ namespace Flora.Audio {
         /// If music is neither playing or paused, nothing will happen.
         /// </summary>
         public void Stop() {
-            if (state == MusicState.Idle) return;
+            if (State == MusicState.Idle) return;
             Audio.soloud.stop(handle);
             handle = 0;
         }
@@ -99,7 +99,7 @@ namespace Flora.Audio {
         /// </summary>
         /// <param name="position">New position in seconds</param>
         public void SetPosition(float position) {
-            bool isPlaying = (state == MusicState.Playing);
+            bool isPlaying = (State == MusicState.Playing);
             if (position == 0f) { Stop(); if (isPlaying) Play(); return; }
             Audio.soloud.setPause(handle, 1);
             Audio.soloud.seek(handle, 0d);
@@ -112,7 +112,7 @@ namespace Flora.Audio {
         /// </summary>
         /// <returns>Current position in seconds</returns>
         public float GetPosition() {
-            switch (state) {
+            switch (State) {
                 case MusicState.Idle:
                     return 0f;
             }
