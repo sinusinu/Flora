@@ -73,8 +73,7 @@ namespace Flora.Input {
         }
 
         internal static float ShortToFloat(short value) {
-            if (value == 0) return 0f;
-            else if (value < 0) return value / 32768f;
+            if (value < 0) return value / 32768f;
             else return value / 32767f;
         }
     }
