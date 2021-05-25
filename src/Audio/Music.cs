@@ -112,10 +112,7 @@ namespace Flora.Audio {
         /// </summary>
         /// <returns>Current position in seconds</returns>
         public float GetPosition() {
-            switch (State) {
-                case MusicState.Idle:
-                    return 0f;
-            }
+            if (State == MusicState.Idle) return 0f;
             return (float)Audio.soloud.getStreamPosition(handle);
         }
 
