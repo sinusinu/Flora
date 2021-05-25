@@ -44,7 +44,16 @@ namespace Flora.Audio {
             }
         }
 
-        internal Music(string path, float volume = 1f) {
+        /// <summary>
+        /// Create a new music.<br/>
+        /// Music is better suited for playing long background music.<br/>
+        /// </summary>
+        /// <param name="path">Path to the sound file. WAV/MP3/OGG are supported.</param>
+        /// <param name="volume">Volume of the sound. must be between 0 to 1.</param>
+        /// <returns></returns>
+        public Music(string path, float volume = 1f) {
+            if (Audio.isAudioInitialized) throw new InvalidOperationException("Audio is not initialized");
+
             wavStream = new WavStream();
             wavStream.load(path);
             Volume = volume;
