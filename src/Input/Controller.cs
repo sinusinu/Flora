@@ -28,7 +28,18 @@ namespace Flora.Input {
             }
         }
 
-        // TODO: add functions that can enumerate or at least get count of controllers
+        /// <summary>
+        /// Get currently available controller IDs.
+        /// </summary>
+        public static int[] GetControllerIds() {
+            if (!isControllerInitialized) throw new InvalidOperationException("Controller is not initialized");
+
+            int[] ids = new int[instances.Count];
+            for (int i = 0; i < instances.Count; i++) {
+                ids[i] = instances[i].id;
+            }
+            return ids;
+        }
 
         /// <summary>
         /// Set ControllerHandler to receive controller input events.<br/>
