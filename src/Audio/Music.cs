@@ -52,7 +52,7 @@ namespace Flora.Audio {
         /// <param name="volume">Volume of the sound. must be between 0 to 1.</param>
         /// <returns></returns>
         public Music(string path, float volume = 1f) {
-            if (Audio.isAudioInitialized) throw new InvalidOperationException("Audio is not initialized");
+            if (!Audio.isAudioInitialized) throw new InvalidOperationException("Audio is not initialized");
 
             wavStream = new WavStream();
             wavStream.load(path);
