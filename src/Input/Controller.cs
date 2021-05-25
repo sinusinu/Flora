@@ -9,6 +9,8 @@ namespace Flora.Input {
         internal static List<ControllerInstance> instances;
         internal static IControllerHandler handler = null;
 
+        private static int[] rncCtrlIds;
+
         internal static void Init() {
             instances = new List<ControllerInstance>();
             RefreshControllers();
@@ -25,6 +27,25 @@ namespace Flora.Input {
             for (int i = 0; i < num; i++) {
                 var ctrl = SDL.SDL_GameControllerOpen(i);
                 if (ctrl != IntPtr.Zero) instances.Add(new ControllerInstance(ctrl));
+            }
+        }
+
+        // workaround for SDL_CONTROLLERDEVICEADDED event data being inaccurate - do not call this otherwise!
+        internal static void ReadyReportNewController() {
+            rncCtrlIds = GetControllerIds();
+        }
+
+        // workaround for SDL_CONTROLLERDEVICEADDED event data being inaccurate - do not call this otherwise!
+        internal static void ReportNewController() {
+            var nrncCtrlIds = GetControllerIds();
+            foreach (var i in nrncCtrlIds) {
+                bool isFound = false;
+                foreach (var j in rncCtrlIds) {
+                    if (i == j) isFound = true;
+                }
+                if (!isFound) {
+                    handler.OnControllerAdded(i);
+                }
             }
         }
 

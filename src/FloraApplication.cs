@@ -111,9 +111,12 @@ namespace Flora {
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
                             if (Input.Controller.isControllerInitialized) {
+                                // workaround for SDL_CONTROLLERDEVICEADDED event data being inaccurate
+                                Input.Controller.ReadyReportNewController();
                                 Input.Controller.RefreshControllers();
                                 if (Input.Controller.handler != null) {
-                                    Input.Controller.handler.OnControllerAdded(e.cdevice.which);
+                                    //Input.Controller.handler.OnControllerAdded(e.cdevice.which);
+                                    Input.Controller.ReportNewController();
                                 }
                             }
                             break;
