@@ -4,11 +4,11 @@ using SDL2;
 namespace Flora.Input {
     internal class ControllerInstance : IDisposable {
         internal IntPtr ctrlInstance;
-        internal int id;
+        internal IntPtr joyId;
         
         internal ControllerInstance(IntPtr instance) {
             this.ctrlInstance = instance;
-            id = SDL.SDL_JoystickInstanceID(instance);
+            joyId = SDL.SDL_GameControllerGetJoystick(ctrlInstance);
         }
 
         private bool _disposed = false;
