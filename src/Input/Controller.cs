@@ -36,7 +36,7 @@ namespace Flora.Input {
 
             int[] ids = new int[instances.Count];
             for (int i = 0; i < instances.Count; i++) {
-                ids[i] = instances[i].id;
+                ids[i] = SDL.SDL_JoystickInstanceID(instances[i].joyId);
             }
             return ids;
         }
