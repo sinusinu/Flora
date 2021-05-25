@@ -6,7 +6,6 @@ namespace Flora.Input {
         void OnAxisMotion(int which, ControllerAxis axis, float value);
         void OnButtonDown(int which, ControllerButton button);
         void OnButtonUp(int which, ControllerButton button);
-        // TODO: add implementation of these
         void OnControllerAdded(int which);
         void OnControllerRemoved(int which);
     }
