@@ -14,7 +14,8 @@ namespace Flora.Util {
             if (File.Exists(path)) {
                 Load();
             } else {
-                try { using (File.Create(path)) {} } catch (Exception) { throw; }
+                Directory.CreateDirectory(Directory.GetParent(path).FullName);
+                using (File.Create(path)) {}
                 pref = new Dictionary<string, string>();
             }
         }
