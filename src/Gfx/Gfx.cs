@@ -45,6 +45,16 @@ namespace Flora.Gfx {
             /// <summary>Exclusive Fullscreen mode.</summary>
             Exclusive = SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN
         }
+
+        /// <summary>
+        /// Scale mode used for texture filtering.
+        /// </summary>
+        public enum ScaleMode {
+            /// <summary>Use Nearest Neighbor scaling method. Image is scaled sharply, and may have scaling artifact.</summary>
+            Nearest,
+            /// <summary>Use Linear scaling method. Image is scaled smoothly, without noticable scaling artifact.</summary>
+            Linear
+        }
         
         internal static void Init(IntPtr w, IntPtr r) {
             sdlWindow = w;
@@ -139,6 +149,16 @@ namespace Flora.Gfx {
         public static void SetView(View view) {
             activeView = view;
             UpdateView();
+        }
+
+        /// <summary>
+        /// Set scale mode for texture scaling.
+        /// </summary>
+        /// <param name="scaleMode">New scale mode</param>
+        public static void SetScaleMode(ScaleMode scaleMode) {
+            string scaleHint = "linear";
+            if (scaleMode == ScaleMode.Nearest) scaleHint = "nearest";
+            SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, scaleHint);
         }
 
         /// <summary>
