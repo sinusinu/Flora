@@ -1,9 +1,9 @@
 # Flora
 Flora is a .NET 2D game development framework.
 
-## Caution
+## Disclaimer
 
-Flora is still in early development, and nothing is set in stone. If you want to try Flora now, be aware that your application may break at any time. Try it at your own risk.
+Flora is currently developed mainly for my personal use. It may lack some important features.
 
 ## About
 
