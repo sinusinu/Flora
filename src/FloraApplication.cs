@@ -144,7 +144,7 @@ namespace Flora {
                                     // stall execution while window is minimized to prevent weird bugs happening
                                     shouldCompensatePause = true;
                                     while (SDL.SDL_WaitEvent(out e) != 0) {
-                                        if (e.window.windowEvent == SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED) {
+                                        if (e.type == SDL.SDL_EventType.SDL_WINDOWEVENT && e.window.windowEvent == SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED) {
                                             break;
                                         }
                                     }
