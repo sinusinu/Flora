@@ -141,7 +141,7 @@ namespace Flora {
                                     core.Resize(e.window.data1, e.window.data2);
                                     break;
                                 case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_MINIMIZED:
-                                    // stall execution while window is minimized.
+                                    // stall execution while window is minimized to prevent weird bugs happening
                                     shouldCompensatePause = true;
                                     while (SDL.SDL_WaitEvent(out e) != 0) {
                                         if (e.window.windowEvent == SDL.SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED) {
@@ -155,7 +155,10 @@ namespace Flora {
                 }
 
                 if (shouldCompensatePause) {
-                    // set 'compensated' delta
+                    // since execution gets stalled while the window is minimized,
+                    // the first frame after stalling will have a delta time of, like, multiples of seconds. 
+                    // for updating game logic, delta time of that large should be avoided.
+                    // so for the first frame after stalling, we just pass 1/60 as delta.
                     delta = 1/60f;
                     shouldCompensatePause = false;
                 } else {
