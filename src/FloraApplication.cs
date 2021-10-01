@@ -157,6 +157,7 @@ namespace Flora {
                 if (shouldCompensatePause) {
                     // set 'compensated' delta
                     delta = 1/60f;
+                    shouldCompensatePause = false;
                 } else {
                     // calculate delta
                     last = now;
