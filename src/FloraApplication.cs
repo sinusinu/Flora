@@ -74,47 +74,47 @@ namespace Flora {
                             goto Cleanup;
                         case SDL.SDL_EventType.SDL_KEYDOWN:
                             if (e.key.repeat > 0) break;
-                            if (Input.Input.handler != null) Input.Input.handler.OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
+                            if (Input.Input.handler.IsAlive) ((Input.IInputHandler)Input.Input.handler.Target).OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
                             break;
                         case SDL.SDL_EventType.SDL_KEYUP:
-                            if (Input.Input.handler != null) Input.Input.handler.OnKeyUp((Input.KeyCode)e.key.keysym.scancode);
+                            if (Input.Input.handler.IsAlive) ((Input.IInputHandler)Input.Input.handler.Target).OnKeyUp((Input.KeyCode)e.key.keysym.scancode);
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
-                            if (Input.Input.handler != null) {
+                            if (Input.Input.handler.IsAlive) {
                                 (int x, int y) = Gfx.Gfx.ConvertScreenPointToViewPoint(e.button.x, e.button.y);
-                                Input.Input.handler.OnMouseDown((Input.MouseButton)e.button.button, x, y);
+                                ((Input.IInputHandler)Input.Input.handler.Target).OnMouseDown((Input.MouseButton)e.button.button, x, y);
                             }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEBUTTONUP:
-                            if (Input.Input.handler != null) {
+                            if (Input.Input.handler.IsAlive) {
                                 (int x, int y) = Gfx.Gfx.ConvertScreenPointToViewPoint(e.button.x, e.button.y);
-                                Input.Input.handler.OnMouseUp((Input.MouseButton)e.button.button, x, y);
+                                ((Input.IInputHandler)Input.Input.handler.Target).OnMouseUp((Input.MouseButton)e.button.button, x, y);
                             }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEMOTION:
-                            if (Input.Input.handler != null) {
+                            if (Input.Input.handler.IsAlive) {
                                 (int x, int y) = Gfx.Gfx.ConvertScreenPointToViewPoint(e.button.x, e.button.y);
-                                Input.Input.handler.OnMouseMove(x, y);
+                                ((Input.IInputHandler)Input.Input.handler.Target).OnMouseMove(x, y);
                             }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEWHEEL:
-                            if (Input.Input.handler != null) Input.Input.handler.OnMouseWheel(e.wheel.x, e.wheel.y);
+                            if (Input.Input.handler.IsAlive) ((Input.IInputHandler)Input.Input.handler.Target).OnMouseWheel(e.wheel.x, e.wheel.y);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
-                            if (Input.Controller.isControllerInitialized && Input.Controller.handler != null) Input.Controller.handler.OnAxisMotion(e.caxis.which, (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
+                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.IsAlive) ((Input.IControllerHandler)Input.Controller.handler.Target).OnAxisMotion(e.caxis.which, (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
-                            if (Input.Controller.isControllerInitialized && Input.Controller.handler != null) Input.Controller.handler.OnButtonDown(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
+                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.IsAlive) ((Input.IControllerHandler)Input.Controller.handler.Target).OnButtonDown(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
-                            if (Input.Controller.isControllerInitialized && Input.Controller.handler != null) Input.Controller.handler.OnButtonUp(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
+                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.IsAlive) ((Input.IControllerHandler)Input.Controller.handler.Target).OnButtonUp(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
                             if (Input.Controller.isControllerInitialized) {
                                 // workaround for SDL_CONTROLLERDEVICEADDED event data being inaccurate
                                 Input.Controller.ReadyReportNewController();
                                 Input.Controller.RefreshControllers();
-                                if (Input.Controller.handler != null) {
+                                if (Input.Controller.handler.IsAlive) {
                                     //Input.Controller.handler.OnControllerAdded(e.cdevice.which);
                                     Input.Controller.ReportNewController();
                                 }
@@ -123,8 +123,8 @@ namespace Flora {
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
                             if (Input.Controller.isControllerInitialized) {
                                 Input.Controller.RefreshControllers();
-                                if (Input.Controller.handler != null) {
-                                    Input.Controller.handler.OnControllerRemoved(e.cdevice.which);
+                                if (Input.Controller.handler.IsAlive) {
+                                    ((Input.IControllerHandler)Input.Controller.handler.Target).OnControllerRemoved(e.cdevice.which);
                                 }
                             }
                             break;
