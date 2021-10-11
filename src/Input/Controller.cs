@@ -7,7 +7,7 @@ namespace Flora.Input {
         internal static bool isControllerInitialized = false;
 
         internal static List<ControllerInstance> instances;
-        internal static WeakReference handler = new WeakReference(null);
+        internal static WeakReference<IControllerHandler> handler = new WeakReference<IControllerHandler>(null);
 
         private static int[] rncCtrlIds;
 
@@ -43,8 +43,9 @@ namespace Flora.Input {
                 foreach (var j in rncCtrlIds) {
                     if (i == j) isFound = true;
                 }
-                if (!isFound && handler.IsAlive) {
-                    (handler as IControllerHandler).OnControllerAdded(i);
+                IControllerHandler h;
+                if (!isFound && handler.TryGetTarget(out h)) {
+                    h.OnControllerAdded(i);
                 }
             }
         }
@@ -69,7 +70,7 @@ namespace Flora.Input {
         /// <param name="handler"></param>
         public static void SetControllerHandler(IControllerHandler handler) {
             if (!isControllerInitialized) throw new InvalidOperationException("Controller is not initialized");
-            Controller.handler.Target = handler;
+            Controller.handler.SetTarget(handler);
         }
 
         internal static float ShortToFloat(short value) {

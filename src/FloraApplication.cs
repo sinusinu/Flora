@@ -62,9 +62,13 @@ namespace Flora {
             float delta = 0f;
 
             bool shouldCompensatePause = false;
+            
+            Input.IInputHandler h = null;
+            Input.IControllerHandler ch = null;
 
             // SDL main loop
             while (run) {
+                ch = null;
                 // do events
                 while (SDL.SDL_PollEvent(out e) != 0) {
                     switch (e.type) {
@@ -74,57 +78,80 @@ namespace Flora {
                             goto Cleanup;
                         case SDL.SDL_EventType.SDL_KEYDOWN:
                             if (e.key.repeat > 0) break;
-                            if (Input.Input.handler.IsAlive) ((Input.IInputHandler)Input.Input.handler.Target).OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
+                            if (Input.Input.handler.TryGetTarget(out h)) {
+                                h.OnKeyDown((Input.KeyCode)e.key.keysym.scancode);
+                                h = null;
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_KEYUP:
-                            if (Input.Input.handler.IsAlive) ((Input.IInputHandler)Input.Input.handler.Target).OnKeyUp((Input.KeyCode)e.key.keysym.scancode);
+                            if (Input.Input.handler.TryGetTarget(out h)) {
+                                h.OnKeyUp((Input.KeyCode)e.key.keysym.scancode);
+                                h = null;
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
-                            if (Input.Input.handler.IsAlive) {
+                            if (Input.Input.handler.TryGetTarget(out h)) {
                                 (int x, int y) = Gfx.Gfx.ConvertScreenPointToViewPoint(e.button.x, e.button.y);
-                                ((Input.IInputHandler)Input.Input.handler.Target).OnMouseDown((Input.MouseButton)e.button.button, x, y);
+                                h.OnMouseDown((Input.MouseButton)e.button.button, x, y);
+                                h = null;
                             }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEBUTTONUP:
-                            if (Input.Input.handler.IsAlive) {
+                            if (Input.Input.handler.TryGetTarget(out h)) {
                                 (int x, int y) = Gfx.Gfx.ConvertScreenPointToViewPoint(e.button.x, e.button.y);
-                                ((Input.IInputHandler)Input.Input.handler.Target).OnMouseUp((Input.MouseButton)e.button.button, x, y);
+                                h.OnMouseUp((Input.MouseButton)e.button.button, x, y);
+                                h = null;
                             }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEMOTION:
-                            if (Input.Input.handler.IsAlive) {
+                            if (Input.Input.handler.TryGetTarget(out h)) {
                                 (int x, int y) = Gfx.Gfx.ConvertScreenPointToViewPoint(e.button.x, e.button.y);
-                                ((Input.IInputHandler)Input.Input.handler.Target).OnMouseMove(x, y);
+                                h.OnMouseMove(x, y);
+                                h = null;
                             }
                             break;
                         case SDL.SDL_EventType.SDL_MOUSEWHEEL:
-                            if (Input.Input.handler.IsAlive) ((Input.IInputHandler)Input.Input.handler.Target).OnMouseWheel(e.wheel.x, e.wheel.y);
+                            if (Input.Input.handler.TryGetTarget(out h)) {
+                                h.OnMouseWheel(e.wheel.x, e.wheel.y);
+                                h = null;
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
-                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.IsAlive) ((Input.IControllerHandler)Input.Controller.handler.Target).OnAxisMotion(e.caxis.which, (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
+                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.TryGetTarget(out ch)) {
+                                ch.OnAxisMotion(e.caxis.which, (Input.ControllerAxis)e.caxis.axis, Input.Controller.ShortToFloat(e.caxis.axisValue));
+                                ch = null;
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
-                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.IsAlive) ((Input.IControllerHandler)Input.Controller.handler.Target).OnButtonDown(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
+                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.TryGetTarget(out ch)) {
+                                ch.OnButtonDown(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
+                                ch = null;
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
-                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.IsAlive) ((Input.IControllerHandler)Input.Controller.handler.Target).OnButtonUp(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
+                            if (Input.Controller.isControllerInitialized && Input.Controller.handler.TryGetTarget(out ch)) {
+                                ch.OnButtonUp(e.cbutton.which, (Input.ControllerButton)e.cbutton.button);
+                                ch = null;
+                            }
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
                             if (Input.Controller.isControllerInitialized) {
                                 // workaround for SDL_CONTROLLERDEVICEADDED event data being inaccurate
                                 Input.Controller.ReadyReportNewController();
                                 Input.Controller.RefreshControllers();
-                                if (Input.Controller.handler.IsAlive) {
+                                if (Input.Controller.handler.TryGetTarget(out ch)) {
                                     //Input.Controller.handler.OnControllerAdded(e.cdevice.which);
                                     Input.Controller.ReportNewController();
+                                    ch = null;
                                 }
                             }
                             break;
                         case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
                             if (Input.Controller.isControllerInitialized) {
                                 Input.Controller.RefreshControllers();
-                                if (Input.Controller.handler.IsAlive) {
-                                    ((Input.IControllerHandler)Input.Controller.handler.Target).OnControllerRemoved(e.cdevice.which);
+                                if (Input.Controller.handler.TryGetTarget(out ch)) {
+                                    ch.OnControllerRemoved(e.cdevice.which);
+                                    ch = null;
                                 }
                             }
                             break;
