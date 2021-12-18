@@ -160,49 +160,12 @@ namespace Flora.Gfx {
             if (scaleMode == ScaleMode.Nearest) scaleHint = "nearest";
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, scaleHint);
         }
-
-        /// <summary>
-        /// Clear screen with current color and get ready for drawing.
-        /// </summary>
-        public static void Begin() {
-            Begin(currentColor);
-        }
-
-        /// <summary>
-        /// Clear screen with current color and get ready for drawing.
-        /// </summary>
-        /// <param name="r">Color to clear screen: Red (0-255)</param>
-        /// <param name="g">Color to clear screen: Green (0-255)</param>
-        /// <param name="b">Color to clear screen: Blue (0-255)</param>
-        public static void Begin(byte r, byte g, byte b) {
-            Begin(new Color(r, g, b, (byte)255));
-        }
-
-        /// <summary>
-        /// Clear screen with current color and get ready for drawing.
-        /// </summary>
-        /// <param name="r">Color to clear screen: Red (0-1)</param>
-        /// <param name="g">Color to clear screen: Green (0-1)</param>
-        /// <param name="b">Color to clear screen: Blue (0-1)</param>
-        public static void Begin(float r, float g, float b) {
-            Begin(new Color((byte)(r * 255f), (byte)(g * 255f), (byte)(b * 255f), (byte)255));
-        }
         
         /// <summary>
-        /// Clear screen with given color and get ready for drawing.
+        /// Get ready for drawing.
         /// </summary>
-        /// <param name="clearColor">Color to clear screen</param>
-        public static void Begin(Color clearColor) {
+        public static void Begin() {
             isDrawing = true;
-
-            if (clearColor == currentColor) {
-                SDL.SDL_RenderClear(sdlRenderer);
-            } else {
-                SDL.SDL_Color prevColor = GetCurrentRenderColor();
-                SetCurrentRenderColor(clearColor.ToSDLColor());
-                SDL.SDL_RenderClear(sdlRenderer);
-                SetCurrentRenderColor(prevColor);
-            }
         }
         
         /// <summary>
@@ -212,6 +175,40 @@ namespace Flora.Gfx {
             SDL.SDL_RenderPresent(sdlRenderer);
 
             isDrawing = false;
+        }
+
+        /// <summary>
+        /// Clear screen with current color.
+        /// </summary>
+        public static void Clear() {
+            Clear(currentColor);
+        }
+
+        /// <summary>
+        /// Clear screen with given color.
+        /// </summary>
+        /// <param name="r">Color to clear screen: Red (0-1)</param>
+        /// <param name="g">Color to clear screen: Green (0-1)</param>
+        /// <param name="b">Color to clear screen: Blue (0-1)</param>
+        public static void Clear(float r, float g, float b) {
+            Clear(new Color((byte)(r * 255f), (byte)(g * 255f), (byte)(b * 255f), (byte)255));
+        }
+
+        /// <summary>
+        /// Clear screen with given color.
+        /// </summary>
+        /// <param name="clearColor">Color to clear screen</param>
+        public static void Clear(Color clearColor) {
+            if (!isDrawing) throw new InvalidOperationException("Clear must be called between Gfx.Begin and Gfx.End");
+
+            if (clearColor == currentColor) {
+                SDL.SDL_RenderClear(sdlRenderer);
+            } else {
+                SDL.SDL_Color prevColor = GetCurrentRenderColor();
+                SetCurrentRenderColor(clearColor.ToSDLColor());
+                SDL.SDL_RenderClear(sdlRenderer);
+                SetCurrentRenderColor(prevColor);
+            }
         }
 
         /// <summary>
