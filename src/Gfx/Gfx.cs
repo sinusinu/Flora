@@ -116,12 +116,30 @@ namespace Flora.Gfx {
         }
 
         /// <summary>
-        /// Return the size of the window.
+        /// Get the size of the window.
         /// </summary>
         public static (int, int) GetClientSize() {
             int w, h;
             SDL.SDL_GetWindowSize(sdlWindow, out w, out h);
             return (w, h);
+        }
+
+        /// <summary>
+        /// Get the width of the window.
+        /// </summary>        
+        public static int GetClientWidth() {
+            int w, h;
+            SDL.SDL_GetWindowSize(sdlWindow, out w, out h);
+            return w;
+        }
+
+        /// <summary>
+        /// Get the height of the window.
+        /// </summary>
+        public static int GetClientHeight() {
+            int w, h;
+            SDL.SDL_GetWindowSize(sdlWindow, out w, out h);
+            return h;
         }
 
         /// <summary>
@@ -131,6 +149,24 @@ namespace Flora.Gfx {
         /// <param name="height">New height of the window</param>
         public static void SetClientSize(int width, int height) {
             SDL.SDL_SetWindowSize(sdlWindow, width, height);
+        }
+
+        /// <summary>
+        /// Set the width of the window. Does nothing when on fullscreen.
+        /// </summary>
+        /// <param name="width">New width of the window</param>
+        public static void SetClientWidth(int width) {
+            int h = GetClientHeight();
+            SDL.SDL_SetWindowSize(sdlWindow, width, h);
+        }
+
+        /// <summary>
+        /// Set the height of the window. Does nothing when on fullscreen.
+        /// </summary>
+        /// <param name="height">New height of the window</param>
+        public static void SetClientHeight(int height) {
+            int w = GetClientWidth();
+            SDL.SDL_SetWindowSize(sdlWindow, w, height);
         }
 
         /// <summary>
