@@ -197,6 +197,16 @@ namespace Flora.Gfx {
         /// <summary>
         /// Clear screen with given color.
         /// </summary>
+        /// <param name="r">Color to clear screen: Red (0-255)</param>
+        /// <param name="g">Color to clear screen: Green (0-255)</param>
+        /// <param name="b">Color to clear screen: Blue (0-255)</param>
+        public static void Clear(byte r, byte g, byte b) {
+            Clear(new Color(r, g, b, (byte)255));
+        }
+
+        /// <summary>
+        /// Clear screen with given color.
+        /// </summary>
         /// <param name="clearColor">Color to clear screen</param>
         public static void Clear(Color clearColor) {
             if (!isDrawing) throw new InvalidOperationException("Clear must be called between Gfx.Begin and Gfx.End");
