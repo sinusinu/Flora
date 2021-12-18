@@ -42,6 +42,6 @@ namespace Flora {
         /// <summary>
         /// Schedule exit of the application. Note that exit will not happen immediately.
         /// </summary>
-        public void Exit() { _floraApplication.Exit(); }
+        public sealed void Exit() { _floraApplication.Exit(); }
     }
 }
