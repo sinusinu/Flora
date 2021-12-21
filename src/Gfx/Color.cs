@@ -1,10 +1,8 @@
 using System;
 using SDL2;
 
-#pragma warning disable 0659
-
 namespace Flora.Gfx {
-    public class Color {
+    public class Color : IEquatable<Color> {
         public byte r;
         public byte g;
         public byte b;
@@ -42,13 +40,6 @@ namespace Flora.Gfx {
             this.a = (byte)MathF.Floor(a * 255);
         }
 
-        public override bool Equals(object obj) {
-            if (obj == null || obj.GetType() != typeof(Color)) return false;
-            
-            Color other = (Color)obj;
-            return this.r == other.r && this.g == other.g && this.b == other.b && this.a == other.a;
-        }
-
         internal SDL.SDL_Color ToSDLColor() {
             SDL.SDL_Color color = new SDL.SDL_Color();
             color.r = r;
@@ -57,7 +48,37 @@ namespace Flora.Gfx {
             color.a = a;
             return color;
         }
+
+        public static bool operator ==(Color obj1, Color obj2) {
+            if (ReferenceEquals(obj1, obj2)) return true;
+            if (ReferenceEquals(obj1, null)) return false;
+            if (ReferenceEquals(obj2, null)) return false;
+            return obj1.Equals(obj2);
+        }
+
+        public static bool operator !=(Color obj1, Color obj2) {
+            return !(obj1 == obj2);
+        }
+
+        public override bool Equals(object obj) {
+            return Equals(obj as Color);
+        }
+
+        public bool Equals(Color obj) {
+            if (ReferenceEquals(obj, null)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return this.r == obj.r && this.g == obj.g && this.b == obj.b && this.a == obj.a;
+        }
+
+        public override int GetHashCode() {
+            int hashCode = 0;
+            unchecked {
+                hashCode = this.r.GetHashCode();
+                hashCode = (hashCode * 337) ^ this.g.GetHashCode();
+                hashCode = (hashCode * 337) ^ this.b.GetHashCode();
+                hashCode = (hashCode * 337) ^ this.a.GetHashCode();
+            }
+            return hashCode;
+        }
     }
 }
-
-#pragma warning restore 0659
