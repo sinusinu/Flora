@@ -71,14 +71,7 @@ namespace Flora.Gfx {
         }
 
         public override int GetHashCode() {
-            int hashCode = 0;
-            unchecked {
-                hashCode = this.r.GetHashCode();
-                hashCode = (hashCode * 337) ^ this.g.GetHashCode();
-                hashCode = (hashCode * 337) ^ this.b.GetHashCode();
-                hashCode = (hashCode * 337) ^ this.a.GetHashCode();
-            }
-            return hashCode;
+            return (r << 24) + (g << 16) + (b << 8) + a;
         }
     }
 }
