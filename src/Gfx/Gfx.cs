@@ -487,6 +487,12 @@ namespace Flora.Gfx {
             );
         }
 
+        /*
+         * TODO: implement these functions:
+         * DrawGeometry(texture_or_region texture, vertex[] vertices, color[] colors, uv[] uvs) -> SDL_RenderGeometryRaw
+         * DrawPoly(vertex[] vertices) -> SDL_RenderGeometry
+         */
+
 #region Internal functions
         internal static void UpdateView() {
             if (activeView == null) {
@@ -524,6 +530,7 @@ namespace Flora.Gfx {
         internal static (int, int) ConvertScreenPointToViewPoint(int x, int y) {
             if (activeView == null) return (x, y);
             
+            // TODO: test if this works correctly with zoom and rotation (looks like it probably does not...)
             int rx = x, ry = y;
             rx += (int)(activeViewOffsetX - activeViewCenterX);
             ry += (int)(activeViewOffsetY - activeViewCenterY);
