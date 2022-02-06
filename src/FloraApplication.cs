@@ -83,7 +83,6 @@ namespace Flora {
             ulong freq = SDL.SDL_GetPerformanceFrequency();
             ulong last, now = SDL.SDL_GetPerformanceCounter();
             float delta = 0f;
-
             bool shouldCompensatePause = false;
             
             Input.IInputHandler h = null;
@@ -208,8 +207,7 @@ namespace Flora {
                     // since execution gets stalled while the window is minimized,
                     // the first frame after stalling will have a delta time of, like, multiples of seconds. 
                     // for updating game logic, delta time of that large should be avoided.
-                    // so for the first frame after stalling, we just pass 1/60 as delta.
-                    delta = 1/60f;
+                    // so for the first frame after stalling, we just repeat the last delta.
                     shouldCompensatePause = false;
                 } else {
                     // calculate delta
