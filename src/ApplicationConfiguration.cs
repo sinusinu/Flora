@@ -1,5 +1,5 @@
 namespace Flora {
-    public class ApplicationConfiguration {
+    public struct ApplicationConfiguration {
         /// <summary>
         /// Flags for window.
         /// </summary>
