@@ -13,11 +13,36 @@ namespace Flora {
         public FloraApplication(ApplicationCore core, ApplicationConfiguration config) {
             core._floraApplication = this;
 
-            // init SDL and friends
+            // init SDL and friends, and check version
+            SDL.SDL_version ver;
+
+            // SDL
             uint sdlInitFlag = SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER;
             SDL.SDL_Init(sdlInitFlag);
+            SDL.SDL_GetVersion(out ver);
+            if (SDL.SDL_VERSIONNUM(ver.major, ver.minor, ver.patch) != SDL.SDL_VERSIONNUM(2, 0, 18)) {
+                SDL.SDL_Quit();
+                throw new Exception("Failed to initialize Flora: SDL must be 2.0.18 (found " + ver.major + "." + ver.minor + "." + ver.patch + ")");
+            }
+
+            // SDL_image
             SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
+            ver = SDL_image.IMG_Linked_Version();
+            if (SDL.SDL_VERSIONNUM(ver.major, ver.minor, ver.patch) != SDL.SDL_VERSIONNUM(2, 0, 5)) {
+                SDL_image.IMG_Quit();
+                SDL.SDL_Quit();
+                throw new Exception("Failed to initialize Flora: SDL_image must be 2.0.5 (found " + ver.major + "." + ver.minor + "." + ver.patch + ")");
+            }
+
+            // SDL_ttf
             SDL_ttf.TTF_Init();
+            ver = SDL_ttf.TTF_LinkedVersion();
+            if (SDL.SDL_VERSIONNUM(ver.major, ver.minor, ver.patch) != SDL.SDL_VERSIONNUM(2, 0, 16)) {
+                SDL_ttf.TTF_Quit();
+                SDL_image.IMG_Quit();
+                SDL.SDL_Quit();
+                throw new Exception("Failed to initialize Flora: SDL_ttf must be 2.0.16 (found " + ver.major + "." + ver.minor + "." + ver.patch + ")");
+            }
             
             // create window
             SDL.SDL_WindowFlags windowFlags = (SDL.SDL_WindowFlags)config.windowFlags;
