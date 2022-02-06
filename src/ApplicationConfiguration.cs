@@ -5,14 +5,6 @@ namespace Flora {
         /// </summary>
         public enum FloraWindowFlags : uint {
             /// <summary>
-            /// Show window on create.
-            /// </summary>
-            Shown = SDL2.SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN,
-            /// <summary>
-            /// Do not show window on create.
-            /// </summary>
-            Hidden = SDL2.SDL.SDL_WindowFlags.SDL_WINDOW_HIDDEN,
-            /// <summary>
             /// Create window as maximized.
             /// </summary>
             Maximized = SDL2.SDL.SDL_WindowFlags.SDL_WINDOW_MAXIMIZED,
@@ -25,7 +17,7 @@ namespace Flora {
             /// </summary>
             Resizable = SDL2.SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE,
             /// <summary>
-            /// Make window borderless.
+            /// Remove window decorations. Do not confuse with borderless fullscreen.
             /// </summary>
             Borderless = SDL2.SDL.SDL_WindowFlags.SDL_WINDOW_BORDERLESS
         }
@@ -34,14 +26,6 @@ namespace Flora {
         /// Flags for renderer.
         /// </summary>
         public enum FloraRenderFlags : uint {
-            /// <summary>
-            /// Use software renderer. Only use when the hardware accelerated renderer is not available.
-            /// </summary>
-            Software = SDL2.SDL.SDL_RendererFlags.SDL_RENDERER_SOFTWARE,
-            /// <summary>
-            /// Use hardware accelerated renderer. Recommended.
-            /// </summary>
-            Accelerated = SDL2.SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED,
             /// <summary>
             /// Render in sync with display's vertical sync. Recommended.
             /// </summary>
@@ -80,8 +64,8 @@ namespace Flora {
             width = 640;
             height = 480;
             windowTitle = "Flora";
-            windowFlags = FloraWindowFlags.Shown;
-            renderFlags = FloraRenderFlags.Accelerated | FloraRenderFlags.Vsync;
+            windowFlags = 0;
+            renderFlags = FloraRenderFlags.Vsync;
         }
     }
 }
