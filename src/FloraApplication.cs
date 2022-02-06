@@ -37,11 +37,11 @@ namespace Flora {
             // SDL_ttf
             SDL_ttf.TTF_Init();
             ver = SDL_ttf.TTF_LinkedVersion();
-            if (SDL.SDL_VERSIONNUM(ver.major, ver.minor, ver.patch) != SDL.SDL_VERSIONNUM(2, 0, 16)) {
+            if (SDL.SDL_VERSIONNUM(ver.major, ver.minor, ver.patch) != SDL.SDL_VERSIONNUM(2, 0, 18)) {
                 SDL_ttf.TTF_Quit();
                 SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
-                throw new Exception("Failed to initialize Flora: SDL_ttf must be 2.0.16 (found " + ver.major + "." + ver.minor + "." + ver.patch + ")");
+                throw new Exception("Failed to initialize Flora: SDL_ttf must be 2.0.18 (found " + ver.major + "." + ver.minor + "." + ver.patch + ")");
             }
             
             // create window
