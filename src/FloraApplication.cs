@@ -208,6 +208,7 @@ namespace Flora {
                     // the first frame after stalling will have a delta time of, like, multiples of seconds. 
                     // for updating game logic, delta time of that large should be avoided.
                     // so for the first frame after stalling, we just repeat the last delta.
+                    now = SDL.SDL_GetPerformanceCounter();
                     shouldCompensatePause = false;
                 } else {
                     // calculate delta
