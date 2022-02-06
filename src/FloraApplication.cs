@@ -50,7 +50,6 @@ namespace Flora {
             if (window == IntPtr.Zero) {
                 string error = SDL.SDL_GetError();
                 SDL_ttf.TTF_Quit();
-                SDL_mixer.Mix_Quit();
                 SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
                 throw new Exception("Failed to initialize Flora: SDL_CreateWindow returned NULL (" + error + ")");
@@ -63,7 +62,6 @@ namespace Flora {
                 string error = SDL.SDL_GetError();
                 SDL.SDL_DestroyWindow(window);
                 SDL_ttf.TTF_Quit();
-                SDL_mixer.Mix_Quit();
                 SDL_image.IMG_Quit();
                 SDL.SDL_Quit();
                 throw new Exception("Failed to initialize Flora: SDL_CreateRenderer returned NULL (" + error + ")");
