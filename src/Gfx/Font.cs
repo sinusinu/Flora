@@ -32,6 +32,7 @@ namespace Flora.Gfx {
             _lineHeight = SDL_ttf.TTF_FontLineSkip(font);
         }
 
+        // TODO: add a pixel margin or something to prevent inter-glyph bleeding?
         internal GlyphInfo GetGlyphInfo(ushort glyph) {
             // return GlyphInfo for given glyph if it is already drawn
             if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
