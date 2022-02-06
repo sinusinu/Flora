@@ -6,7 +6,7 @@ using Flora.Util;
 namespace Flora.Gfx {
     public class Font : IDisposable {
         internal const int TextureSize = 1024;
-        internal static SDL.SDL_Color white = new SDL.SDL_Color();
+        internal static readonly SDL.SDL_Color white = new SDL.SDL_Color() { r = 0xFF, g = 0xFF, b = 0xFF, a = 0xFF };
 
         internal IntPtr font;
         internal List<IntPtr> textures;
@@ -22,12 +22,6 @@ namespace Flora.Gfx {
 
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
             if (size > 255) throw new ArgumentException("Font size must be smaller than 256");
-
-            // is there any better way to do this?
-            white.r = 0xFF;
-            white.g = 0xFF;
-            white.b = 0xFF;
-            white.a = 0xFF;
 
             textures = new List<IntPtr>();
             glyphInfos = new Dictionary<ushort, GlyphInfo>();
