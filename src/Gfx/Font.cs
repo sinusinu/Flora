@@ -14,10 +14,17 @@ namespace Flora.Gfx {
         internal float scale = 1f;
         internal Color color = new Color(0xFF, 0xFF, 0xFF, 0xFF);
         internal float _lineHeight;
-
         public float lineHeight { get { return _lineHeight * scale; }}
+        public FontScaleMode fontScaleMode = FontScaleMode.Default;
+        private Gfx.ScaleMode gfxScaleMode = Gfx.ScaleMode.Linear;
 
-        public Font(string path, int size) {
+        public enum FontScaleMode {
+            Default,
+            Nearest,
+            Linear
+        }
+
+        public Font(string path, int size, FontScaleMode scaleMode = FontScaleMode.Default) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
@@ -25,6 +32,7 @@ namespace Flora.Gfx {
 
             textures = new List<IntPtr>();
             glyphInfos = new Dictionary<ushort, GlyphInfo>();
+            fontScaleMode = scaleMode;
 
             font = SDL_ttf.TTF_OpenFont(path, size);
             if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
@@ -282,6 +290,11 @@ namespace Flora.Gfx {
 
             if (text == null || text.Length == 0) return;
 
+            if (fontScaleMode != FontScaleMode.Default) {
+                gfxScaleMode = Gfx.currentScaleMode;
+                Gfx.SetScaleMode(fontScaleMode == FontScaleMode.Nearest ? Gfx.ScaleMode.Nearest : Gfx.ScaleMode.Linear);
+            }
+
             // for easier detection of line break
             text = text.Replace("\r", "");
 
@@ -311,6 +324,10 @@ namespace Flora.Gfx {
                 Gfx.DrawGlyph(textures[glyphInfo.page], glyphInfo.rect.ToSDLRect(), dstRect, 0, 0, 0, Gfx.FlipMode.None, color);
 
                 currentX += glyphInfo.rect.w * scale;
+            }
+            
+            if (fontScaleMode != FontScaleMode.Default) {
+                Gfx.SetScaleMode(gfxScaleMode);
             }
         }
 
