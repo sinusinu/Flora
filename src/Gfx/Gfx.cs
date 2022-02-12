@@ -192,8 +192,7 @@ namespace Flora.Gfx {
         /// </summary>
         /// <param name="scaleMode">New scale mode</param>
         public static void SetScaleMode(ScaleMode scaleMode) {
-            string scaleHint = "linear";
-            if (scaleMode == ScaleMode.Nearest) scaleHint = "nearest";
+            string scaleHint = (scaleMode == ScaleMode.Nearest) ? "nearest" : "linear";
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, scaleHint);
         }
         
