@@ -13,18 +13,22 @@ namespace Flora.Gfx {
         internal Dictionary<ushort, GlyphInfo> glyphInfos;
         internal float scale = 1f;
         internal Color color = new Color(0xFF, 0xFF, 0xFF, 0xFF);
+
         internal float _lineHeight;
-        public float lineHeight { get { return _lineHeight * scale; }}
-        public FontScaleMode fontScaleMode = FontScaleMode.Default;
+        public float LineHeight { get { return _lineHeight * scale; }}
+        
+        // TODO: wow this is a mess
+        internal FontScaleModes _fontScaleMode = FontScaleModes.Default;
+        public FontScaleModes FontScaleMode { get { return _fontScaleMode; } set { _fontScaleMode = value; } }
         private Gfx.ScaleMode gfxScaleMode = Gfx.ScaleMode.Linear;
 
-        public enum FontScaleMode {
+        public enum FontScaleModes {
             Default,
             Nearest,
             Linear
         }
 
-        public Font(string path, int size, FontScaleMode scaleMode = FontScaleMode.Default) {
+        public Font(string path, int size, FontScaleModes scaleMode = FontScaleModes.Default) {
             if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
             if (size < 2) throw new ArgumentException("Font size must be bigger than 1");
@@ -32,7 +36,7 @@ namespace Flora.Gfx {
 
             textures = new List<IntPtr>();
             glyphInfos = new Dictionary<ushort, GlyphInfo>();
-            fontScaleMode = scaleMode;
+            _fontScaleMode = scaleMode;
 
             font = SDL_ttf.TTF_OpenFont(path, size);
             if (font == IntPtr.Zero) throw new InvalidOperationException("Cannot open font: " + SDL.SDL_GetError());
@@ -290,9 +294,9 @@ namespace Flora.Gfx {
 
             if (text == null || text.Length == 0) return;
 
-            if (fontScaleMode != FontScaleMode.Default) {
+            if (_fontScaleMode != FontScaleModes.Default) {
                 gfxScaleMode = Gfx.currentScaleMode;
-                Gfx.SetScaleMode(fontScaleMode == FontScaleMode.Nearest ? Gfx.ScaleMode.Nearest : Gfx.ScaleMode.Linear);
+                Gfx.SetScaleMode(_fontScaleMode == FontScaleModes.Nearest ? Gfx.ScaleMode.Nearest : Gfx.ScaleMode.Linear);
             }
 
             // for easier detection of line break
@@ -326,7 +330,7 @@ namespace Flora.Gfx {
                 currentX += glyphInfo.rect.w * scale;
             }
             
-            if (fontScaleMode != FontScaleMode.Default) {
+            if (_fontScaleMode != FontScaleModes.Default) {
                 Gfx.SetScaleMode(gfxScaleMode);
             }
         }
