@@ -13,6 +13,7 @@ namespace Flora.Gfx {
         // drawing stuff
         internal static bool isDrawing = false;
         internal static Color currentColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
+        internal static ScaleMode currentScaleMode = ScaleMode.Linear;
 
         // view
         internal static View activeView = null;
@@ -60,7 +61,7 @@ namespace Flora.Gfx {
             sdlWindow = w;
             sdlRenderer = r;
 
-            SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+            SetScaleMode(ScaleMode.Linear);
             SetCurrentRenderColor(currentColor.ToSDLColor());
             
             SDL.SDL_SetRenderDrawBlendMode(sdlRenderer, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
@@ -192,7 +193,8 @@ namespace Flora.Gfx {
         /// </summary>
         /// <param name="scaleMode">New scale mode</param>
         public static void SetScaleMode(ScaleMode scaleMode) {
-            string scaleHint = (scaleMode == ScaleMode.Nearest) ? "nearest" : "linear";
+            currentScaleMode = (scaleMode == ScaleMode.Nearest) ? ScaleMode.Nearest : ScaleMode.Linear;
+            string scaleHint = (currentScaleMode == ScaleMode.Nearest) ? "nearest" : "linear";
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, scaleHint);
         }
         
