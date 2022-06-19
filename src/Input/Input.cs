@@ -1,22 +1,22 @@
 using System;
 
-namespace Flora.Input {
-    public static class Input {
-        internal static WeakReference<IInputHandler> handler = new WeakReference<IInputHandler>(null);
-        internal static bool isInputInitialized = false;
+namespace Flora.Input;
 
-        internal static void Init() {
-            isInputInitialized = true;
-        }
+public static class Input {
+    internal static WeakReference<IInputHandler> handler = new WeakReference<IInputHandler>(null);
+    internal static bool isInputInitialized = false;
 
-        /// <summary>
-        /// Set InputHandler to receive user input events.<br/>
-        /// Any previously set InputHandler will no longer receive user input events.
-        /// </summary>
-        /// <param name="handler"></param>
-        public static void SetInputHandler(IInputHandler handler) {
-            if (!isInputInitialized) throw new InvalidOperationException("Input is not initialized");
-            Input.handler.SetTarget(handler);
-        }
+    internal static void Init() {
+        isInputInitialized = true;
+    }
+
+    /// <summary>
+    /// Set InputHandler to receive user input events.<br/>
+    /// Any previously set InputHandler will no longer receive user input events.
+    /// </summary>
+    /// <param name="handler"></param>
+    public static void SetInputHandler(IInputHandler handler) {
+        if (!isInputInitialized) throw new InvalidOperationException("Input is not initialized");
+        Input.handler.SetTarget(handler);
     }
 }

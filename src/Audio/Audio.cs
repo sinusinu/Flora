@@ -3,26 +3,26 @@ using System.Threading;
 using SDL2;
 using SoLoud;
 
-namespace Flora.Audio {
-    public static class Audio {
-        internal static Soloud soloud;
-        internal static bool isAudioInitialized = false;
+namespace Flora.Audio;
 
-        internal static void Init() {
-            soloud = new Soloud();
-            int result = soloud.init(1, Soloud.SDL2);
-            if (result != 0) {
-                SDL_ttf.TTF_Quit();
-                SDL_image.IMG_Quit();
-                SDL.SDL_Quit();
-                throw new Exception("Failed to initialize Flora: Soloud::init failed (result: " + result + ")");
-            }
+public static class Audio {
+    internal static Soloud soloud;
+    internal static bool isAudioInitialized = false;
 
-            isAudioInitialized = true;
+    internal static void Init() {
+        soloud = new Soloud();
+        int result = soloud.init(1, Soloud.SDL2);
+        if (result != 0) {
+            SDL_ttf.TTF_Quit();
+            SDL_image.IMG_Quit();
+            SDL.SDL_Quit();
+            throw new Exception("Failed to initialize Flora: Soloud::init failed (result: " + result + ")");
         }
 
-        internal static void Deinit() {
-            soloud.deinit();
-        }
+        isAudioInitialized = true;
+    }
+
+    internal static void Deinit() {
+        soloud.deinit();
     }
 }
