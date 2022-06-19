@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Flora;
 
 public struct ApplicationConfiguration {
@@ -64,7 +66,7 @@ public struct ApplicationConfiguration {
     public ApplicationConfiguration() {
         width = 640;
         height = 480;
-        windowTitle = "Flora";
+        windowTitle = Assembly.GetCallingAssembly().GetName().Name;
         windowFlags = 0;
         renderFlags = FloraRenderFlags.Vsync;
     }
