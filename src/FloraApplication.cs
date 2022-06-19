@@ -17,7 +17,6 @@ public class FloraApplication {
         // init SDL and friends
         uint sdlInitFlag = SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_GAMECONTROLLER;
         SDL.SDL_Init(sdlInitFlag);
-        SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_JPG | SDL_image.IMG_InitFlags.IMG_INIT_PNG);
         SDL_ttf.TTF_Init();
         
         // create window
@@ -26,7 +25,6 @@ public class FloraApplication {
         if (window == IntPtr.Zero) {
             string error = SDL.SDL_GetError();
             SDL_ttf.TTF_Quit();
-            SDL_image.IMG_Quit();
             SDL.SDL_Quit();
             throw new Exception("Failed to initialize Flora: SDL_CreateWindow returned NULL (" + error + ")");
         }
@@ -38,7 +36,6 @@ public class FloraApplication {
             string error = SDL.SDL_GetError();
             SDL.SDL_DestroyWindow(window);
             SDL_ttf.TTF_Quit();
-            SDL_image.IMG_Quit();
             SDL.SDL_Quit();
             throw new Exception("Failed to initialize Flora: SDL_CreateRenderer returned NULL (" + error + ")");
         }
@@ -211,7 +208,6 @@ public class FloraApplication {
 
         // cleanup SDL and friends
         SDL_ttf.TTF_Quit();
-        SDL_image.IMG_Quit();
         SDL.SDL_Quit();
     }
 

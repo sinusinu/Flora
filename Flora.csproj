@@ -17,4 +17,9 @@
     <EmbeddedResource Remove="SDL2-CS\**" />
     <None Remove="SDL2-CS\**" />
   </ItemGroup>
+
+  <!-- NuGet package references -->
+  <ItemGroup>
+    <PackageReference Include="StbiSharp" Version="1.2.1" />
+  </ItemGroup>
 </Project>

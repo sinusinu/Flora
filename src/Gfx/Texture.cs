@@ -1,6 +1,9 @@
 using System;
+using System.IO;
 using SDL2;
+using StbiSharp;
 using Flora.Util;
+using System.Runtime.InteropServices;
 
 namespace Flora.Gfx;
 
@@ -15,17 +18,22 @@ public class Texture : IDisposable {
     public Texture(string path) {
         if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
-        var imgSurface = SDL_image.IMG_Load(path);
-        if (imgSurface == IntPtr.Zero) {
-            string error = SDL_image.IMG_GetError();
-            throw new ArgumentException("Failed to load image " + path + ": " + error);
+        StbiImage stbiImage = null;
+        byte[] imageData;
+
+        using (var stream = File.OpenRead(path))
+        using (var ms = new MemoryStream()) {
+            stream.CopyTo(ms);
+            stbiImage = Stbi.LoadFromMemory(ms, 4);
+            imageData = stbiImage.Data.ToArray();   // TODO: any way to use ReadOnlySpan<byte> as is? this is probably making an unnecessary copy of it
         }
-        sdlTexture = SDL.SDL_CreateTextureFromSurface(Gfx.sdlRenderer, imgSurface);
-        if (sdlTexture == IntPtr.Zero) {
-            string error = SDL.SDL_GetError();
-            throw new InvalidOperationException("Failed to create texture from loaded surface: " + error);
-        }
-        SDL.SDL_FreeSurface(imgSurface);
+
+        GCHandle imageDataHandle = GCHandle.Alloc(imageData, GCHandleType.Pinned);
+
+        sdlTexture = SDL.SDL_CreateTexture(Gfx.sdlRenderer, SDL.SDL_PIXELFORMAT_ABGR8888, 0, stbiImage.Width, stbiImage.Height);
+        SDL.SDL_UpdateTexture(sdlTexture, IntPtr.Zero, imageDataHandle.AddrOfPinnedObject(), stbiImage.Width * 4);
+
+        imageDataHandle.Free();
 
         SDL.SDL_SetTextureBlendMode(sdlTexture, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
 

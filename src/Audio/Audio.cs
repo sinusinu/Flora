@@ -14,7 +14,6 @@ public static class Audio {
         int result = soloud.init(1, Soloud.SDL2);
         if (result != 0) {
             SDL_ttf.TTF_Quit();
-            SDL_image.IMG_Quit();
             SDL.SDL_Quit();
             throw new Exception("Failed to initialize Flora: Soloud::init failed (result: " + result + ")");
         }
