@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Flora;
 
-public struct ApplicationConfiguration {
+public struct FloraConfig {
     /// <summary>
     /// Flags for window.
     /// </summary>
@@ -63,7 +63,7 @@ public struct ApplicationConfiguration {
     /// <summary>
     /// Create ApplicationConfiguration with default settings.
     /// </summary>
-    public ApplicationConfiguration() {
+    public FloraConfig() {
         width = 640;
         height = 480;
         windowTitle = Assembly.GetCallingAssembly().GetName().Name;

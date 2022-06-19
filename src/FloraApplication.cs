@@ -11,7 +11,7 @@ public class FloraApplication {
     /// </summary>
     /// <param name="core">Instance of the class that extends ApplicationCore</param>
     /// <param name="config">ApplicationConfiguration to apply</param>
-    public FloraApplication(ApplicationCore core, ApplicationConfiguration config) {
+    public FloraApplication(FloraCore core, FloraConfig config) {
         core._floraApplication = this;
 
         // init SDL and friends

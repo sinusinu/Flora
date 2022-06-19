@@ -5,7 +5,7 @@ namespace Flora;
 /// <summary>
 /// Core of the application.
 /// </summary>
-public class ApplicationCore {
+public class FloraCore {
     // will be set in ctor of FloraApplication
     internal FloraApplication _floraApplication;
 
