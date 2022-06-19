@@ -1,0 +1,2 @@
+- [ ] Implement JPEG/PNG decoder to ditch the SDL-image dependency
+- [ ] Do a complete rework on audio to ditch soloud dependency
