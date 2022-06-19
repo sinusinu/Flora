@@ -18,3 +18,5 @@ Flora's public functions are usually documented with [documentation comments](ht
 
 ## License
 Flora is distributed under the MIT License.
+
+For open-source projects used in Flora, Please refer to [third-party licenses](https://github.com/sinusinu/Flora/LICENSE-THIRDPARTY).
