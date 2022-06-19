@@ -1,23 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+    <PackageId>Flora</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Woohyun Shin</Authors>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-	    <PlatformTarget>x64</PlatformTarget>
-        <Platforms>x64</Platforms>
-
-        <PackageId>Flora</PackageId>
-        <Version>0.0.1</Version>
-        <Authors>Woohyun Shin</Authors>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="SDL2-CS\SDL2-CS.Core.csproj" />
-        
-        <!-- Prevent SDL2-CS module from being compiled into this project -->
-        <Content Remove="SDL2-CS\**" />
-        <Compile Remove="SDL2-CS\**" />
-        <EmbeddedResource Remove="SDL2-CS\**" />
-        <None Remove="SDL2-CS\**" />
-    </ItemGroup>
-    
+  <!-- SDL2-CS Reference -->
+  <ItemGroup>
+    <ProjectReference Include="SDL2-CS\SDL2-CS.Core.csproj" />
+    <!-- Prevent SDL2-CS module from being compiled into this project -->
+    <Content Remove="SDL2-CS\**" />
+    <Compile Remove="SDL2-CS\**" />
+    <EmbeddedResource Remove="SDL2-CS\**" />
+    <None Remove="SDL2-CS\**" />
+  </ItemGroup>
 </Project>
