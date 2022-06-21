@@ -2,12 +2,14 @@
 Flora is a .NET 2D game development framework.
 
 ## Disclaimer
-Flora is currently developed mainly for my personal use. It may lack some important features.
+Flora is currently being developed mainly for my personal use, thus it may lack some basic functionalities.
 
 ## About
-Flora aims to be a just-enough framework that does the dirty works for you - without too much restriction and over-packed features. It is heavily influenced by [libGDX](https://github.com/libgdx/libgdx/), and took a lot of concepts from it.
+Flora aims to be a minimal, just-enough framework that does the dirty works for you - so you can focus on building core elements of the game.
 
-Since it is built on .NET 6 and SDL2, it could be theoretically cross-platform, but currently only Windows is considered as a supported platform. With some modification, it will probably run on Linux or macOS, but those platforms are not officially supported for now.
+It is heavily influenced by [libGDX](https://github.com/libgdx/libgdx/), and took a lot of concepts from it.
+
+Flora is designed to run on Windows. Since it is built on .NET 6 and SDL2, it could theoretically be cross-platform, but currently only Windows is considered as a supported platform. With some modification, it may run on Linux or macOS, but those platforms are not officially supported for now.
 
 ## Documentation
 For basic usages, check out the [wiki](https://github.com/sinusinu/Flora/wiki).
