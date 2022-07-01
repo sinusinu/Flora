@@ -19,27 +19,25 @@ public class Texture : IDisposable {
         if (!Gfx.isGfxInitialized) throw new InvalidOperationException("Gfx is not initialized");
 
         StbiImage stbiImage = null;
-        byte[] imageData;
 
         using (var stream = File.OpenRead(path))
         using (var ms = new MemoryStream()) {
             stream.CopyTo(ms);
             stbiImage = Stbi.LoadFromMemory(ms, 4);
-            imageData = stbiImage.Data.ToArray();   // TODO: any way to use ReadOnlySpan<byte> as is? this is probably making an unnecessary copy of it
         }
 
-        GCHandle imageDataHandle = GCHandle.Alloc(imageData, GCHandleType.Pinned);
-
         sdlTexture = SDL.SDL_CreateTexture(Gfx.sdlRenderer, SDL.SDL_PIXELFORMAT_ABGR8888, 0, stbiImage.Width, stbiImage.Height);
-        SDL.SDL_UpdateTexture(sdlTexture, IntPtr.Zero, imageDataHandle.AddrOfPinnedObject(), stbiImage.Width * 4);
 
-        imageDataHandle.Free();
+        unsafe {
+            fixed (byte* dataRef = stbiImage.Data) {
+                SDL.SDL_UpdateTexture(sdlTexture, IntPtr.Zero, new IntPtr(dataRef), stbiImage.Width * 4);
+            }
+        }
 
         SDL.SDL_SetTextureBlendMode(sdlTexture, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
 
-        uint d1; int d2; int w; int h;
-        SDL.SDL_QueryTexture(sdlTexture, out d1, out d2, out w, out h);
-        width = w; height = h;
+        width = stbiImage.Width;
+        height = stbiImage.Height;
     }
 
     private bool _disposed = false;
