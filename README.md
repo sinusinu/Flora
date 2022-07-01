@@ -17,6 +17,6 @@ For working example, check out the sample project: [Bootleg Invaders](https://gi
 Flora's public functions are usually documented with [documentation comments](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments), so check out the sources if you need more info.
 
 ## License
-Flora is distributed under the MIT License.
+Flora is distributed under the zlib License.
 
 For open-source projects used in Flora, Please refer to [third-party licenses](https://github.com/sinusinu/Flora/blob/main/THIRDPARTY).
