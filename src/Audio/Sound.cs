@@ -1,6 +1,5 @@
 using System;
 using SDL2;
-using SoLoud;
 
 namespace Flora.Audio;
 
@@ -8,14 +7,13 @@ namespace Flora.Audio;
 /// Audio instance that suit better for playing fire-and-forget type of short sound effects.
 /// </summary>
 public class Sound : IDisposable {
-    internal Wav wav;
-
     private float _volume = 1f;
     public float Volume {
         get { return _volume; }
         set { 
             _volume = Math.Clamp(value, 0f, 1f);
-            wav.setVolume(_volume);
+            
+            // TODO: do something
         }
     }
 
@@ -29,9 +27,7 @@ public class Sound : IDisposable {
     public Sound(string path, float volume = 1f) {
         if (!Audio.isAudioInitialized) throw new InvalidOperationException("Audio is not initialized");
 
-        wav = new Wav();
-        wav.load(path);
-        this.Volume = volume;
+        // TODO: do something
     }
 
     /// <summary>
@@ -39,8 +35,7 @@ public class Sound : IDisposable {
     /// </summary>
     /// <param name="singleton">If true, any of this sound playing will be halted before playing.</param>
     public void Play(bool singleton = false) {
-        if (singleton) Audio.soloud.stopAudioSource(wav);
-        Audio.soloud.play(wav, _volume);
+        // TODO: do something
     }
 
     private bool _disposed = false;
@@ -50,7 +45,7 @@ public class Sound : IDisposable {
 
         /* if (disposing) {} */
         
-        wav.Dispose();
+        // TODO: dispose native things
 
         _disposed = true;
     }
