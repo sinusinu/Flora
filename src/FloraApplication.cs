@@ -20,7 +20,7 @@ public class FloraApplication {
         SDL_ttf.TTF_Init();
         
         // create window
-        SDL.SDL_WindowFlags windowFlags = (SDL.SDL_WindowFlags)config.windowFlags;
+        SDL.SDL_WindowFlags windowFlags = SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN;
         var window = SDL.SDL_CreateWindow(config.windowTitle, SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, windowFlags);
         if (window == IntPtr.Zero) {
             string error = SDL.SDL_GetError();
@@ -30,7 +30,7 @@ public class FloraApplication {
         }
 
         // create renderer
-        SDL.SDL_RendererFlags rendererFlags = (SDL.SDL_RendererFlags)config.renderFlags | SDL.SDL_RendererFlags.SDL_RENDERER_TARGETTEXTURE;
+        SDL.SDL_RendererFlags rendererFlags = SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_TARGETTEXTURE;
         var renderer = SDL.SDL_CreateRenderer(window, -1, rendererFlags);
         if (renderer == IntPtr.Zero) {
             string error = SDL.SDL_GetError();
