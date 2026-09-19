@@ -54,6 +54,7 @@ public class TestCore : Core {
     }
 
     public override void Cleanup() {
+        font.Dispose();
         texture.Dispose();
     }
 }
