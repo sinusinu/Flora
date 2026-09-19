@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Flora.Test/Flora.Test.csproj" />
+  <Project Path="Flora/Flora.csproj" />
+</Solution>
