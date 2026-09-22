@@ -315,4 +315,9 @@ public unsafe sealed class Graphics {
         Vertical,
         Both,
     }
+
+    private struct DrawCommand {
+        internal required SDL_Texture* Texture { get; init; }
+        internal required SDL_Vertex[] Vertices { get; init; }
+    }
 }
