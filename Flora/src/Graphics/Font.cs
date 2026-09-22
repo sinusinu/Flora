@@ -32,7 +32,6 @@ public unsafe class Font : IDisposable {
         _rawLineHeight = SDL3_ttf.TTF_GetFontLineSkip(font);
     }
 
-    // TODO: add 1px padding to each glyphs
     internal GlyphInfo? GetGlyphInfo(uint glyph) {
         if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
         
@@ -57,8 +56,8 @@ public unsafe class Font : IDisposable {
         // take the fast track for the very first glyph
         if (glyphAtlases.Count == 0) {
             CreateNewAtlas();
-            PlaceGlyph((SDL_Texture*)glyphAtlases[0], glyphTexture, new Rect(0, 0, w, h));
-            ret = new(0, new Rect(0, 0, w, h));
+            PlaceGlyph((SDL_Texture*)glyphAtlases[0], glyphTexture, new Rect(1, 1, w, h));
+            ret = new(0, new Rect(0, 0, w + 2f, h + 2f));
             glyphInfos.Add(glyph, ret);
             return ret;
         }
@@ -69,17 +68,17 @@ public unsafe class Font : IDisposable {
         for (int i = 0; i < glyphAtlases.Count; i++) {
             bool isGlyphPlacedOnThisPage = false;
             List<Rect> rectsOfThisPage = new();
-            foreach (var j in glyphInfos) if (j.Value?.page == i) rectsOfThisPage.Add(j.Value.rect);
+            foreach (var j in glyphInfos) if (j.Value?.page == i) rectsOfThisPage.Add(j.Value.paddedRect);
 
             if (rectsOfThisPage.Count == 0) {
                 // this page is empty, place glyph on top left
-                PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new Rect(0, 0, w, h));
-                ret = new(i, new Rect(0, 0, w, h));
+                PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new Rect(1, 1, w, h));
+                ret = new(i, new Rect(0, 0, w + 1f, h + 1f));
                 glyphInfos.Add(glyph, ret);
                 isGlyphPlaced = true;
                 break;
             } else {
-                Rect testRect = new Rect(0, 0, w, h);
+                Rect testRect = new Rect(0, 0, w + 1f, h + 1f);
 
                 // check right of each rects
                 foreach (var r in rectsOfThisPage) {
@@ -92,7 +91,7 @@ public unsafe class Font : IDisposable {
                         foreach (var rr in rectsOfThisPage) if (Rect.Intersect(testRect, rr)) { isVacant = false; break; }
                         if (isVacant) {
                             // can be placed here
-                            PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, testRect);
+                            PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new(testRect.x + 1f, testRect.y + 1f, testRect.w - 1f, testRect.h - 1f));
                             ret = new(i, testRect);
                             glyphInfos.Add(glyph, ret);
                             isGlyphPlacedOnThisPage = true;
@@ -118,7 +117,7 @@ public unsafe class Font : IDisposable {
                         foreach (var rr in rectsOfThisPage) if (Rect.Intersect(testRect, rr)) { isVacant = false; break; }
                         if (isVacant) {
                             // can be placed here
-                            PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, testRect);
+                            PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new(testRect.x + 1f, testRect.y + 1f, testRect.w - 1f, testRect.h - 1f));
                             ret = new(i, testRect);
                             glyphInfos.Add(glyph, ret);
                             isGlyphPlacedOnThisPage = true;
@@ -140,8 +139,8 @@ public unsafe class Font : IDisposable {
         if (!isGlyphPlaced) {
             // couldn't place on all atlases - means we need a new one
             int newAtlasIndex = CreateNewAtlas() - 1;
-            PlaceGlyph((SDL_Texture*)glyphAtlases[newAtlasIndex], glyphTexture, new(0, 0, w, h));
-            ret = new(newAtlasIndex, new Rect(0, 0, w, h));
+            PlaceGlyph((SDL_Texture*)glyphAtlases[newAtlasIndex], glyphTexture, new(1, 1, w, h));
+            ret = new(newAtlasIndex, new Rect(0, 0, w + 1f, h + 1f));
             glyphInfos.Add(glyph, ret);
         }
 
@@ -186,7 +185,7 @@ public unsafe class Font : IDisposable {
             var glyphInfo = GetGlyphInfo(glyph);
             if (glyphInfo == null) continue;
 
-            currentWidth += glyphInfo.rect.w * Scale;
+            currentWidth += glyphInfo.paddedRect.w * Scale;
             if (currentWidth > maxWidth) maxWidth = currentWidth;
         }
 
@@ -222,13 +221,13 @@ public unsafe class Font : IDisposable {
             var dstRect = new SDL.SDL_FRect() {
                 x = x + currentX,
                 y = y + currentY,
-                w = glyphInfo.rect.w * Scale,
-                h = glyphInfo.rect.h * Scale
+                w = glyphInfo.paddedRect.w * Scale,
+                h = glyphInfo.paddedRect.h * Scale
             };
 
-            app.Gfx.DrawRawTexture((SDL_Texture*)glyphAtlases[glyphInfo.page], x + currentX, y + currentY, glyphInfo.rect.w * Scale, glyphInfo.rect.h * Scale, 0, 0, 0, (int)glyphInfo.rect.x, (int)glyphInfo.rect.y, (int)glyphInfo.rect.w, (int)glyphInfo.rect.h);
+            app.Gfx.DrawRawTexture((SDL_Texture*)glyphAtlases[glyphInfo.page], x + currentX, y + currentY, glyphInfo.paddedRect.w * Scale, glyphInfo.paddedRect.h * Scale, 0, 0, 0, (int)glyphInfo.paddedRect.x, (int)glyphInfo.paddedRect.y, (int)glyphInfo.paddedRect.w, (int)glyphInfo.paddedRect.h);
 
-            currentX += glyphInfo.rect.w * Scale;
+            currentX += glyphInfo.paddedRect.w * Scale;
         }
         
         app.Gfx.RenderColor = originalRenderColor;
@@ -245,7 +244,7 @@ public unsafe class Font : IDisposable {
         return codepoints;
     }
 
-    internal record GlyphInfo(int page, Rect rect);
+    internal record GlyphInfo(int page, Rect paddedRect);
 
 #region Dispose
     private bool _disposed = false;
