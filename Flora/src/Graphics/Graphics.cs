@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Numerics;
 using SDL;
 
@@ -181,7 +182,9 @@ public unsafe sealed class Graphics {
         }
 
         var dc = new DrawCommand() {
-            Texture = texture.texture,
+            Texture = texture,
+            BlendMode = texture.BlendMode,
+            ScaleMode = texture.ScaleMode,
             Vertices = [
                 new() {
                     position = new() { x = dst[0].X, y = dst[0].Y },
@@ -209,11 +212,8 @@ public unsafe sealed class Graphics {
         drawCommandBuffer.Add(dc);
     }
 
-    internal void DrawRawTexture(SDL_Texture* texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
+    internal void DrawGlyph(Font font, Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
         if (!isDrawing) throw new InvalidOperationException("Draw calls must be placed inbetween Begin and End calls");
-
-        float tw = 0f; float th = 0f;
-        SDL3.SDL_GetTextureSize(texture, &tw, &th);
 
         Vector2[] src = {
             new Vector2(x,     y),
@@ -246,17 +246,25 @@ public unsafe sealed class Graphics {
 
         float uvTLrx, uvTLry, uvTRrx, uvTRry, uvBLrx, uvBLry, uvBRrx, uvBRry;
 
-        float invW = 1f / tw;
-        float invH = 1f / th;
-
-        uvTLrx =  srcX         * invW;
-        uvTLry =  srcY         * invH;
-        uvTRrx = (srcX + srcW) * invW;
-        uvTRry =  srcY         * invH;
-        uvBLrx =  srcX         * invW;
-        uvBLry = (srcY + srcH) * invH;
-        uvBRrx = (srcX + srcW) * invW;
-        uvBRry = (srcY + srcH) * invH;
+        if (srcX == 0 && srcY == 0 && srcW == texture.Width && srcH == texture.Height) {
+            uvTLrx = 0f;
+            uvTLry = 0f;
+            uvTRrx = 1f;
+            uvTRry = 0f;
+            uvBLrx = 0f;
+            uvBLry = 1f;
+            uvBRrx = 1f;
+            uvBRry = 1f;
+        } else {
+            uvTLrx =  srcX         * texture.invW;
+            uvTLry =  srcY         * texture.invH;
+            uvTRrx = (srcX + srcW) * texture.invW;
+            uvTRry =  srcY         * texture.invH;
+            uvBLrx =  srcX         * texture.invW;
+            uvBLry = (srcY + srcH) * texture.invH;
+            uvBRrx = (srcX + srcW) * texture.invW;
+            uvBRry = (srcY + srcH) * texture.invH;
+        }
 
         float uvTLx, uvTLy, uvTRx, uvTRy, uvBLx, uvBLy, uvBRx, uvBRy;
         switch (flip) {
@@ -268,6 +276,8 @@ public unsafe sealed class Graphics {
 
         var dc = new DrawCommand() {
             Texture = texture,
+            BlendMode = Texture.BlendModeOpts.Blend,
+            ScaleMode = font.ScaleMode,
             Vertices = [
                 new() {
                     position = new() { x = dst[0].X, y = dst[0].Y },
@@ -301,8 +311,16 @@ public unsafe sealed class Graphics {
         // draw everything in drawCommandBuffer
         fixed (int* indices = fixedIndices)
         foreach (var dc in drawCommandBuffer) {
+            if (dc.Texture.BlendMode != dc.BlendMode) {
+                dc.Texture.BlendMode = dc.BlendMode;
+                SDL3.SDL_SetTextureBlendMode(dc.Texture.texture, (SDL_BlendMode)dc.BlendMode);
+            }
+            if (dc.Texture.ScaleMode != dc.ScaleMode) {
+                dc.Texture.ScaleMode = dc.ScaleMode;
+                SDL3.SDL_SetTextureScaleMode(dc.Texture.texture, (SDL_ScaleMode)dc.ScaleMode);
+            }
             fixed (SDL_Vertex* verts = dc.Vertices)
-            SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture, verts, 4, indices, 6);
+            SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture.texture, verts, 4, indices, 6);
         }
 
         SDL3.SDL_RenderPresent(app.Window.sdlRenderer);
@@ -317,7 +335,9 @@ public unsafe sealed class Graphics {
     }
 
     private struct DrawCommand {
-        internal required SDL_Texture* Texture { get; init; }
+        internal required Texture Texture { get; init; }
+        internal required Texture.BlendModeOpts BlendMode { get; init; }
+        internal required Texture.ScaleModeOpts ScaleMode { get; init; }
         internal required SDL_Vertex[] Vertices { get; init; }
     }
 }

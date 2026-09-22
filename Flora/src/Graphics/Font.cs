@@ -10,7 +10,7 @@ public unsafe class Font : IDisposable {
     private Application app;
 
     private TTF_Font* font;
-    private List<nint> glyphAtlases = new();
+    private List<Texture> glyphAtlases = new();
     private Dictionary<uint, GlyphInfo?> glyphInfos = new(); // key is unicode codepoint
     
     public float Scale { get; set; } = 1f;
@@ -20,7 +20,7 @@ public unsafe class Font : IDisposable {
         get => _scaleMode;
         set {
             _scaleMode = value;
-            foreach (var atlas in glyphAtlases) SDL3.SDL_SetTextureScaleMode((SDL_Texture*)atlas, (SDL_ScaleMode)value);
+            foreach (var texture in glyphAtlases) texture.ScaleMode = value;
         }
     }
 
@@ -67,7 +67,7 @@ public unsafe class Font : IDisposable {
         // take the fast track for the very first glyph
         if (glyphAtlases.Count == 0) {
             CreateNewAtlas();
-            PlaceGlyph((SDL_Texture*)glyphAtlases[0], glyphTexture, new Rect(1, 1, w, h));
+            PlaceGlyph(glyphAtlases[0].texture, glyphTexture, new Rect(1, 1, w, h));
             ret = new(0, new Rect(0, 0, w + 2f, h + 2f));
             glyphInfos.Add(glyph, ret);
             return ret;
@@ -83,7 +83,7 @@ public unsafe class Font : IDisposable {
 
             if (rectsOfThisPage.Count == 0) {
                 // this page is empty, place glyph on top left
-                PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new Rect(1, 1, w, h));
+                PlaceGlyph(glyphAtlases[i].texture, glyphTexture, new Rect(1, 1, w, h));
                 ret = new(i, new Rect(0, 0, w + 1f, h + 1f));
                 glyphInfos.Add(glyph, ret);
                 isGlyphPlaced = true;
@@ -102,7 +102,7 @@ public unsafe class Font : IDisposable {
                         foreach (var rr in rectsOfThisPage) if (Rect.Intersect(testRect, rr)) { isVacant = false; break; }
                         if (isVacant) {
                             // can be placed here
-                            PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new(testRect.x + 1f, testRect.y + 1f, testRect.w - 1f, testRect.h - 1f));
+                            PlaceGlyph(glyphAtlases[i].texture, glyphTexture, new(testRect.x + 1f, testRect.y + 1f, testRect.w - 1f, testRect.h - 1f));
                             ret = new(i, testRect);
                             glyphInfos.Add(glyph, ret);
                             isGlyphPlacedOnThisPage = true;
@@ -128,7 +128,7 @@ public unsafe class Font : IDisposable {
                         foreach (var rr in rectsOfThisPage) if (Rect.Intersect(testRect, rr)) { isVacant = false; break; }
                         if (isVacant) {
                             // can be placed here
-                            PlaceGlyph((SDL_Texture*)glyphAtlases[i], glyphTexture, new(testRect.x + 1f, testRect.y + 1f, testRect.w - 1f, testRect.h - 1f));
+                            PlaceGlyph(glyphAtlases[i].texture, glyphTexture, new(testRect.x + 1f, testRect.y + 1f, testRect.w - 1f, testRect.h - 1f));
                             ret = new(i, testRect);
                             glyphInfos.Add(glyph, ret);
                             isGlyphPlacedOnThisPage = true;
@@ -150,7 +150,7 @@ public unsafe class Font : IDisposable {
         if (!isGlyphPlaced) {
             // couldn't place on all atlases - means we need a new one
             int newAtlasIndex = CreateNewAtlas() - 1;
-            PlaceGlyph((SDL_Texture*)glyphAtlases[newAtlasIndex], glyphTexture, new(1, 1, w, h));
+            PlaceGlyph(glyphAtlases[newAtlasIndex].texture, glyphTexture, new(1, 1, w, h));
             ret = new(newAtlasIndex, new Rect(0, 0, w + 1f, h + 1f));
             glyphInfos.Add(glyph, ret);
         }
@@ -164,7 +164,8 @@ public unsafe class Font : IDisposable {
         var newAtlasTexture = SDL3.SDL_CreateTexture(app.Window.sdlRenderer, SDL_PixelFormat.SDL_PIXELFORMAT_ARGB8888, SDL_TextureAccess.SDL_TEXTUREACCESS_TARGET, TextureSize, TextureSize);
         SDL3.SDL_SetTextureBlendMode(newAtlasTexture, SDL_BlendMode.SDL_BLENDMODE_BLEND);
         SDL3.SDL_SetTextureScaleMode(newAtlasTexture, (SDL_ScaleMode)_scaleMode);
-        glyphAtlases.Add((nint)newAtlasTexture);
+        var newAtlasTextureTexture = new Texture(newAtlasTexture);
+        glyphAtlases.Add(newAtlasTextureTexture);
         return glyphAtlases.Count;
     }
 
@@ -230,14 +231,14 @@ public unsafe class Font : IDisposable {
             var glyphInfo = GetGlyphInfo(glyph);
             if (glyphInfo == null) continue;
 
-            var dstRect = new SDL.SDL_FRect() {
+            var dstRect = new SDL_FRect() {
                 x = x + currentX,
                 y = y + currentY,
                 w = glyphInfo.paddedRect.w * Scale,
                 h = glyphInfo.paddedRect.h * Scale
             };
 
-            app.Gfx.DrawRawTexture((SDL_Texture*)glyphAtlases[glyphInfo.page], x + currentX, y + currentY, glyphInfo.paddedRect.w * Scale, glyphInfo.paddedRect.h * Scale, 0, 0, 0, (int)glyphInfo.paddedRect.x, (int)glyphInfo.paddedRect.y, (int)glyphInfo.paddedRect.w, (int)glyphInfo.paddedRect.h);
+            app.Gfx.DrawGlyph(this, glyphAtlases[glyphInfo.page], x + currentX, y + currentY, glyphInfo.paddedRect.w * Scale, glyphInfo.paddedRect.h * Scale, 0, 0, 0, (int)glyphInfo.paddedRect.x, (int)glyphInfo.paddedRect.y, (int)glyphInfo.paddedRect.w, (int)glyphInfo.paddedRect.h);
 
             currentX += glyphInfo.paddedRect.w * Scale;
         }

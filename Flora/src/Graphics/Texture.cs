@@ -13,15 +13,23 @@ public unsafe class Texture : IDisposable {
     internal float invW;
     internal float invH;
 
-    public enum ScaleModeOpts { Nearest = SDL_ScaleMode.SDL_SCALEMODE_NEAREST, Linear = SDL_ScaleMode.SDL_SCALEMODE_LINEAR, PixelArt = SDL_ScaleMode.SDL_SCALEMODE_PIXELART }
-    private ScaleModeOpts _scaleMode;
-    public ScaleModeOpts ScaleMode {
-        get => _scaleMode;
-        set {
-            _scaleMode = value;
-            SDL3.SDL_SetTextureScaleMode(texture, (SDL_ScaleMode)value);
-        }
+    public enum ScaleModeOpts {
+        Nearest     = SDL_ScaleMode.SDL_SCALEMODE_NEAREST,
+        Linear      = SDL_ScaleMode.SDL_SCALEMODE_LINEAR,
+        PixelArt    = SDL_ScaleMode.SDL_SCALEMODE_PIXELART,
     }
+    public ScaleModeOpts ScaleMode { get; set; }
+
+    public enum BlendModeOpts : uint {
+        None                = SDL_BlendMode.SDL_BLENDMODE_NONE,
+        Blend               = SDL_BlendMode.SDL_BLENDMODE_BLEND,
+        BlendPremultiplied  = SDL_BlendMode.SDL_BLENDMODE_BLEND_PREMULTIPLIED,
+        Add                 = SDL_BlendMode.SDL_BLENDMODE_ADD,
+        AddPremultiplied    = SDL_BlendMode.SDL_BLENDMODE_ADD_PREMULTIPLIED,
+        Mod                 = SDL_BlendMode.SDL_BLENDMODE_MOD,
+        Mul                 = SDL_BlendMode.SDL_BLENDMODE_MUL,
+    }
+    public BlendModeOpts BlendMode { get; set; }
 
     internal Texture(Application app, string path, ScaleModeOpts scaleMode) {
         StbiImage? stbiImage = null;
@@ -38,6 +46,7 @@ public unsafe class Texture : IDisposable {
             SDL3.SDL_UpdateTexture(texture, null, new nint(dataRef), stbiImage.Width * 4);
         }
 
+        BlendMode = BlendModeOpts.Blend;
         SDL3.SDL_SetTextureBlendMode(texture, SDL_BlendMode.SDL_BLENDMODE_BLEND);
         ScaleMode = scaleMode;
 
@@ -49,6 +58,25 @@ public unsafe class Texture : IDisposable {
 
         stbiImage.Dispose();
         stbiImage = null;
+    }
+
+    internal Texture(SDL_Texture* texture) {
+        this.texture = texture;
+
+        SDL_BlendMode blendMode;
+        SDL_ScaleMode scaleMode;
+        SDL3.SDL_GetTextureBlendMode(texture, &blendMode);
+        SDL3.SDL_GetTextureScaleMode(texture, &scaleMode);
+        BlendMode = (BlendModeOpts)blendMode;
+        ScaleMode = (ScaleModeOpts)scaleMode;
+
+        float w = 0; float h = 0;
+        SDL3.SDL_GetTextureSize(texture, &w, &h);
+        Width = (int)w;
+        Height = (int)h;
+
+        invW = 1f / Width;
+        invH = 1f / Height;
     }
 
 #region Dispose
