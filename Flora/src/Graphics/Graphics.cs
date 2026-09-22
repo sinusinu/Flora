@@ -4,7 +4,7 @@ using SDL;
 namespace Flora;
 
 public unsafe sealed class Graphics {
-    private static float RadToDeg = 0.0174533f;
+    private const float RadToDeg = 0.0174533f;
 
     private Application app;
 
