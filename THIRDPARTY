@@ -1,5 +1,0 @@
-Flora is powered by following open-source projects:
-- SDL (zlib)
-- SDL_ttf (zlib)
-- ppy.SDL3-CS (MIT)
-- StbiSharp (BSD 3-Clause)
