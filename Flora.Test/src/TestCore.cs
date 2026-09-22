@@ -14,7 +14,7 @@ public class TestCore : Core {
 
     public override void Prepare() {
         texture = Gfx.CreateTexture("test.png");
-        font = Gfx.CreateFont("test.ttf", 48);
+        font = Gfx.CreateFont("test.otf", 24);
 
         Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Overscan);
     }
