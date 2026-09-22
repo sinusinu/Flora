@@ -7,6 +7,7 @@ public class TestCore : Core {
     Font font = null!;
 
     float dingus = 0f;
+    bool spin = false;
 
     const int deltaSampleSize = 128;
     float[] deltaSamples = new float[deltaSampleSize];
@@ -14,6 +15,7 @@ public class TestCore : Core {
 
     int dx = 0;
     int dy = 0;
+    int dr = 0;
 
     float targetSX = 1f;
     float targetSY = 1f;
@@ -38,6 +40,7 @@ public class TestCore : Core {
 
         Gfx.Camera.X += 720f * delta * dx / targetSX;
         Gfx.Camera.Y += 720f * delta * dy / targetSY;
+        Gfx.Camera.Rotation += 180f * delta * dr;
 
         if (MathF.Abs(targetSX - intermediateSX) < 0.005f) intermediateSX = targetSX;
         else intermediateSX = targetSX * 0.2f + intermediateSX * 0.8f;
@@ -56,7 +59,7 @@ public class TestCore : Core {
         for (int y = -6; y < 6; y++) {
             for (int x = -7; x < 7; x++) {
                 Gfx.RenderColor = new((x + 7) / 13f, (y + 6) / 11f, 1f, 1f);
-                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, 0 * (40 + ((x + y + 1) * 4)), 64, 64);
+                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, (spin ? dingus : 0) * (40 + ((x + y + 1) * 4)), 64, 64);
             }
         }
         
@@ -67,6 +70,8 @@ public class TestCore : Core {
 
         Gfx.Draw(texture, 0, 0, 128, 128);
         font.Color = new Color(0f, 0f, 0f, 1f);
+        font.Draw("(0, 0)", 2, 2);
+        font.Color = new Color(1f, 1f, 1f, 1f);
         font.Draw("(0, 0)", 0, 0);
 
         float anchorSize = 64 / intermediateSX;
@@ -104,6 +109,13 @@ public class TestCore : Core {
             dx -= 1;
         } else if (key == Keycode.Right) {
             dx += 1;
+        } else if (key == Keycode.Delete) {
+            dr += 1;
+        } else if (key == Keycode.PageDown) {
+            dr -= 1;
+        } else if (key == Keycode.R) {
+            spin = !spin;
+            dingus = 0;
         } else if (key == Keycode.KeypadPlus) {
             targetSX *= 2;
             targetSY *= 2;
@@ -113,6 +125,7 @@ public class TestCore : Core {
         } else if (key == Keycode.Keypad0) {
             Gfx.Camera.X = 0;
             Gfx.Camera.Y = 0;
+            Gfx.Camera.Rotation = 0;
             targetSX = 1;
             targetSY = 1;
         }
@@ -127,6 +140,10 @@ public class TestCore : Core {
             dx += 1;
         } else if (key == Keycode.Right) {
             dx -= 1;
+        } else if (key == Keycode.Delete) {
+            dr -= 1;
+        } else if (key == Keycode.PageDown) {
+            dr += 1;
         }
     }
 
