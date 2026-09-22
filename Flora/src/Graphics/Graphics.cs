@@ -38,8 +38,8 @@ public unsafe sealed class Graphics {
         return new Texture(app, path, scaleMode);
     }
 
-    public Font CreateFont(string path, float size) {
-        return new Font(app, path, size);
+    public Font CreateFont(string path, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
+        return new Font(app, path, size, scaleMode);
     }
 
     public enum ViewportOpts {

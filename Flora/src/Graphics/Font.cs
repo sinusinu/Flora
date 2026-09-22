@@ -15,12 +15,21 @@ public unsafe class Font : IDisposable {
     
     public float Scale { get; set; } = 1f;
     public Color Color { get; set; } = new Color(1f, 1f, 1f, 1f);
+    private Texture.ScaleModeOpts _scaleMode;
+    public Texture.ScaleModeOpts ScaleMode {
+        get => _scaleMode;
+        set {
+            _scaleMode = value;
+            foreach (var atlas in glyphAtlases) SDL3.SDL_SetTextureScaleMode((SDL_Texture*)atlas, (SDL_ScaleMode)value);
+        }
+    }
+
     internal float _rawLineHeight;
     public float LineHeight => _rawLineHeight * Scale;
 
     private readonly SDL_Color white = new SDL_Color() { r = 0xFF, g = 0xFF, b = 0xFF, a = 0xFF };
 
-    internal Font(Application app, string path, float size) {
+    internal Font(Application app, string path, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
         if (size < 2) throw new ArgumentException("Font size must be larger than 1");
         if (size > 255) throw new ArgumentException("Font size must be smaller than 256");
 
@@ -30,6 +39,8 @@ public unsafe class Font : IDisposable {
         if (font == null) throw new InvalidOperationException($"Failed to open font: {SDL3.SDL_GetError()}");
 
         _rawLineHeight = SDL3_ttf.TTF_GetFontLineSkip(font);
+
+        ScaleMode = scaleMode;
     }
 
     internal GlyphInfo? GetGlyphInfo(uint glyph) {
@@ -152,6 +163,7 @@ public unsafe class Font : IDisposable {
     private int CreateNewAtlas() {
         var newAtlasTexture = SDL3.SDL_CreateTexture(app.Window.sdlRenderer, SDL_PixelFormat.SDL_PIXELFORMAT_ARGB8888, SDL_TextureAccess.SDL_TEXTUREACCESS_TARGET, TextureSize, TextureSize);
         SDL3.SDL_SetTextureBlendMode(newAtlasTexture, SDL_BlendMode.SDL_BLENDMODE_BLEND);
+        SDL3.SDL_SetTextureScaleMode(newAtlasTexture, (SDL_ScaleMode)_scaleMode);
         glyphAtlases.Add((nint)newAtlasTexture);
         return glyphAtlases.Count;
     }
