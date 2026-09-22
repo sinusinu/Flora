@@ -75,11 +75,11 @@ public unsafe sealed class Graphics {
                     return new Rect((-(w / 2) / Camera.ScaleX) + Camera.X, (-(h / 2) / Camera.ScaleY) + Camera.Y, w / Camera.ScaleX, h / Camera.ScaleY);
                 } else if (presentAspectRatio < windowAspectRatio) {
                     // present width is preserved
-                    float actualPresentHeight = (float)Math.Round(w / windowAspectRatio);
+                    float actualPresentHeight = MathF.Round(w / windowAspectRatio);
                     return new Rect((-(w / 2) / Camera.ScaleX) + Camera.X, (-(actualPresentHeight / 2) / Camera.ScaleY) + Camera.Y, w / Camera.ScaleX, actualPresentHeight / Camera.ScaleY);
                 } else if (presentAspectRatio > windowAspectRatio) {
                     // present height is preserved
-                    float actualPresentWidth = (float)Math.Round(h * windowAspectRatio);
+                    float actualPresentWidth = MathF.Round(h * windowAspectRatio);
                     return new Rect((-(actualPresentWidth / 2) / Camera.ScaleX) + Camera.X, (-(h / 2) / Camera.ScaleY) + Camera.Y, actualPresentWidth / Camera.ScaleX, h / Camera.ScaleY);
                 }
                 // probably shouldn't reach here

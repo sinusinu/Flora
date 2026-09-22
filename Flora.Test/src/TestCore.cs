@@ -24,7 +24,7 @@ public class TestCore : Core {
         texture = Gfx.CreateTexture("test.png");
         font = Gfx.CreateFont("test.otf", 32);
 
-        Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Letterbox);
+        Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Overscan);
     }
 
     public override void Render(float delta) {
