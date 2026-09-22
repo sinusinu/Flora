@@ -31,6 +31,10 @@ public class Rect {
         h = rect.h,
     };
 
+    public override string ToString() {
+        return $"[ {x}, {y}, {w}, {h} ]";
+    }
+
     /// <summary>
     /// Check if given two rectangles intersect.
     /// </summary>
