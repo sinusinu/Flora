@@ -1,7 +1,7 @@
 ﻿namespace Flora;
 
 public class Core {
-    internal Application application = null!;
+    public Application App { get; internal set; } = null!;
     public Graphics Gfx { get; internal set; } = null!;
     public Input Input { get; internal set; } = null!;
 
@@ -26,9 +26,4 @@ public class Core {
     public virtual void OnGamepadUp(uint which, GamepadButton button) {}
     public virtual void OnGamepadAdded(uint which) {}
     public virtual void OnGamepadRemoved(uint which) {}
-
-    /// <summary>
-    /// Schedule the exit of the application. Note that the exit will not happen immediately.
-    /// </summary>
-    public void Exit() { application.Exit(); }
 }

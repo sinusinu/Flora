@@ -6,9 +6,9 @@ namespace Flora;
 
 public sealed unsafe class Application {
     private Core Core { get; init; }
-    public Config Config { internal get; init; }
-    public Graphics Gfx { get; init; }
-    public Input Input { get; init; }
+    internal Config Config { get; init; }
+    internal Graphics Gfx { get; init; }
+    internal Input Input { get; init; }
     public Window Window { get; private set; } = null!;
 
     private bool run = false;
@@ -34,7 +34,7 @@ public sealed unsafe class Application {
         Gfx = new Graphics(this);
         Input = new Input(this);
 
-        core.application = this;
+        core.App = this;
         core.Gfx = Gfx;
         core.Input = Input;
     }
@@ -192,7 +192,10 @@ public sealed unsafe class Application {
         }
     }
 
-    internal void Exit() {
+    /// <summary>
+    /// Schedule the exit of the application. Note that the exit will not happen immediately.
+    /// </summary>
+    public void Exit() {
         run = false;
         skipUpdate = true;
     }

@@ -53,6 +53,12 @@ public class TestCore : Core {
         Gfx.End();
     }
 
+    public override void OnKeyDown(Keycode key, Scancode scan) {
+        if (key == Keycode.Escape) {
+            App.Exit();
+        }
+    }
+
     public override void Cleanup() {
         font.Dispose();
         texture.Dispose();
