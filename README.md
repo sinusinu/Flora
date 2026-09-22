@@ -11,5 +11,3 @@ In other words: nothing to see here!
 ## License
 
 Flora is distributed under the zlib License.
-
-For open-source projects used in Flora, Please refer to [third-party licenses](https://github.com/sinusinu/Flora/blob/main/THIRDPARTY).
