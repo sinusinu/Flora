@@ -56,6 +56,12 @@ public class TestCore : Core {
     public override void OnKeyDown(Keycode key, Scancode scan) {
         if (key == Keycode.Escape) {
             App.Exit();
+        } else if (key == Keycode.F11) {
+            if (App.Window.WindowMode == Window.WindowModeOpts.Windowed) {
+                App.Window.SetFullscreen();
+            } else {
+                App.Window.SetWindowed(640, 480);
+            }
         }
     }
 

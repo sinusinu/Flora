@@ -30,6 +30,7 @@ public sealed unsafe class Application {
     private Application(Core core, Config? config) {
         Core = core;
         Config = config ?? new Config();
+        if (Config.WindowWidth <= 0 || Config.WindowHeight <= 0) throw new InvalidOperationException("Window width and height must be >0");
 
         Gfx = new Graphics(this);
         Input = new Input(this);
@@ -74,8 +75,8 @@ public sealed unsafe class Application {
         Window = new Window(this, sdlWindow, sdlRenderer);
         
         // set initial configs
-        Window.SetWindowMode(Config.WindowMode, Config.WindowWidth, Config.WindowHeight);
-        Gfx.SetVSync(Config.VSync);
+        if (Config.WindowMode == Window.WindowModeOpts.Fullscreen) Window.SetFullscreen();
+        Gfx.VSync = Config.VSync;
         Gfx.Camera.UpdateActualViewportSizes();
         
         Core.Prepare();

@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using SDL;
 
 namespace Flora;
@@ -24,13 +23,17 @@ public unsafe sealed class Graphics {
         Camera = new(app);
     }
 
-    public void SetVSync(Config.VSyncOpts vsync) {
-        app.Config.VSync = vsync;
-
-        switch (vsync) {
-            case Config.VSyncOpts.Disabled: SDL3.SDL_SetRenderVSync(app.Window.sdlRenderer, SDL3.SDL_RENDERER_VSYNC_DISABLED); break;
-            case Config.VSyncOpts.Enabled:  SDL3.SDL_SetRenderVSync(app.Window.sdlRenderer, 1); break;
-            case Config.VSyncOpts.Adaptive: SDL3.SDL_SetRenderVSync(app.Window.sdlRenderer, SDL3.SDL_RENDERER_VSYNC_ADAPTIVE); break;
+    public enum VSyncOpts { Disabled, Enabled, Adaptive }
+    private VSyncOpts _vsync;
+    public VSyncOpts VSync {
+        get => _vsync;
+        set {
+            _vsync = value;
+            switch (value) {
+                case VSyncOpts.Disabled: SDL3.SDL_SetRenderVSync(app.Window.sdlRenderer, SDL3.SDL_RENDERER_VSYNC_DISABLED); break;
+                case VSyncOpts.Enabled:  SDL3.SDL_SetRenderVSync(app.Window.sdlRenderer, 1); break;
+                case VSyncOpts.Adaptive: SDL3.SDL_SetRenderVSync(app.Window.sdlRenderer, SDL3.SDL_RENDERER_VSYNC_ADAPTIVE); break;
+            }
         }
     }
 
