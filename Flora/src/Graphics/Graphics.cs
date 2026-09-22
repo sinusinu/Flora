@@ -89,6 +89,15 @@ public unsafe sealed class Graphics {
         }
     }
 
+    /// <summary>Camera rotation does not apply!</summary>
+    public (float, float) ScreenToWorld(float screenX, float screenY) {
+        float renderX = 0; float renderY = 0;
+        SDL3.SDL_RenderCoordinatesFromWindow(app.Window.sdlRenderer, screenX, screenY, &renderX, &renderY);
+        float worldX = (renderX / Camera.ScaleX) + Camera.X - (Camera.actualViewportWidth / Camera.ScaleX / 2);
+        float worldY = (renderY / Camera.ScaleY) + Camera.Y - (Camera.actualViewportHeight / Camera.ScaleY / 2);
+        return (worldX, worldY);
+    }
+
     public void SetViewport(int width, int height, ViewportOpts opts) {
         if (width < 1 || height < 1) { ClearViewport(); return; }
         Camera.requestedViewportWidth = width;

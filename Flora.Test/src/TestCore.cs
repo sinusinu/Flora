@@ -24,7 +24,7 @@ public class TestCore : Core {
         texture = Gfx.CreateTexture("test.png");
         font = Gfx.CreateFont("test.otf", 32);
 
-        Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Overscan);
+        Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Letterbox);
     }
 
     public override void Render(float delta) {
@@ -56,7 +56,7 @@ public class TestCore : Core {
         for (int y = -6; y < 6; y++) {
             for (int x = -7; x < 7; x++) {
                 Gfx.RenderColor = new((x + 7) / 13f, (y + 6) / 11f, 1f, 1f);
-                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, dingus * (40 + ((x + y + 1) * 4)), 64, 64);
+                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, 0 * (40 + ((x + y + 1) * 4)), 64, 64);
             }
         }
         
@@ -77,6 +77,11 @@ public class TestCore : Core {
         Gfx.Draw(texture, va.x + va.w - anchorSize, va.y + va.h - anchorSize, anchorSize, anchorSize);
 
         Gfx.End();
+    }
+
+    public override void OnPointerDown(PointerType type, int index, int button, float x, float y) {
+        (float wx, float wy) = Gfx.ScreenToWorld(x, y);
+        Console.WriteLine($"{wx}, {wy}");
     }
 
     public override void OnKeyDown(Keycode key, Scancode scan) {
