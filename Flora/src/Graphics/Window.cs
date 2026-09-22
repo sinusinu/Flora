@@ -15,9 +15,12 @@ public sealed unsafe class Window {
         set {
             _windowTitle = value;
             SDL3.SDL_SetWindowTitle(sdlWindow, value);
-        } }
-    public int WindowWidth { get; internal set; } = 640;
-    public int WindowHeight { get; internal set; } = 480;
+        }
+    }
+
+    public int WindowWidth { get { int width = 0; SDL3.SDL_GetWindowSize(sdlWindow, &width, null); return width; } }
+    public int WindowHeight { get { int height = 0; SDL3.SDL_GetWindowSize(sdlWindow, null, &height); return height; } }
+    public (int, int) WindowSize { get { int width = 0; int height = 0; SDL3.SDL_GetWindowSize(sdlWindow, &width, &height); return (width, height); } }
 
     public WindowModeOpts WindowMode { get; set;}
 
@@ -31,8 +34,6 @@ public sealed unsafe class Window {
         if (width <= 0 || height <= 0) throw new InvalidOperationException("Width and Height must be >0");
 
         WindowMode = WindowModeOpts.Windowed;
-        WindowWidth = width;
-        WindowHeight = height;
         
         SDL3.SDL_SetWindowFullscreen(sdlWindow, false);
         SDL3.SDL_SetWindowSize(sdlWindow, width, height);
@@ -44,10 +45,5 @@ public sealed unsafe class Window {
         
         SDL3.SDL_SetWindowFullscreen(sdlWindow, true);
         SDL3.SDL_SyncWindow(sdlWindow);
-        
-        int w = 0; int h = 0;
-        SDL3.SDL_GetWindowSize(sdlWindow, &w, &h);
-        WindowWidth = w;
-        WindowHeight = h;
     }
 }

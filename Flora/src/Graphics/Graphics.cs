@@ -52,6 +52,42 @@ public unsafe sealed class Graphics {
         IntegerScale = SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_INTEGER_SCALE,
     }
 
+    /// <summary>Camera rotation does not apply!</summary>
+    public Rect GetVisibleArea() {
+        if (Camera.ScaleX == 0 || Camera.ScaleY == 0) return new Rect(0, 0, 0, 0);
+        int w = 0; int h = 0; SDL_RendererLogicalPresentation rlp;
+        SDL3.SDL_GetRenderLogicalPresentation(app.Window.sdlRenderer, &w, &h, &rlp);
+        switch (rlp) {
+            case SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_DISABLED:
+                (w, h) = app.Window.WindowSize;
+                return new Rect((-(w / 2) / Camera.ScaleX) + Camera.X, (-(h / 2) / Camera.ScaleY) + Camera.Y, w / Camera.ScaleX, h / Camera.ScaleY);
+            case SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_STRETCH:
+            case SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_LETTERBOX:
+            case SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_INTEGER_SCALE:
+                return new Rect((-(w / 2) / Camera.ScaleX) + Camera.X, (-(h / 2) / Camera.ScaleY) + Camera.Y, w / Camera.ScaleX, h / Camera.ScaleY);
+            case SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_OVERSCAN:
+                (int ww, int wh) = app.Window.WindowSize;
+                float presentAspectRatio = w / (float)h;
+                float windowAspectRatio = ww / (float)wh;
+                if (MathF.Abs(presentAspectRatio - windowAspectRatio) < 0.01f) {
+                    // almost same aspect ratio - prob equals stretch
+                    return new Rect((-(w / 2) / Camera.ScaleX) + Camera.X, (-(h / 2) / Camera.ScaleY) + Camera.Y, w / Camera.ScaleX, h / Camera.ScaleY);
+                } else if (presentAspectRatio < windowAspectRatio) {
+                    // present width is preserved
+                    float actualPresentHeight = (float)Math.Round(w / windowAspectRatio);
+                    return new Rect((-(w / 2) / Camera.ScaleX) + Camera.X, (-(actualPresentHeight / 2) / Camera.ScaleY) + Camera.Y, w / Camera.ScaleX, actualPresentHeight / Camera.ScaleY);
+                } else if (presentAspectRatio > windowAspectRatio) {
+                    // present height is preserved
+                    float actualPresentWidth = (float)Math.Round(h * windowAspectRatio);
+                    return new Rect((-(actualPresentWidth / 2) / Camera.ScaleX) + Camera.X, (-(h / 2) / Camera.ScaleY) + Camera.Y, actualPresentWidth / Camera.ScaleX, h / Camera.ScaleY);
+                }
+                // probably shouldn't reach here
+                return new Rect(0, 0, 0, 0);
+            default:
+                return new(0, 0, 0, 0);
+        }
+    }
+
     public void SetViewport(int width, int height, ViewportOpts opts) {
         if (width < 1 || height < 1) { ClearViewport(); return; }
         Camera.requestedViewportWidth = width;

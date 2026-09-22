@@ -12,6 +12,14 @@ public class TestCore : Core {
     float[] deltaSamples = new float[deltaSampleSize];
     int deltaSampleIndex = 0;
 
+    int dx = 0;
+    int dy = 0;
+
+    float targetSX = 1f;
+    float targetSY = 1f;
+    float intermediateSX = 1f;
+    float intermediateSY = 1f;
+
     public override void Prepare() {
         texture = Gfx.CreateTexture("test.png");
         font = Gfx.CreateFont("test.otf", 24);
@@ -22,33 +30,50 @@ public class TestCore : Core {
     public override void Render(float delta) {
         deltaSamples[deltaSampleIndex] = delta;
         deltaSampleIndex++; if (deltaSampleIndex == deltaSampleSize) deltaSampleIndex = 0;
-        Console.WriteLine($"FPS: {float.Round(1f / deltaSamples.Average(), 1):00.0}");
+        //Console.WriteLine($"FPS: {float.Round(1f / deltaSamples.Average(), 1):00.0}");
 
         dingus += delta * 4f;
 
         Gfx.Begin();
 
-        Gfx.Camera.PushState();
+        Gfx.Camera.X += 720f * delta * dx / targetSX;
+        Gfx.Camera.Y += 720f * delta * dy / targetSY;
 
-        Gfx.Camera.Rotation = MathF.Sin(dingus / 2f) * 40;
-        Gfx.Camera.X = MathF.Sin(dingus) * 200;
-        Gfx.Camera.ScaleX = ((MathF.Sin(dingus) + 1f) * 0.125f) + 1f;
-        Gfx.Camera.ScaleY = ((MathF.Cos(dingus) + 1f) * 0.125f) + 1f;
+        if (MathF.Abs(targetSX - intermediateSX) < 0.005f) intermediateSX = targetSX;
+        else intermediateSX = targetSX * 0.2f + intermediateSX * 0.8f;
+        if (MathF.Abs(targetSY - intermediateSY) < 0.005f) intermediateSY = targetSY;
+        else intermediateSY = targetSY * 0.2f + intermediateSY * 0.8f;
+        Gfx.Camera.ScaleX = intermediateSX;
+        Gfx.Camera.ScaleY = intermediateSY;
+
+        // Gfx.Camera.PushState();
+
+        // Gfx.Camera.Rotation = MathF.Sin(dingus / 2f) * 40;
+        //Gfx.Camera.X = MathF.Sin(dingus) * 200;
+        // Gfx.Camera.ScaleX = ((MathF.Sin(dingus) + 1f) * 0.125f) + 1f;
+        // Gfx.Camera.ScaleY = ((MathF.Cos(dingus) + 1f) * 0.125f) + 1f;
 
         for (int y = -6; y < 6; y++) {
             for (int x = -7; x < 7; x++) {
                 Gfx.RenderColor = new((x + 7) / 13f, (y + 6) / 11f, 1f, 1f);
-                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, dingus * (40 + ((x + y + 1) * 4)), 64, 64);
+                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, 0 * (40 + ((x + y + 1) * 4)), 64, 64);
             }
         }
         
-        font.Color = new Color(1f, 1f, 0f, 1f);
-        font.Draw("이 텍스트는 카메라의\n영향을 받습니다.\nThe quick brown fox\njumps over the lazy dog", -200, -200);
+        // font.Color = new Color(1f, 1f, 0f, 1f);
+        // font.Draw("이 텍스트는 카메라의\n영향을 받습니다.\nThe quick brown fox\njumps over the lazy dog", -200, -200);
 
-        Gfx.Camera.PopState();
+        // Gfx.Camera.PopState();
 
-        font.Color = new Color(0f, 1f, 1f, 0.8f);
-        font.Draw("이 텍스트는 카메라의\n영향을 받지 않습니다.", 0, 150);
+        Gfx.Draw(texture, 0, 0, 128, 128);
+        font.Color = new Color(0f, 0f, 0f, 1f);
+        font.Draw("(0, 0)", 0, 0);
+
+        var va = Gfx.GetVisibleArea();
+        Gfx.Draw(texture, va.x,              va.y,              128, 128);
+        Gfx.Draw(texture, va.x + va.w - 128, va.y,              128, 128);
+        Gfx.Draw(texture, va.x,              va.y + va.h - 128, 128, 128);
+        Gfx.Draw(texture, va.x + va.w - 128, va.y + va.h - 128, 128, 128);
 
         Gfx.End();
     }
@@ -62,6 +87,40 @@ public class TestCore : Core {
             } else {
                 App.Window.SetWindowed(640, 480);
             }
+        } else if (key == Keycode.Q) {
+            Console.WriteLine($"Camera is at {Gfx.Camera.X}, {Gfx.Camera.Y}");
+            Console.WriteLine($"Visible area: {Gfx.GetVisibleArea()}");
+        } else if (key == Keycode.Up) {
+            dy -= 1;
+        } else if (key == Keycode.Down) {
+            dy += 1;
+        } else if (key == Keycode.Left) {
+            dx -= 1;
+        } else if (key == Keycode.Right) {
+            dx += 1;
+        } else if (key == Keycode.KeypadPlus) {
+            targetSX *= 2;
+            targetSY *= 2;
+        } else if (key == Keycode.KeypadMinus) {
+            targetSX /= 2;
+            targetSY /= 2;
+        } else if (key == Keycode.Keypad0) {
+            Gfx.Camera.X = 0;
+            Gfx.Camera.Y = 0;
+            targetSX = 1;
+            targetSY = 1;
+        }
+    }
+
+    public override void OnKeyUp(Keycode key, Scancode scan) {
+        if (key == Keycode.Up) {
+            dy += 1;
+        } else if (key == Keycode.Down) {
+            dy -= 1;
+        } else if (key == Keycode.Left) {
+            dx += 1;
+        } else if (key == Keycode.Right) {
+            dx -= 1;
         }
     }
 
