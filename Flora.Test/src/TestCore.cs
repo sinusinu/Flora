@@ -22,7 +22,7 @@ public class TestCore : Core {
 
     public override void Prepare() {
         texture = Gfx.CreateTexture("test.png");
-        font = Gfx.CreateFont("test.otf", 24);
+        font = Gfx.CreateFont("test.otf", 32);
 
         Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Overscan);
     }
@@ -56,7 +56,7 @@ public class TestCore : Core {
         for (int y = -6; y < 6; y++) {
             for (int x = -7; x < 7; x++) {
                 Gfx.RenderColor = new((x + 7) / 13f, (y + 6) / 11f, 1f, 1f);
-                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, 0 * (40 + ((x + y + 1) * 4)), 64, 64);
+                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, dingus * (40 + ((x + y + 1) * 4)), 64, 64);
             }
         }
         
@@ -69,11 +69,12 @@ public class TestCore : Core {
         font.Color = new Color(0f, 0f, 0f, 1f);
         font.Draw("(0, 0)", 0, 0);
 
+        float anchorSize = 64 / intermediateSX;
         var va = Gfx.GetVisibleArea();
-        Gfx.Draw(texture, va.x,              va.y,              128, 128);
-        Gfx.Draw(texture, va.x + va.w - 128, va.y,              128, 128);
-        Gfx.Draw(texture, va.x,              va.y + va.h - 128, 128, 128);
-        Gfx.Draw(texture, va.x + va.w - 128, va.y + va.h - 128, 128, 128);
+        Gfx.Draw(texture, va.x,                     va.y,                     anchorSize, anchorSize);
+        Gfx.Draw(texture, va.x + va.w - anchorSize, va.y,                     anchorSize, anchorSize);
+        Gfx.Draw(texture, va.x,                     va.y + va.h - anchorSize, anchorSize, anchorSize);
+        Gfx.Draw(texture, va.x + va.w - anchorSize, va.y + va.h - anchorSize, anchorSize, anchorSize);
 
         Gfx.End();
     }
