@@ -1,4 +1,5 @@
-@setlocal
-@cd Flora.Test
+@echo off
+setlocal
+cd Flora.Test
 dotnet run
-@endlocal
+endlocal
