@@ -16,7 +16,7 @@ public unsafe sealed class Graphics {
 
     public Camera Camera { get; init; }
     // TODO: better not do alloc on render loop...
-    private List<DrawCommand> drawCommandBuffer = new(1024);
+    private List<DrawCommandInternal> drawCommandBuffer = new(1024);
     private readonly int[] fixedIndices = [ 0, 1, 2, 2, 1, 3 ];
 
     internal Graphics(Application application) {
@@ -190,7 +190,7 @@ public unsafe sealed class Graphics {
             default:              uvTLx = uvTLrx; uvTLy = uvTLry; uvTRx = uvTRrx; uvTRy = uvTRry; uvBLx = uvBLrx; uvBLy = uvBLry; uvBRx = uvBRrx; uvBRy = uvBRry; break;
         }
 
-        var dc = new DrawCommand() {
+        var dc = new DrawCommandInternal() {
             Texture = texture,
             BlendMode = texture.BlendMode,
             ScaleMode = texture.ScaleMode,
@@ -216,9 +216,20 @@ public unsafe sealed class Graphics {
                     tex_coord = new() { x = uvBRx, y = uvBRy }
                 },
             ],
+            Indices = null,
         };
 
         drawCommandBuffer.Add(dc);
+    }
+
+    public void Draw(DrawCommand command) {
+        drawCommandBuffer.Add(new DrawCommandInternal() {
+            Texture = command.Texture,
+            BlendMode = command.Texture.BlendMode,
+            ScaleMode = command.Texture.ScaleMode,
+            Vertices = command.Vertices.Select(v => v.ToSDLVertex()).ToArray(),
+            Indices = command.Indices,
+        });
     }
 
     internal void DrawGlyph(Font font, Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
@@ -283,7 +294,7 @@ public unsafe sealed class Graphics {
             default:              uvTLx = uvTLrx; uvTLy = uvTLry; uvTRx = uvTRrx; uvTRy = uvTRry; uvBLx = uvBLrx; uvBLy = uvBLry; uvBRx = uvBRrx; uvBRy = uvBRry; break;
         }
 
-        var dc = new DrawCommand() {
+        var dc = new DrawCommandInternal() {
             Texture = texture,
             BlendMode = Texture.BlendModeOpts.Blend,
             ScaleMode = font.ScaleMode,
@@ -309,6 +320,7 @@ public unsafe sealed class Graphics {
                     tex_coord = new() { x = uvBRx, y = uvBRy }
                 },
             ],
+            Indices = null,
         };
 
         drawCommandBuffer.Add(dc);
@@ -328,8 +340,15 @@ public unsafe sealed class Graphics {
                 dc.Texture.ScaleMode = dc.ScaleMode;
                 SDL3.SDL_SetTextureScaleMode(dc.Texture.texture, (SDL_ScaleMode)dc.ScaleMode);
             }
-            fixed (SDL_Vertex* verts = dc.Vertices)
-            SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture.texture, verts, 4, indices, 6);
+            if (dc.Indices is null) {
+                // use fixed indices
+                fixed (SDL_Vertex* verts = dc.Vertices)
+                SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture.texture, verts, 4, indices, 6);
+            } else {
+                // use command indices
+                fixed (SDL_Vertex* verts = dc.Vertices) fixed (int* cmdIndices = dc.Indices)
+                SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture.texture, verts, 4, cmdIndices, dc.Indices.Length);
+            }
         }
 
         SDL3.SDL_RenderPresent(app.Window.sdlRenderer);
@@ -343,10 +362,11 @@ public unsafe sealed class Graphics {
         Both,
     }
 
-    private struct DrawCommand {
+    private struct DrawCommandInternal {
         internal required Texture Texture { get; init; }
         internal required Texture.BlendModeOpts BlendMode { get; init; }
         internal required Texture.ScaleModeOpts ScaleMode { get; init; }
         internal required SDL_Vertex[] Vertices { get; init; }
+        internal required int[]? Indices { get; init; }
     }
 }
