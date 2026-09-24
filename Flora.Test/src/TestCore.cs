@@ -93,12 +93,12 @@ public class TestCore : Core {
         Gfx.End();
     }
 
-    public override void OnPointerDown(PointerType type, int button, float x, float y) {
+    public override void PointerDown(PointerType type, int button, float x, float y) {
         (float wx, float wy) = Gfx.ScreenToWorld(x, y);
         Console.WriteLine($"[{type}] down {wx}, {wy}");
     }
 
-    public override void OnKeyDown(Keycode key, Scancode scan) {
+    public override void KeyDown(Keycode key, Scancode scan) {
         if (key == Keycode.Escape) {
             App.Exit();
         } else if (key == Keycode.F11) {
@@ -159,7 +159,7 @@ public class TestCore : Core {
         }
     }
 
-    public override void OnKeyUp(Keycode key, Scancode scan) {
+    public override void KeyUp(Keycode key, Scancode scan) {
         if (key == Keycode.Up) {
             dy += 1;
         } else if (key == Keycode.Down) {

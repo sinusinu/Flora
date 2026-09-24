@@ -137,53 +137,53 @@ public sealed unsafe class Application {
                 break;
             case SDL_EventType.SDL_EVENT_KEY_DOWN:
                 if (ev.key.repeat) break;
-                Core.OnKeyDown((Keycode)ev.key.key, (Scancode)ev.key.scancode);
+                Core.KeyDown((Keycode)ev.key.key, (Scancode)ev.key.scancode);
                 break;
             case SDL_EventType.SDL_EVENT_KEY_UP:
                 if (ev.key.repeat) break;
-                Core.OnKeyUp((Keycode)ev.key.key, (Scancode)ev.key.scancode);
+                Core.KeyUp((Keycode)ev.key.key, (Scancode)ev.key.scancode);
                 break;
             case SDL_EventType.SDL_EVENT_TEXT_INPUT:
-                Core.OnTextInput(Marshal.PtrToStringUTF8((nint)ev.text.text) ?? "");
+                Core.TextInput(Marshal.PtrToStringUTF8((nint)ev.text.text) ?? "");
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_DOWN:
-                if (ev.button.which == 0) Core.OnPointerDown(PointerType.Mouse, ev.button.button, ev.button.x, ev.button.y);
+                if (ev.button.which == 0) Core.PointerDown(PointerType.Mouse, ev.button.button, ev.button.x, ev.button.y);
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_UP:
-                if (ev.button.which == 0) Core.OnPointerUp(PointerType.Mouse, ev.button.button, ev.button.x, ev.button.y);
+                if (ev.button.which == 0) Core.PointerUp(PointerType.Mouse, ev.button.button, ev.button.x, ev.button.y);
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_MOTION:
-                if (ev.motion.which == 0) Core.OnPointerMove(PointerType.Mouse, ev.motion.x, ev.motion.y, ev.motion.xrel, ev.motion.yrel);
+                if (ev.motion.which == 0) Core.PointerMove(PointerType.Mouse, ev.motion.x, ev.motion.y, ev.motion.xrel, ev.motion.yrel);
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_WHEEL:
-                if (ev.wheel.which == 0) Core.OnPointerWheel(PointerType.Mouse, ev.wheel.mouse_x, ev.wheel.mouse_y, ev.wheel.x, ev.wheel.y);
+                if (ev.wheel.which == 0) Core.PointerWheel(PointerType.Mouse, ev.wheel.mouse_x, ev.wheel.mouse_y, ev.wheel.x, ev.wheel.y);
                 break;
-            // TODO: pen options are mess - maybe have separate Core.OnPen*?
+            // TODO: maybe have separate Core.Pen*?
             case SDL_EventType.SDL_EVENT_PEN_MOTION:
-                Core.OnPointerMove(PointerType.Pen, ev.pmotion.x, ev.pmotion.y, 0, 0);
+                Core.PointerMove(PointerType.Pen, ev.pmotion.x, ev.pmotion.y, 0, 0);
                 break;
             case SDL_EventType.SDL_EVENT_PEN_DOWN:
-                Core.OnPointerDown(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
+                Core.PointerDown(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
                 break;
             case SDL_EventType.SDL_EVENT_PEN_UP:
-                Core.OnPointerUp(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
+                Core.PointerUp(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_AXIS_MOTION:
-                Core.OnGamepadAxis((uint)ev.gaxis.which, (GamepadAxis)ev.gaxis.axis, ev.gaxis.value);
+                Core.GamepadAxis((uint)ev.gaxis.which, (GamepadAxis)ev.gaxis.axis, ev.gaxis.value);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_DOWN:
-                Core.OnGamepadDown((uint)ev.gbutton.which, (GamepadButton)ev.gbutton.button);
+                Core.GamepadDown((uint)ev.gbutton.which, (GamepadButton)ev.gbutton.button);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_UP:
-                Core.OnGamepadUp((uint)ev.gbutton.which, (GamepadButton)ev.gbutton.button);
+                Core.GamepadUp((uint)ev.gbutton.which, (GamepadButton)ev.gbutton.button);
                 break;
             case SDL_EventType.SDL_EVENT_JOYSTICK_ADDED:
                 nint newGamepad = (nint)SDL3.SDL_OpenGamepad(ev.jdevice.which);
                 gamepads.Add((uint)ev.jdevice.which, newGamepad);
-                Core.OnGamepadAdded((uint)ev.jdevice.which);
+                Core.GamepadAdded((uint)ev.jdevice.which);
                 break;
             case SDL_EventType.SDL_EVENT_JOYSTICK_REMOVED:
-                Core.OnGamepadRemoved((uint)ev.jdevice.which);
+                Core.GamepadRemoved((uint)ev.jdevice.which);
                 SDL_Gamepad* closedGamepad = (SDL_Gamepad*)gamepads[(uint)ev.jdevice.which];
                 SDL3.SDL_CloseGamepad(closedGamepad);
                 gamepads.Remove((uint)ev.jdevice.which);

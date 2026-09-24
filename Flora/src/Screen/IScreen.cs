@@ -8,16 +8,16 @@ interface IScreen {
     public void Render(float delta);
     public void Cleanup();
 
-    public virtual void OnKeyDown(Keycode key, Scancode scan) {}
-    public virtual void OnKeyUp(Keycode key, Scancode scan) {}
-    public virtual void OnTextInput(string text) {}
-    public virtual void OnPointerDown(PointerType type, int button, float x, float y) {}
-    public virtual void OnPointerUp(PointerType type, int button, float x, float y) {}
-    public virtual void OnPointerMove(PointerType type, float x, float y, float dx, float dy) {}
-    public virtual void OnPointerWheel(PointerType type, float x, float y, float dx, float dy) {}
-    public virtual void OnGamepadAxis(uint which, GamepadAxis axis, short value) {}
-    public virtual void OnGamepadDown(uint which, GamepadButton button) {}
-    public virtual void OnGamepadUp(uint which, GamepadButton button) {}
-    public virtual void OnGamepadAdded(uint which) {}
-    public virtual void OnGamepadRemoved(uint which) {}
+    public virtual void KeyDown(Keycode key, Scancode scan) {}
+    public virtual void KeyUp(Keycode key, Scancode scan) {}
+    public virtual void TextInput(string text) {}
+    public virtual void PointerDown(PointerType type, int button, float x, float y) {}
+    public virtual void PointerUp(PointerType type, int button, float x, float y) {}
+    public virtual void PointerMove(PointerType type, float x, float y, float dx, float dy) {}
+    public virtual void PointerWheel(PointerType type, float x, float y, float dx, float dy) {}
+    public virtual void GamepadAxis(uint which, GamepadAxis axis, short value) {}
+    public virtual void GamepadDown(uint which, GamepadButton button) {}
+    public virtual void GamepadUp(uint which, GamepadButton button) {}
+    public virtual void GamepadAdded(uint which) {}
+    public virtual void GamepadRemoved(uint which) {}
 }
