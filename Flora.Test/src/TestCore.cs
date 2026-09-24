@@ -81,7 +81,7 @@ public class TestCore : Core {
         font.Draw("(0, 0)", 0, 0);
 
         float anchorSize = 64 / intermediateSX;
-        var va = Gfx.GetVisibleArea();
+        var va = Gfx.VisibleArea;
         Gfx.Draw(texture, va.x,                     va.y,                     anchorSize, anchorSize);
         Gfx.Draw(texture, va.x + va.w - anchorSize, va.y,                     anchorSize, anchorSize);
         Gfx.Draw(texture, va.x,                     va.y + va.h - anchorSize, anchorSize, anchorSize);
@@ -106,7 +106,7 @@ public class TestCore : Core {
             }
         } else if (key == Keycode.Q) {
             Console.WriteLine($"Camera is at {Gfx.Camera.X}, {Gfx.Camera.Y}");
-            Console.WriteLine($"Visible area: {Gfx.GetVisibleArea()}");
+            Console.WriteLine($"Visible area: {Gfx.VisibleArea}");
         } else if (key == Keycode.Up) {
             dy -= 1;
         } else if (key == Keycode.Down) {
