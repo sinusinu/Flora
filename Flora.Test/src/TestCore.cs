@@ -35,6 +35,10 @@ public class TestCore : Core {
             Console.WriteLine("sound stopped");
         };
 
+        Input.ActiveInputChanged += (newInput) => {
+            Console.WriteLine($"Active Input changed: {newInput}");
+        };
+
         Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Overscan);
     }
 

@@ -5,6 +5,20 @@ namespace Flora;
 public unsafe sealed class Input {
     private Application app;
 
+    public enum ActiveInputOpts { Keyboard, Gamepad }
+    public ActiveInputOpts _activeInput = ActiveInputOpts.Keyboard;
+    public ActiveInputOpts ActiveInput {
+        get => _activeInput;
+        internal set {
+            if (_activeInput != value) {
+                _activeInput = value;
+                ActiveInputChanged?.Invoke(value);
+            }
+        }
+    }
+
+    public Action<ActiveInputOpts>? ActiveInputChanged = null;
+
     internal Input(Application application) {
         app = application;
     }

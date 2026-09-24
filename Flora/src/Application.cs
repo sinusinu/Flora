@@ -137,13 +137,16 @@ public sealed unsafe class Application {
                 break;
             case SDL_EventType.SDL_EVENT_KEY_DOWN:
                 if (ev.key.repeat) break;
+                Input.ActiveInput = Input.ActiveInputOpts.Keyboard;
                 Core.KeyDown((Keycode)ev.key.key, (Scancode)ev.key.scancode);
                 break;
             case SDL_EventType.SDL_EVENT_KEY_UP:
                 if (ev.key.repeat) break;
+                Input.ActiveInput = Input.ActiveInputOpts.Keyboard;
                 Core.KeyUp((Keycode)ev.key.key, (Scancode)ev.key.scancode);
                 break;
             case SDL_EventType.SDL_EVENT_TEXT_INPUT:
+                Input.ActiveInput = Input.ActiveInputOpts.Keyboard;
                 Core.TextInput(Marshal.PtrToStringUTF8((nint)ev.text.text) ?? "");
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_DOWN:
@@ -169,12 +172,15 @@ public sealed unsafe class Application {
                 Core.PointerUp(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_AXIS_MOTION:
+                Input.ActiveInput = Input.ActiveInputOpts.Gamepad;
                 Core.GamepadAxis((uint)ev.gaxis.which, (GamepadAxis)ev.gaxis.axis, ev.gaxis.value);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+                Input.ActiveInput = Input.ActiveInputOpts.Gamepad;
                 Core.GamepadDown((uint)ev.gbutton.which, (GamepadButton)ev.gbutton.button);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_BUTTON_UP:
+                Input.ActiveInput = Input.ActiveInputOpts.Gamepad;
                 Core.GamepadUp((uint)ev.gbutton.which, (GamepadButton)ev.gbutton.button);
                 break;
             case SDL_EventType.SDL_EVENT_JOYSTICK_ADDED:
