@@ -1,12 +1,13 @@
 namespace Flora;
 
-interface IScreen {
-    public void Prepare();
-    public void Pause();
-    public void Resume();
-    public void Resize(int width, int height);
-    public void Render(float delta);
-    public void Cleanup();
+public class Screen {
+    // same as core
+    public virtual void Prepare() {}
+    public virtual void Pause() {}
+    public virtual void Resume() {}
+    public virtual void Resize(int width, int height) {}
+    public virtual void Render(float delta) {}
+    public virtual void Cleanup() {}
 
     public virtual void KeyDown(Keycode key, Scancode scan) {}
     public virtual void KeyUp(Keycode key, Scancode scan) {}
