@@ -6,6 +6,8 @@ public class TestCore : Core {
     Texture texture = null!;
     Font font = null!;
 
+    Sound sound = null!;
+
     float dingus = 0f;
     bool spin = false;
 
@@ -26,13 +28,20 @@ public class TestCore : Core {
         texture = Gfx.CreateTexture("test.png");
         font = Gfx.CreateFont("test.otf", 32);
 
+        sound = Audio.CreateSound("test.wav");
+        sound.Stopped += () => {
+            Console.WriteLine("sound stopped");
+        };
+
         Gfx.SetViewport(1280, 720, Graphics.ViewportOpts.Overscan);
     }
 
     public override void Render(float delta) {
         deltaSamples[deltaSampleIndex] = delta;
         deltaSampleIndex++; if (deltaSampleIndex == deltaSampleSize) deltaSampleIndex = 0;
-        //Console.WriteLine($"FPS: {float.Round(1f / deltaSamples.Average(), 1):00.0}");
+        // Console.WriteLine($"FPS: {float.Round(1f / deltaSamples.Average(), 1):00.0}");
+
+        if (sound.Playing) Console.WriteLine($"{sound.Position} / {sound.Length}");
 
         dingus += delta * 4f;
 
@@ -128,6 +137,25 @@ public class TestCore : Core {
             Gfx.Camera.Rotation = 0;
             targetSX = 1;
             targetSY = 1;
+        } else if (key == Keycode.P) {
+            sound.Volume = 1f;
+            sound.Play();
+        } else if (key == Keycode.O) {
+            sound.Volume = 0.25f;
+            sound.Play();
+        } else if (key == Keycode.L) {
+            if (sound.Paused) sound.Resume();
+            else sound.Pause();
+        } else if (key == Keycode.K) {
+            sound.Stop();
+        } else if (key == Keycode.LeftBracket) {
+            sound.Volume = 0.5f;
+        } else if (key == Keycode.RightBracket) {
+            sound.Volume = 1f;
+        } else if (key == Keycode.Semicolon) {
+            Audio.MasterVolume = 0.5f;
+        } else if (key == Keycode.Apostrophe) {
+            Audio.MasterVolume = 1f;
         }
     }
 
@@ -148,6 +176,7 @@ public class TestCore : Core {
     }
 
     public override void Cleanup() {
+        sound.Dispose();
         font.Dispose();
         texture.Dispose();
     }

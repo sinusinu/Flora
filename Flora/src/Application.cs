@@ -9,6 +9,7 @@ public sealed unsafe class Application {
     internal Config Config { get; init; }
     internal Graphics Gfx { get; init; }
     internal Input Input { get; init; }
+    internal Audio Audio { get; init; }
     public Window Window { get; private set; } = null!;
 
     private bool run = false;
@@ -34,14 +35,17 @@ public sealed unsafe class Application {
 
         Gfx = new Graphics(this);
         Input = new Input(this);
+        Audio = new Audio(this);
 
         core.App = this;
         core.Gfx = Gfx;
         core.Input = Input;
+        core.Audio = Audio;
     }
 
     private void Start() {
         SDL3.SDL_SetHint("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", "1");
+        SDL3.SDL_SetHint("SDL_HINT_AUDIO_DEVICE_SAMPLE_FRAMES", Config.AudioBufferSize.ToString());
 
         var sdlFlags = SDL_InitFlags.SDL_INIT_VIDEO | SDL_InitFlags.SDL_INIT_AUDIO | SDL_InitFlags.SDL_INIT_GAMEPAD;
         if (!SDL3.SDL_Init(sdlFlags)) {
@@ -72,13 +76,15 @@ public sealed unsafe class Application {
             throw new Exception($"Failed to create renderer: {error}");
         }
 
+        Audio.Prepare();
+
         Window = new Window(this, sdlWindow, sdlRenderer);
         
         // set initial configs
         if (Config.WindowMode == Window.WindowModeOpts.Fullscreen) Window.SetFullscreen();
         Gfx.VSync = Config.VSync;
         Gfx.Camera.UpdateActualViewportSizes();
-        
+
         Core.Prepare();
 
         run = true;
@@ -100,6 +106,8 @@ public sealed unsafe class Application {
         }
 
         Core.Cleanup();
+
+        Audio.Cleanup();
 
         // close all open gamepads
         foreach (var kv in gamepads) {

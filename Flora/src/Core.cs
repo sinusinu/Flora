@@ -4,6 +4,7 @@ public class Core {
     public Application App { get; internal set; } = null!;
     public Graphics Gfx { get; internal set; } = null!;
     public Input Input { get; internal set; } = null!;
+    public Audio Audio { get; internal set; } = null!;
 
     // basics
     public virtual void Prepare() {}

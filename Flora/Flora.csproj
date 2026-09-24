@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="ppy.SDL3-CS" Version="2026.722.0" />
+    <PackageReference Include="ppy.SDL3_mixer-CS" Version="2026.722.0" />
     <PackageReference Include="ppy.SDL3_ttf-CS" Version="2026.722.0" />
     <PackageReference Include="StbiSharp" Version="1.2.2" />
   </ItemGroup>
