@@ -221,6 +221,8 @@ public unsafe class Font : IDisposable {
         float currentX = 0;
         float currentY = 0;
 
+        List<Graphics.DrawCommandInternal> glyphDrawCommands = new();
+
         foreach (var glyph in utf32) {
             if (glyph == '\n') {
                 currentX = 0;
@@ -238,9 +240,51 @@ public unsafe class Font : IDisposable {
                 h = glyphInfo.paddedRect.h * Scale
             };
 
-            app.Gfx.DrawGlyph(this, glyphAtlases[glyphInfo.page], x + currentX, y + currentY, glyphInfo.paddedRect.w * Scale, glyphInfo.paddedRect.h * Scale, 0, 0, 0, (int)glyphInfo.paddedRect.x, (int)glyphInfo.paddedRect.y, (int)glyphInfo.paddedRect.w, (int)glyphInfo.paddedRect.h);
+            var gdc = app.Gfx.GetTransformedGlyphDrawCommand(this, glyphAtlases[glyphInfo.page], x + currentX, y + currentY, glyphInfo.paddedRect.w * Scale, glyphInfo.paddedRect.h * Scale, 0, 0, 0, (int)glyphInfo.paddedRect.x, (int)glyphInfo.paddedRect.y, (int)glyphInfo.paddedRect.w, (int)glyphInfo.paddedRect.h);
+            glyphDrawCommands.Add(gdc);
 
             currentX += glyphInfo.paddedRect.w * Scale;
+        }
+
+        // TODO: do batch per texture? in an extreme case this might be as inefficient as not doing this at all
+        if (glyphDrawCommands.Count > 0) {
+            Texture lastTexture = glyphDrawCommands[0].Texture;
+            List<SDL_Vertex> vertices = new();
+            List<int> indices = new();
+            List<Graphics.DrawCommandInternal> batchedCommands = new();
+            int indicesCount = 0;
+
+            foreach (var gdc in glyphDrawCommands) {
+                if (gdc.Texture != lastTexture) {
+                    // flush
+                    batchedCommands.Add(new Graphics.DrawCommandInternal() {
+                        Texture = lastTexture,
+                        BlendMode = Texture.BlendModeOpts.Blend,
+                        ScaleMode = lastTexture.ScaleMode,
+                        Vertices = vertices.ToArray(),
+                        Indices = indices.ToArray()
+                    });
+                    vertices.Clear();
+                    indices.Clear();
+                    lastTexture = gdc.Texture;
+                    indicesCount = 0;
+                }
+                // stack verts if same texture
+                vertices.AddRange(gdc.Vertices);
+                indices.AddRange([ indicesCount, indicesCount + 1, indicesCount + 2, indicesCount + 1, indicesCount + 2, indicesCount + 3 ]);
+                indicesCount += 4;
+            }
+            // flush
+            batchedCommands.Add(new Graphics.DrawCommandInternal() {
+                Texture = lastTexture,
+                BlendMode = Texture.BlendModeOpts.Blend,
+                ScaleMode = lastTexture.ScaleMode,
+                Vertices = vertices.ToArray(),
+                Indices = indices.ToArray()
+            });
+            foreach (var bdc in batchedCommands) {
+                app.Gfx.Draw(bdc);
+            }
         }
         
         app.Gfx.RenderColor = originalRenderColor;

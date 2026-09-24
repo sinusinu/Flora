@@ -233,9 +233,11 @@ public unsafe sealed class Graphics {
         });
     }
 
-    internal void DrawGlyph(Font font, Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
-        if (!isDrawing) throw new InvalidOperationException("Draw calls must be placed inbetween Begin and End calls");
+    internal void Draw(DrawCommandInternal command) {
+        drawCommandBuffer.Add(command);
+    }
 
+    internal DrawCommandInternal GetTransformedGlyphDrawCommand(Font font, Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
         Vector2[] src = {
             new Vector2(x,     y),
             new Vector2(x + w, y),
@@ -324,7 +326,7 @@ public unsafe sealed class Graphics {
             Indices = null,
         };
 
-        drawCommandBuffer.Add(dc);
+        return dc;
     }
 
     public void End() {
@@ -348,7 +350,7 @@ public unsafe sealed class Graphics {
             } else {
                 // use command indices
                 fixed (SDL_Vertex* verts = dc.Vertices) fixed (int* cmdIndices = dc.Indices)
-                SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture.texture, verts, 4, cmdIndices, dc.Indices.Length);
+                SDL3.SDL_RenderGeometry(app.Window.sdlRenderer, dc.Texture.texture, verts, dc.Vertices.Length, cmdIndices, dc.Indices.Length);
             }
         }
 
@@ -363,7 +365,7 @@ public unsafe sealed class Graphics {
         Both,
     }
 
-    private struct DrawCommandInternal {
+    internal struct DrawCommandInternal {
         internal required Texture Texture { get; init; }
         internal required Texture.BlendModeOpts BlendMode { get; init; }
         internal required Texture.ScaleModeOpts ScaleMode { get; init; }
