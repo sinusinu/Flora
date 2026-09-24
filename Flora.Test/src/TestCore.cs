@@ -93,9 +93,9 @@ public class TestCore : Core {
         Gfx.End();
     }
 
-    public override void OnPointerDown(PointerType type, int index, int button, float x, float y) {
+    public override void OnPointerDown(PointerType type, int button, float x, float y) {
         (float wx, float wy) = Gfx.ScreenToWorld(x, y);
-        Console.WriteLine($"{wx}, {wy}");
+        Console.WriteLine($"[{type}] down {wx}, {wy}");
     }
 
     public override void OnKeyDown(Keycode key, Scancode scan) {

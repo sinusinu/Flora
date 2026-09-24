@@ -147,16 +147,26 @@ public sealed unsafe class Application {
                 Core.OnTextInput(Marshal.PtrToStringUTF8((nint)ev.text.text) ?? "");
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_DOWN:
-                Core.OnPointerDown(PointerType.Mouse, 0, ev.button.button, ev.button.x, ev.button.y);
+                if (ev.button.which == 0) Core.OnPointerDown(PointerType.Mouse, ev.button.button, ev.button.x, ev.button.y);
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_UP:
-                Core.OnPointerUp(PointerType.Mouse, 0, ev.button.button, ev.button.x, ev.button.y);
+                if (ev.button.which == 0) Core.OnPointerUp(PointerType.Mouse, ev.button.button, ev.button.x, ev.button.y);
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_MOTION:
-                Core.OnPointerMove(PointerType.Mouse, 0, ev.motion.x, ev.motion.y, ev.motion.xrel, ev.motion.yrel);
+                if (ev.motion.which == 0) Core.OnPointerMove(PointerType.Mouse, ev.motion.x, ev.motion.y, ev.motion.xrel, ev.motion.yrel);
                 break;
             case SDL_EventType.SDL_EVENT_MOUSE_WHEEL:
-                Core.OnPointerWheel(PointerType.Mouse, 0, ev.wheel.mouse_x, ev.wheel.mouse_y, ev.wheel.x, ev.wheel.y);
+                if (ev.wheel.which == 0) Core.OnPointerWheel(PointerType.Mouse, ev.wheel.mouse_x, ev.wheel.mouse_y, ev.wheel.x, ev.wheel.y);
+                break;
+            // TODO: pen options are mess - maybe have separate Core.OnPen*?
+            case SDL_EventType.SDL_EVENT_PEN_MOTION:
+                Core.OnPointerMove(PointerType.Pen, ev.pmotion.x, ev.pmotion.y, 0, 0);
+                break;
+            case SDL_EventType.SDL_EVENT_PEN_DOWN:
+                Core.OnPointerDown(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
+                break;
+            case SDL_EventType.SDL_EVENT_PEN_UP:
+                Core.OnPointerUp(PointerType.Pen, ev.ptouch.eraser ? 1 : 0, ev.ptouch.x, ev.ptouch.y);
                 break;
             case SDL_EventType.SDL_EVENT_GAMEPAD_AXIS_MOTION:
                 Core.OnGamepadAxis((uint)ev.gaxis.which, (GamepadAxis)ev.gaxis.axis, ev.gaxis.value);
