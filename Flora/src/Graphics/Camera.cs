@@ -21,7 +21,7 @@ public class Camera {
     }
 
     public void PopState() {
-        if (stateStack.Count == 0) throw new InvalidOperationException("Camera state stack underflow");
+        if (stateStack.Count == 0) return;
         var lastState = stateStack.Pop();
         X = lastState.x;
         Y = lastState.y;
