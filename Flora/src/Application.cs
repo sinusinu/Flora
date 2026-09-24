@@ -1,9 +1,11 @@
 using System.Runtime.InteropServices;
-using System.Text;
 using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// Flora application running a <c>Core</c>.
+/// </summary>
 public sealed unsafe class Application {
     private Core Core { get; init; }
     internal Config Config { get; init; }
@@ -224,7 +226,12 @@ public sealed unsafe class Application {
         run = false;
         skipUpdate = true;
     }
-    
+
+    /// <summary>
+    /// Start a new Flora application.
+    /// </summary>
+    /// <param name="core">Your class that inherits <c>Core</c>.</param>
+    /// <param name="config">Optional parameters to set on start.</param>
     public static void Run<T>(T core, Config? config = null) where T : Core {
         Application application = new Application(core, config);
         application.Start();

@@ -3,6 +3,9 @@ using StbiSharp;
 
 namespace Flora;
 
+/// <summary>
+/// Image to draw.
+/// </summary>
 public unsafe class Texture : IDisposable {
     internal SDL_Texture* texture;
     

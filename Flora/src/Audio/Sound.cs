@@ -4,6 +4,9 @@ using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// <c>Sound</c> decodes all of file and store it on memory. Slower and memory-heavy loading, faster playing. Good for short sound effects.<br/>
+/// </summary>
 public unsafe class Sound : IDisposable {
     internal MIX_Audio* sdlAudio;
     internal MIX_Track* sdlTrack;
@@ -15,6 +18,7 @@ public unsafe class Sound : IDisposable {
     public bool Playing => _playing;
     private bool _paused = false;
     public bool Paused => _paused;
+    /// <summary>Called when the audio playback stops.</summary>
     public Action? Stopped = null;
 
     internal Sound(Audio audio, string path, bool predecode = true) {
@@ -40,39 +44,63 @@ public unsafe class Sound : IDisposable {
         SDL3_mixer.MIX_SetTrackStoppedCallback(sdlTrack, &TrackStoppedCallback, userdata);
     }
 
+    /// <summary>
+    /// Start the audio playback.
+    /// </summary>
     public void Play() {
         _playing = true;
         _paused = false;
         SDL3_mixer.MIX_PlayTrack(sdlTrack, options);
     }
 
+    /// <summary>
+    /// Pause the audio playback. Does nothing if not playing or is already paused.
+    /// </summary>
     public void Pause() {
         if (!_playing || _paused) return;
         SDL3_mixer.MIX_PauseTrack(sdlTrack);
         _paused = true;
     }
 
+    /// <summary>
+    /// Resume the paused audio playback. Does nothing if not playing or is not paused.
+    /// </summary>
     public void Resume() {
         if (!_playing || !_paused) return;
         SDL3_mixer.MIX_ResumeTrack(sdlTrack);
         _paused = false;
     }
 
+    /// <summary>
+    /// Stop the audio playback.
+    /// </summary>
     public void Stop() {
         SDL3_mixer.MIX_StopTrack(sdlTrack, 0);
     }
 
+    /// <summary>
+    /// Total length of the audio in milliseconds.
+    /// </summary>
     public long Length => SDL3_mixer.MIX_TrackFramesToMS(sdlTrack, SDL3_mixer.MIX_GetAudioDuration(sdlAudio));
 
+    /// <summary>
+    /// Current playback position of the audio in milliseconds.
+    /// </summary>
     public long Position {
         get => SDL3_mixer.MIX_TrackFramesToMS(sdlTrack, SDL3_mixer.MIX_GetTrackPlaybackPosition(sdlTrack));
         set => SDL3_mixer.MIX_SetTrackPlaybackPosition(sdlTrack, SDL3_mixer.MIX_TrackMSToFrames(sdlTrack, value));
     }
 
+    /// <summary>
+    /// Volume of this audio, ranged from 0 to 1.
+    /// </summary>
     public float Volume {
         set => SDL3_mixer.MIX_SetTrackGain(sdlTrack, Math.Clamp(value, 0f, 1f));
     }
 
+    /// <summary>
+    /// Playback speed of this audio, ranged from 0.01 to 100, default is 1.
+    /// </summary>
     public float Speed {
         get => SDL3_mixer.MIX_GetTrackFrequencyRatio(sdlTrack);
         set => SDL3_mixer.MIX_SetTrackFrequencyRatio(sdlTrack, Math.Clamp(value, 0.01f, 100f));

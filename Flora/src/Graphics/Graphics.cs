@@ -24,6 +24,9 @@ public unsafe sealed class Graphics {
 
     public enum VSyncOpts { Disabled, Enabled, Adaptive }
     private VSyncOpts _vsync;
+    /// <summary>
+    /// Vertical sync.
+    /// </summary>
     public VSyncOpts VSync {
         get => _vsync;
         set {
@@ -36,22 +39,37 @@ public unsafe sealed class Graphics {
         }
     }
 
+    /// <summary>
+    /// Create a <c>Texture</c> from an image file.<br/>
+    /// Supported types are: BMP, GIF (not animated), JPG, PNG.
+    /// </summary>
     public Texture CreateTexture(string path, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
         return new Texture(app, path, scaleMode);
     }
 
+    /// <summary>
+    /// Create a <c>Font</c> from a font file.<br/>
+    /// Supported types are: TTF, OTF.
+    /// </summary>
     public Font CreateFont(string path, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
         return new Font(app, path, size, scaleMode);
     }
 
     public enum ViewportOpts {
+        /// <summary>View is stretched to fill the window regardless of aspect ratio.</summary>
         Stretch = SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_STRETCH,
+        /// <summary>View is fit to the largest dimension while preserving aspect ratio. Out of viewport area will be filled with <c>ClearColor</c>.</summary>
         Letterbox = SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_LETTERBOX,
+        /// <summary>View is fit to the smallest dimension, and the other dimension gets extended.</summary>
         Overscan = SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_OVERSCAN,
+        /// <summary>View is scaled to a largest non-extruding integer scale. Out of viewport area will be filled with <c>ClearColor</c>.</summary>
         IntegerScale = SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_INTEGER_SCALE,
     }
 
-    /// <summary>Camera rotation does not apply!</summary>
+    /// <summary>
+    /// Total visible area with current camera and viewport settings.<br/>
+    /// Note: camera rotation does not apply!
+    /// </summary>
     public Rect VisibleArea {
         get {
             if (Camera.ScaleX == 0 || Camera.ScaleY == 0) return new Rect(0, 0, 0, 0);
@@ -89,7 +107,10 @@ public unsafe sealed class Graphics {
         }
     }
 
-    /// <summary>Camera rotation does not apply!</summary>
+    /// <summary>
+    /// Translates a screen position (e.g. from mouse input) to a world position.<br/>
+    /// Note: camera rotation does not apply!
+    /// </summary>
     public (float, float) ScreenToWorld(float screenX, float screenY) {
         float renderX = 0; float renderY = 0;
         SDL3.SDL_RenderCoordinatesFromWindow(app.Window.sdlRenderer, screenX, screenY, &renderX, &renderY);
@@ -98,6 +119,10 @@ public unsafe sealed class Graphics {
         return (worldX, worldY);
     }
 
+    /// <summary>
+    /// Set a new viewport.<br/>
+    /// Use viewport if you want kinda-fixed viewing area/coordinates regardless of window size/display resolution.
+    /// </summary>
     public void SetViewport(int width, int height, ViewportOpts opts) {
         if (width < 1 || height < 1) { ClearViewport(); return; }
         Camera.requestedViewportWidth = width;
@@ -106,6 +131,10 @@ public unsafe sealed class Graphics {
         Camera.UpdateActualViewportSizes();
     }
 
+    /// <summary>
+    /// Clear viewport.<br/>
+    /// Viewing area will be determined by the pixels of window size/display resolution.
+    /// </summary>
     public void ClearViewport() {
         Camera.requestedViewportWidth = 0;
         Camera.requestedViewportHeight = 0;
@@ -113,6 +142,10 @@ public unsafe sealed class Graphics {
         Camera.UpdateActualViewportSizes();
     }
 
+    /// <summary>
+    /// Prepare to draw.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
     public void Begin() {
         isDrawing = true;
 
@@ -123,12 +156,43 @@ public unsafe sealed class Graphics {
         SDL3.SDL_SetRenderDrawColorFloat(app.Window.sdlRenderer, 1f, 1f, 1f, 1f);
     }
 
+    /// <summary>
+    /// Draw a texture to a position.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
     public void Draw(Texture texture, float x, float y) => Draw(texture, x, y, texture.Width, texture.Height, 0f, 0f, 0f, 0f, 0f, texture.Width, texture.Height);
+    /// <summary>
+    /// Draw a texture to a position with a size.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
     public void Draw(Texture texture, float x, float y, float w, float h) => Draw(texture, x, y, w, h, 0f, 0f, 0f, 0f, 0f, texture.Width, texture.Height);
+    /// <summary>
+    /// Draw a texture to a position with a size and a rotation pivoted on center.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
+    /// <param name="rotation">in radians</param>
     public void Draw(Texture texture, float x, float y, float w, float h, float rotation) => Draw(texture, x, y, w, h, rotation, w / 2f, h / 2f, 0f, 0f, texture.Width, texture.Height);
+    /// <summary>
+    /// Draw a texture to a position with a size and a rotation on a pivot.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
+    /// <param name="rotation">in radians</param>
+    /// <param name="pivotX">in pixels</param>
+    /// <param name="pivotY">in pixels</param>
     public void Draw(Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY) => Draw(texture, x, y, w, h, rotation, pivotX, pivotY, 0f, 0f, texture.Width, texture.Height);
 
     // TODO: could keep the command until texture changes, change behavior of drawing same texture more than once to appending the vertices/indices on previous command so it can be 'batched'?
+    /// <summary>
+    /// Draw a rectangle area of a texture to a position with a size, a rotation on a pivot, and optional flip.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
+    /// <param name="rotation">in radians</param>
+    /// <param name="pivotX">in pixels</param>
+    /// <param name="pivotY">in pixels</param>
+    /// <param name="srcX">in pixels</param>
+    /// <param name="srcY">in pixels</param>
+    /// <param name="srcW">in pixels</param>
+    /// <param name="srcH">in pixels</param>
     public void Draw(Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
         if (!isDrawing) throw new InvalidOperationException("Draw calls must be placed inbetween Begin and End calls");
 
@@ -224,6 +288,10 @@ public unsafe sealed class Graphics {
         drawCommandBuffer.Add(dc);
     }
 
+    /// <summary>
+    /// Draw a <c>DrawCommand</c>.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
     public void Draw(DrawCommand command) {
         drawCommandBuffer.Add(new DrawCommandInternal() {
             Texture = command.Texture,
@@ -330,6 +398,10 @@ public unsafe sealed class Graphics {
         return dc;
     }
 
+    /// <summary>
+    /// Present the drawings.<br/>
+    /// All <c>Draw</c> calls must be placed inbetween <c>Begin</c> and <c>End</c> calls.
+    /// </summary>
     public void End() {
         isDrawing = false;
 

@@ -3,6 +3,10 @@ using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// For use with <c>Graphics.Draw(DrawCommand)</c>.<br/>
+/// Usually <c>Graphics.Draw(Texture, ...)</c> should suffice.
+/// </summary>
 public class DrawCommand {
     public required Texture Texture { get; init; }
     public required Vertex[] Vertices { get; init; }

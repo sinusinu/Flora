@@ -1,5 +1,10 @@
 namespace Flora;
 
+/// <summary>
+/// Default configurations to use while initializing Flora.<br/>
+/// After initializing, changing values in <c>Config</c> object will do nothing.<br/>
+/// Use appropriate functions to change things after the initialization.
+/// </summary>
 public class Config {
     public string                WindowTitle { get; init; } = "A Flora Application";
     public Window.WindowModeOpts WindowMode { get; init; } = Window.WindowModeOpts.Windowed;

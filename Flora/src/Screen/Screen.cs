@@ -1,5 +1,8 @@
 namespace Flora;
 
+/// <summary>
+/// A screen.
+/// </summary>
 public class Screen {
     // same as core
     public virtual void Prepare() {}

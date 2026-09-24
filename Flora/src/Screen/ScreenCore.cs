@@ -1,5 +1,8 @@
 namespace Flora;
 
+/// <summary>
+/// Core with screens.
+/// </summary>
 public class ScreenCore : Core {
     private Screen? pendingScreen = null;
     private Screen? activeScreen = null;

@@ -2,6 +2,9 @@ using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// Provide things related to the window.
+/// </summary>
 public sealed unsafe class Window {
     public enum WindowModeOpts { Windowed, Fullscreen }
 
@@ -30,6 +33,11 @@ public sealed unsafe class Window {
         sdlRenderer = renderer;
     }
     
+    /// <summary>
+    /// Change window to windowed mode.
+    /// </summary>
+    /// <param name="width">Must be a positive integer</param>
+    /// <param name="height">Must be a positive integer</param>
     public void SetWindowed(int width, int height) {
         if (width <= 0 || height <= 0) throw new InvalidOperationException("Width and Height must be >0");
 
@@ -40,6 +48,10 @@ public sealed unsafe class Window {
         SDL3.SDL_SyncWindow(sdlWindow);
     }
     
+    /// <summary>
+    /// Change window to borderless fullscreen mode.<br/>
+    /// Note: Flora does not support exclusive fullscreen mode.
+    /// </summary>
     public void SetFullscreen() {
         WindowMode = WindowModeOpts.Fullscreen;
         

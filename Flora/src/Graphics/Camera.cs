@@ -2,6 +2,9 @@ using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// Camera that can move, rotate, scale.
+/// </summary>
 public class Camera {
     private Application app;
     private Stack<CameraState> stateStack = new();
@@ -16,10 +19,16 @@ public class Camera {
     public float ScaleX { get; set; } = 1f;
     public float ScaleY { get; set; } = 1f;
 
+    /// <summary>
+    /// Push current state of camera into stack.
+    /// </summary>
     public void PushState() {
         stateStack.Push(new(X, Y, Rotation, ScaleX, ScaleY));
     }
 
+    /// <summary>
+    /// Pop a camera state from stack and apply.
+    /// </summary>
     public void PopState() {
         if (stateStack.Count == 0) return;
         var lastState = stateStack.Pop();
@@ -30,6 +39,9 @@ public class Camera {
         ScaleY = lastState.scaleY;
     }
 
+    /// <summary>
+    /// Reset current camera state.
+    /// </summary>
     public void Reset() {
         X = 0f;
         Y = 0f;

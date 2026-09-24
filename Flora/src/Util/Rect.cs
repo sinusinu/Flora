@@ -2,6 +2,9 @@ using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// It's a box!
+/// </summary>
 public class Rect {
     public float x;
     public float y;

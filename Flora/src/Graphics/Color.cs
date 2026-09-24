@@ -1,5 +1,8 @@
 namespace Flora;
 
+/// <summary>
+/// It's a color!
+/// </summary>
 public class Color : IEquatable<Color> {
     public float r;
     public float g;

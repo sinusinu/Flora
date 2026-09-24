@@ -4,6 +4,9 @@ using SDL;
 
 namespace Flora;
 
+/// <summary>
+/// Font to draw.
+/// </summary>
 public unsafe class Font : IDisposable {
     private const int TextureSize = 2048;
 
@@ -205,6 +208,10 @@ public unsafe class Font : IDisposable {
         return (maxWidth, stackedHeight);
     }
 
+    /// <summary>
+    /// Draw a text with this font on a position.<br/>
+    /// All <c>Font.Draw</c> calls must be placed inbetween <c>Graphics.Begin</c> and <c>Graphics.End</c> calls.
+    /// </summary>
     public void Draw(string? text, float x, float y) {
         if (!app.Gfx.isDrawing) throw new InvalidOperationException("Draw calls must be placed inbetween Begin and End calls");
         

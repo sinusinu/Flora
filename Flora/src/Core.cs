@@ -1,5 +1,8 @@
 ﻿namespace Flora;
 
+/// <summary>
+/// An empty class that provides overridable functions and access to Flora functionalities.<br/>
+/// </summary>
 public class Core {
     public Application App { get; internal set; } = null!;
     public Graphics Gfx { get; internal set; } = null!;
