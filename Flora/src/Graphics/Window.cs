@@ -22,7 +22,7 @@ public sealed unsafe class Window {
     public int WindowHeight { get { int height = 0; SDL3.SDL_GetWindowSize(sdlWindow, null, &height); return height; } }
     public (int, int) WindowSize { get { int width = 0; int height = 0; SDL3.SDL_GetWindowSize(sdlWindow, &width, &height); return (width, height); } }
 
-    public WindowModeOpts WindowMode { get; set;}
+    public WindowModeOpts WindowMode { get; internal set; }
 
     internal Window(Application app, SDL_Window* window, SDL_Renderer* renderer) {
         this.app = app;
