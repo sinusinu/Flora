@@ -3,6 +3,8 @@ using Flora;
 namespace FloraTest;
 
 public class TestCore : Core {
+    private const float DegToRad = 0.0174533f;
+
     Texture texture = null!;
     Font font = null!;
 
@@ -49,7 +51,7 @@ public class TestCore : Core {
 
         Gfx.Camera.X += 720f * delta * dx / targetSX;
         Gfx.Camera.Y += 720f * delta * dy / targetSY;
-        Gfx.Camera.Rotation += 180f * delta * dr;
+        Gfx.Camera.Rotation += 180f * delta * dr * DegToRad;
 
         if (MathF.Abs(targetSX - intermediateSX) < 0.005f) intermediateSX = targetSX;
         else intermediateSX = targetSX * 0.2f + intermediateSX * 0.8f;
@@ -60,15 +62,16 @@ public class TestCore : Core {
 
         Gfx.Camera.PushState();
 
-        Gfx.Camera.Rotation = MathF.Sin(dingus / 2f) * 40;
+        Gfx.Camera.Rotation = MathF.Sin(dingus / 2f) * 40 * DegToRad;
         Gfx.Camera.X = MathF.Sin(dingus) * 200;
+        Gfx.Camera.Y = 0;
         Gfx.Camera.ScaleX *= ((MathF.Sin(dingus) + 1f) * 0.125f) + 1f;
         Gfx.Camera.ScaleY *= ((MathF.Cos(dingus) + 1f) * 0.125f) + 1f;
 
         for (int y = -11; y < 11; y++) {
             for (int x = -12; x < 12; x++) {
                 Gfx.RenderColor = new((x + 12) / 24f, (y + 11) / 22f, 1f, 1f);
-                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, (spin ? dingus : 0) * (40 + ((x + y + 1) * 4)), 64, 64);
+                Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, (spin ? dingus : 0) * (40 + ((x + y + 1) * 4)) * DegToRad, 64, 64);
             }
         }
         

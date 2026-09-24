@@ -5,8 +5,6 @@ using SDL;
 namespace Flora;
 
 public unsafe sealed class Graphics {
-    private const float RadToDeg = 0.0174533f;
-
     private Application app;
 
     internal bool isDrawing = false;
@@ -148,16 +146,16 @@ public unsafe sealed class Graphics {
 
         // local transform
         Matrix3x2 localTransform =
-            Matrix3x2.CreateTranslation(-worldPivotX, -worldPivotY) *                                        // move pivot to origin
-            Matrix3x2.CreateRotation(rotation * RadToDeg) *                                                  // apply local rotation
-            Matrix3x2.CreateTranslation(worldPivotX, worldPivotY);                                           // revert
+            Matrix3x2.CreateTranslation(-worldPivotX, -worldPivotY) *                                       // move pivot to origin
+            Matrix3x2.CreateRotation(rotation) *                                                            // apply local rotation
+            Matrix3x2.CreateTranslation(worldPivotX, worldPivotY);                                          // revert
 
         // world transform
         Matrix3x2 worldTransform =
-            Matrix3x2.CreateTranslation(-Camera.X, -Camera.Y) *                                              // apply camera position
-            Matrix3x2.CreateRotation(-Camera.Rotation * RadToDeg) *                                          // apply world rotation
-            Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                            // apply camera scale
-            Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f);  // center viewport
+            Matrix3x2.CreateTranslation(-Camera.X, -Camera.Y) *                                             // apply camera position
+            Matrix3x2.CreateRotation(-Camera.Rotation) *                                                    // apply world rotation
+            Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                           // apply camera scale
+            Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f); // center viewport
 
         for (int i = 0; i < 4; i++) {
             dst[i] = Vector2.Transform(src[i], localTransform * worldTransform);
@@ -254,16 +252,16 @@ public unsafe sealed class Graphics {
 
         // local transform
         Matrix3x2 localTransform =
-            Matrix3x2.CreateTranslation(-worldPivotX, -worldPivotY) *                                        // move pivot to origin
-            Matrix3x2.CreateRotation(rotation * RadToDeg) *                                                  // apply local rotation
-            Matrix3x2.CreateTranslation(worldPivotX, worldPivotY);                                           // revert
+            Matrix3x2.CreateTranslation(-worldPivotX, -worldPivotY) *                                       // move pivot to origin
+            Matrix3x2.CreateRotation(rotation) *                                                            // apply local rotation
+            Matrix3x2.CreateTranslation(worldPivotX, worldPivotY);                                          // revert
 
         // world transform
         Matrix3x2 worldTransform =
-            Matrix3x2.CreateTranslation(-Camera.X, -Camera.Y) *                                              // apply camera position
-            Matrix3x2.CreateRotation(-Camera.Rotation * RadToDeg) *                                          // apply world rotation
-            Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                            // apply camera scale
-            Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f);  // center viewport
+            Matrix3x2.CreateTranslation(-Camera.X, -Camera.Y) *                                             // apply camera position
+            Matrix3x2.CreateRotation(-Camera.Rotation) *                                                    // apply world rotation
+            Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                           // apply camera scale
+            Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f); // center viewport
 
         for (int i = 0; i < 4; i++) {
             dst[i] = Vector2.Transform(src[i], localTransform * worldTransform);
