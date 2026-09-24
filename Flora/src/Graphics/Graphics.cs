@@ -127,7 +127,8 @@ public unsafe sealed class Graphics {
     public void Draw(Texture texture, float x, float y, float w, float h) => Draw(texture, x, y, w, h, 0f, 0f, 0f, 0f, 0f, texture.Width, texture.Height);
     public void Draw(Texture texture, float x, float y, float w, float h, float rotation) => Draw(texture, x, y, w, h, rotation, w / 2f, h / 2f, 0f, 0f, texture.Width, texture.Height);
     public void Draw(Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY) => Draw(texture, x, y, w, h, rotation, pivotX, pivotY, 0f, 0f, texture.Width, texture.Height);
-    
+
+    // TODO: could keep the command until texture changes, change behavior of drawing same texture more than once to appending the vertices/indices on previous command so it can be 'batched'?
     public void Draw(Texture texture, float x, float y, float w, float h, float rotation, float pivotX, float pivotY, float srcX, float srcY, float srcW, float srcH, Flip flip = Flip.None) {
         if (!isDrawing) throw new InvalidOperationException("Draw calls must be placed inbetween Begin and End calls");
 
