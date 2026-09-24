@@ -157,8 +157,9 @@ public unsafe sealed class Graphics {
             Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                           // apply camera scale
             Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f); // center viewport
 
+        var combinedTransform = localTransform * worldTransform;
         for (int i = 0; i < 4; i++) {
-            dst[i] = Vector2.Transform(src[i], localTransform * worldTransform);
+            dst[i] = Vector2.Transform(src[i], combinedTransform);
         }
 
         float uvTLrx, uvTLry, uvTRrx, uvTRry, uvBLrx, uvBLry, uvBRrx, uvBRry;
