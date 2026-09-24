@@ -6,7 +6,7 @@ public unsafe sealed class Input {
     private Application app;
 
     public enum ActiveInputOpts { None, Keyboard, Gamepad }
-    public ActiveInputOpts _activeInput = ActiveInputOpts.None;
+    private ActiveInputOpts _activeInput = ActiveInputOpts.None;
     public ActiveInputOpts ActiveInput {
         get => _activeInput;
         internal set {
