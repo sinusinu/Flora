@@ -153,7 +153,7 @@ public unsafe sealed class Graphics {
         // world transform
         Matrix3x2 worldTransform =
             Matrix3x2.CreateTranslation(-Camera.X, -Camera.Y) *                                             // apply camera position
-            Matrix3x2.CreateRotation(-Camera.Rotation) *                                                    // apply world rotation
+            Matrix3x2.CreateRotation(Camera.Rotation) *                                                     // apply world rotation
             Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                           // apply camera scale
             Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f); // center viewport
 
@@ -259,7 +259,7 @@ public unsafe sealed class Graphics {
         // world transform
         Matrix3x2 worldTransform =
             Matrix3x2.CreateTranslation(-Camera.X, -Camera.Y) *                                             // apply camera position
-            Matrix3x2.CreateRotation(-Camera.Rotation) *                                                    // apply world rotation
+            Matrix3x2.CreateRotation(Camera.Rotation) *                                                     // apply world rotation
             Matrix3x2.CreateScale(Camera.ScaleX, Camera.ScaleY) *                                           // apply camera scale
             Matrix3x2.CreateTranslation(Camera.actualViewportWidth / 2f, Camera.actualViewportHeight / 2f); // center viewport
 

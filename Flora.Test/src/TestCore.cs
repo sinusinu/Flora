@@ -119,9 +119,9 @@ public class TestCore : Core {
         } else if (key == Keycode.Right) {
             dx += 1;
         } else if (key == Keycode.Delete) {
-            dr += 1;
-        } else if (key == Keycode.PageDown) {
             dr -= 1;
+        } else if (key == Keycode.PageDown) {
+            dr += 1;
         } else if (key == Keycode.R) {
             spin = !spin;
             dingus = 0;
@@ -169,9 +169,9 @@ public class TestCore : Core {
         } else if (key == Keycode.Right) {
             dx -= 1;
         } else if (key == Keycode.Delete) {
-            dr -= 1;
-        } else if (key == Keycode.PageDown) {
             dr += 1;
+        } else if (key == Keycode.PageDown) {
+            dr -= 1;
         }
     }
 
