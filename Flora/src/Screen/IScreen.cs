@@ -5,7 +5,7 @@ interface IScreen {
     public void Pause();
     public void Resume();
     public void Resize(int width, int height);
-    public void Render(double delta);
+    public void Render(float delta);
     public void Cleanup();
 
     public virtual void OnKeyDown(Keycode key, Scancode scan) {}
