@@ -2,11 +2,13 @@
 
 .NET 2D Game Development Framework
 
-## WIP
+## Project Status
 
-This project is currently being completely rewritten, and is in very early stages of development.
+At this moment, Flora is intended for my personal use only.
 
-In other words: nothing to see here!
+There will be no packages, examples, documentations, API stability or whatsoever provided.
+
+In terms of how's it going now, I consider it barely usable.
 
 ## License
 
