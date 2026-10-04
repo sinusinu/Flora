@@ -55,6 +55,14 @@ public unsafe sealed class Graphics {
         return new Font(app, path, size, scaleMode);
     }
 
+    /// <summary>
+    /// Create a compound <c>Font</c> from font files.<br/>
+    /// Supported types are: TTF, OTF.
+    /// </summary>
+    public Font CreateFont(string[] paths, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
+        return new Font(app, paths, size, scaleMode);
+    }
+
     public enum ViewportOpts {
         /// <summary>View is stretched to fill the window regardless of aspect ratio.</summary>
         Stretch = SDL_RendererLogicalPresentation.SDL_LOGICAL_PRESENTATION_STRETCH,

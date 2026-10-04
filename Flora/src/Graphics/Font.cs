@@ -12,7 +12,7 @@ public unsafe class Font : IDisposable {
 
     private Application app;
 
-    private TTF_Font* font;
+    private TTF_Font*[] fonts;
     private List<Texture> glyphAtlases = new();
     private Dictionary<uint, GlyphInfo?> glyphInfos = new(); // key is unicode codepoint
     
@@ -32,16 +32,23 @@ public unsafe class Font : IDisposable {
 
     private readonly SDL_Color white = new SDL_Color() { r = 0xFF, g = 0xFF, b = 0xFF, a = 0xFF };
 
-    internal Font(Application app, string path, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
+    internal Font(Application app, string path, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) :
+        this(app, [path], size, scaleMode) {}
+
+    internal Font(Application app, string[] paths, float size, Texture.ScaleModeOpts scaleMode = Texture.ScaleModeOpts.Linear) {
+        if (paths.Length == 0) throw new ArgumentException("At least one font file must be provided");
         if (size < 2) throw new ArgumentException("Font size must be larger than 1");
         if (size > 255) throw new ArgumentException("Font size must be smaller than 256");
 
         this.app = app;
 
-        font = SDL3_ttf.TTF_OpenFont(path, size);
-        if (font == null) throw new InvalidOperationException($"Failed to open font: {SDL3.SDL_GetError()}");
+        fonts = new TTF_Font*[paths.Length];
+        for (int i = 0; i < paths.Length; i++) {
+            fonts[i] = SDL3_ttf.TTF_OpenFont(paths[i], size);
+            if (fonts[i] == null) throw new InvalidOperationException($"Failed to open font ({paths[i]}): {SDL3.SDL_GetError()}");
+        }
 
-        _rawLineHeight = SDL3_ttf.TTF_GetFontLineSkip(font);
+        _rawLineHeight = SDL3_ttf.TTF_GetFontLineSkip(fonts[0]);
 
         ScaleMode = scaleMode;
     }
@@ -49,11 +56,19 @@ public unsafe class Font : IDisposable {
     internal GlyphInfo? GetGlyphInfo(uint glyph) {
         if (glyphInfos.ContainsKey(glyph)) return glyphInfos[glyph];
         
-        // return empty glyphinfo if the font does not have this glyph
-        if (!SDL3_ttf.TTF_FontHasGlyph(font, glyph)) {
+        // return empty glyphinfo if no font have this glyph
+        int fontIndex = -1;
+        for (int i = 0; i < fonts.Length; i++) {
+            if (SDL3_ttf.TTF_FontHasGlyph(fonts[i], glyph)) {
+                fontIndex = i;
+                break;
+            }
+        }
+        if (fontIndex == -1) {
             glyphInfos[glyph] = null;
             return null;
         }
+        TTF_Font* font = fonts[fontIndex];
 
         // create glyph texture
         var glyphSurface = SDL3_ttf.TTF_RenderGlyph_Blended(font, glyph, white);
@@ -318,7 +333,9 @@ public unsafe class Font : IDisposable {
 
         /* if (disposing) {} */
 
-        SDL3_ttf.TTF_CloseFont(font);
+        foreach (var font in fonts) {
+            SDL3_ttf.TTF_CloseFont(font);
+        }
 
         _disposed = true;
     }
