@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using SDL;
 
 namespace Flora;
@@ -31,6 +32,47 @@ public sealed unsafe class Window {
         this.app = app;
         sdlWindow = window;
         sdlRenderer = renderer;
+    }
+
+    /// <summary>
+    /// Set window icon to specified image.
+    /// </summary>
+    /// <param name="path">Path to an image file. Supported types are: BMP, JPG, PNG.</param>
+    public void SetIcon(string path) {
+        if (!File.Exists(path)) throw new FileNotFoundException($"{path} does not exist!");
+        using (FileStream fs = File.OpenRead(path)) SetIcon(fs);
+    }
+
+    /// <summary>
+    /// Set window icon to specified image.
+    /// </summary>
+    /// <param name="stream">Stream of an image file. Supported types are: BMP, JPG, PNG.</param>
+    public void SetIcon(Stream stream) {
+        // TODO: do some error handling like a decent human being?
+        SDL_Surface* surface;
+        MemoryStream ms;
+
+        if (stream is MemoryStream) {
+            ms = (MemoryStream)stream;
+        } else {
+            ms = new MemoryStream();
+            stream.CopyTo(ms);
+        }
+
+        // convert MemoryStream to SDL_IOStream*
+        if (!ms.TryGetBuffer(out var buf)) buf = new ArraySegment<byte>(ms.ToArray());
+        var handle = GCHandle.Alloc(buf.Array, GCHandleType.Pinned);
+        byte* bufPtr = (byte*)handle.AddrOfPinnedObject() + buf.Offset;
+        var ios = SDL3.SDL_IOFromConstMem((nint)bufPtr, (nuint)buf.Count);
+
+        surface = SDL3.SDL_LoadSurface_IO(ios, false);
+
+        SDL3.SDL_CloseIO(ios);
+        handle.Free();
+        ms.Dispose();
+
+        SDL3.SDL_SetWindowIcon(sdlWindow, surface);
+        SDL3.SDL_DestroySurface(surface);
     }
     
     /// <summary>
