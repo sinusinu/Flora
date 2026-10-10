@@ -81,6 +81,7 @@ public unsafe class Font : IDisposable {
 
         // return null if glyph doesn't fit in an entire atlas texture
         if (w > TextureSize || h > TextureSize) {
+            SDL3.SDL_DestroyTexture(glyphTexture);
             glyphInfos[glyph] = null;
             return null;
         }
