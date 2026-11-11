@@ -20,7 +20,7 @@ public class ScreenCore : Core {
     public override void Pause() { activeScreen?.Pause(); }
     public override void Resume() { activeScreen?.Resume(); }
     public override void Resize(int width, int height) { activeScreen?.Resize(width, height); }
-    public override void Render(float delta) {
+    public override void Render(double delta) {
         activeScreen?.Render(delta);
         // if pending screen exists, set them active
         if (pendingScreen is not null) {

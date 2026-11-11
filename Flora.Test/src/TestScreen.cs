@@ -3,7 +3,7 @@ using Flora;
 namespace FloraTest;
 
 public class TestScreen : Screen {
-    private const float DegToRad = 0.0174533f;
+    private const double DegToRad = 0.0174533d;
 
     TestCore core;
 
@@ -15,7 +15,7 @@ public class TestScreen : Screen {
     bool spin = false;
 
     const int deltaSampleSize = 128;
-    float[] deltaSamples = new float[deltaSampleSize];
+    double[] deltaSamples = new double[deltaSampleSize];
     int deltaSampleIndex = 0;
 
     int dx = 0;
@@ -46,20 +46,20 @@ public class TestScreen : Screen {
         Console.WriteLine($"Active Input changed: {newInput}");
     }
 
-    public override void Render(float delta) {
+    public override void Render(double delta) {
         deltaSamples[deltaSampleIndex] = delta;
         deltaSampleIndex++; if (deltaSampleIndex == deltaSampleSize) deltaSampleIndex = 0;
         // Console.WriteLine($"FPS: {float.Round(1f / deltaSamples.Average(), 1):00.0}");
 
         if (sound.Playing) Console.WriteLine($"{sound.Position} / {sound.Length}");
 
-        dingus += delta * 4f;
+        dingus += (float)delta * 4f;
 
         core.Gfx.Begin();
 
-        core.Gfx.Camera.X += 720f * delta * dx / targetSX;
-        core.Gfx.Camera.Y += 720f * delta * dy / targetSY;
-        core.Gfx.Camera.Rotation += 180f * delta * dr * DegToRad;
+        core.Gfx.Camera.X += (float)(720d * delta * dx / targetSX);
+        core.Gfx.Camera.Y += (float)(720d * delta * dy / targetSY);
+        core.Gfx.Camera.Rotation += (float)(180f * delta * dr * DegToRad);
 
         if (MathF.Abs(targetSX - intermediateSX) < 0.005f) intermediateSX = targetSX;
         else intermediateSX = targetSX * 0.2f + intermediateSX * 0.8f;
@@ -70,16 +70,16 @@ public class TestScreen : Screen {
 
         core.Gfx.Camera.PushState();
 
-        core.Gfx.Camera.Rotation = MathF.Sin(dingus / 2f) * 40 * DegToRad;
-        core.Gfx.Camera.X = MathF.Sin(dingus) * 200;
+        core.Gfx.Camera.Rotation = (float)(Math.Sin(dingus / 2d) * 40 * DegToRad);
+        core.Gfx.Camera.X = (float)(Math.Sin(dingus) * 200d);
         core.Gfx.Camera.Y = 0;
-        core.Gfx.Camera.ScaleX *= ((MathF.Sin(dingus) + 1f) * 0.125f) + 1f;
-        core.Gfx.Camera.ScaleY *= ((MathF.Cos(dingus) + 1f) * 0.125f) + 1f;
+        core.Gfx.Camera.ScaleX *= (float)(((Math.Sin(dingus) + 1d) * 0.125d) + 1d);
+        core.Gfx.Camera.ScaleY *= (float)(((Math.Cos(dingus) + 1d) * 0.125d) + 1d);
 
         for (int y = -11; y < 11; y++) {
             for (int x = -12; x < 12; x++) {
                 core.Gfx.RenderColor = new((x + 12) / 24f, (y + 11) / 22f, 1f, 1f);
-                core.Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, (spin ? dingus : 0) * (40 + ((x + y + 1) * 4)) * DegToRad, 64, 64);
+                core.Gfx.Draw(texture, 128 * x, 128 * y, 128, 128, (spin ? dingus : 0) * (40 + ((x + y + 1) * 4)) * (float)DegToRad, 64, 64);
             }
         }
         

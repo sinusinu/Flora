@@ -14,7 +14,7 @@ public class Core {
     public virtual void Pause() {}
     public virtual void Resume() {}
     public virtual void Resize(int width, int height) {}
-    public virtual void Render(float delta) {}
+    public virtual void Render(double delta) {}
     public virtual void Cleanup() {}
 
     // interaction events

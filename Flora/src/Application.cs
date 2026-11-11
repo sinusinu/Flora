@@ -24,7 +24,7 @@ public sealed unsafe class Application {
     // delta calculating stuff
     ulong freq = SDL3.SDL_GetPerformanceFrequency();
     ulong last, now = SDL3.SDL_GetPerformanceCounter();
-    float delta;
+    double delta;
 
     Dictionary<uint, nint> gamepads = new();
 
@@ -99,7 +99,7 @@ public sealed unsafe class Application {
             // calculate delta
             last = now;
             now = SDL3.SDL_GetPerformanceCounter();
-            delta = (now - last) / (float)freq;
+            delta = (now - last) / (double)freq;
 
             Core.Render(delta);
 

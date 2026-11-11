@@ -9,7 +9,7 @@ public class TestTwoScreen : Screen {
         this.core = core;
     }
 
-    public override void Render(float delta) {
+    public override void Render(double delta) {
         var va = core.Gfx.VisibleArea;
         core.Gfx.Begin();
         core.font.Draw("so...\ncome here often?", va.x, va.y);
