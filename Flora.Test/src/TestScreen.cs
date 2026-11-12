@@ -164,6 +164,12 @@ public class TestScreen : Screen {
             core.Audio.MasterVolume = 0.5f;
         } else if (key == Keycode.Apostrophe) {
             core.Audio.MasterVolume = 1f;
+        } else if (key == Keycode.Comma) {
+            sound.Loop = Sound.LoopInfinite;
+            sound.SetLoopPoints(1000, 1500);
+        } else if (key == Keycode.Period) {
+            sound.Loop = 0;
+            sound.ClearLoopPoints();
         } else if (key == Keycode.Insert) {
             core.SetScreen(new TestTwoScreen(core));
         }

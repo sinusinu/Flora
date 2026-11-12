@@ -35,6 +35,10 @@ public unsafe class Sound : IDisposable {
         }
 
         options = SDL3.SDL_CreateProperties();
+        // default options: no looping, no loop points
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_LOOPS_NUMBER, 0);
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER, 0);
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_MAX_FRAME_NUMBER, -1);
 
         SDL3_mixer.MIX_SetTrackAudio(sdlTrack, sdlAudio);
 
@@ -104,6 +108,40 @@ public unsafe class Sound : IDisposable {
     public float Speed {
         get => SDL3_mixer.MIX_GetTrackFrequencyRatio(sdlTrack);
         set => SDL3_mixer.MIX_SetTrackFrequencyRatio(sdlTrack, Math.Clamp(value, 0.01f, 100f));
+    }
+
+    /// <summary>
+    /// If set as Loop, the audio loops infinitely.
+    /// </summary>
+    public const int LoopInfinite = -1;
+    
+    /// <summary>
+    /// How many times this audio should loop upon playing. 0 disables looping, making it one-shot. Has no effect on already playing audio.
+    /// </summary>
+    public long Loop {
+        get => SDL3.SDL_GetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_LOOPS_NUMBER, 0);
+        set => SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_LOOPS_NUMBER, value);
+    }
+
+    /// <summary>
+    /// Set loop points for looping. Audio will seek back to the start point upon reaching the end point. If Loop is set to 0, the playback will stop at the end point. Has no effect on already playing audio.
+    /// </summary>
+    /// <param name="startMs">Loop start point in milliseconds</param>
+    /// <param name="endMs">Loop end point in milliseconds</param>
+    public void SetLoopPoints(long startMs, long endMs) {
+        long startFrame = SDL3_mixer.MIX_AudioMSToFrames(sdlAudio, startMs);
+        long endFrame = SDL3_mixer.MIX_AudioMSToFrames(sdlAudio, endMs);
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER, startFrame);
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_MAX_FRAME_NUMBER, endFrame);
+    }
+
+    /// <summary>
+    /// Clear loop points. Has no effect on already playing audio.
+    /// </summary>
+    public void ClearLoopPoints() {
+        // revert related props back to default
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER, 0);
+        SDL3.SDL_SetNumberProperty(options, SDL3_mixer.MIX_PROP_PLAY_MAX_FRAME_NUMBER, -1);
     }
 
     private void StoppedInternal() {
